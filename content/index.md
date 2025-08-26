@@ -3,12 +3,6 @@ title: Home
 ---
 
 # 🌐 Welcome 欢迎光临
-
-请选择语言 / Please choose your language:
-
-- CN [中文 / Chinese](/zh/)
-- EN [English](/en/)
-
 ---
 
 ✨ This is my personal blog, where I share notes on AI/ML, quant finance projects, and personal reflections.  
