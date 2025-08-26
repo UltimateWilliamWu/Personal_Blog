@@ -6,8 +6,8 @@ title: Home
 
 请选择语言 / Please choose your language:
 
-- CN [中文 / Chinese](/CN/)
-- EN [English](/EN/)
+- CN [中文 / Chinese](/zh/)
+- EN [English](/en/)
 
 ---
 
