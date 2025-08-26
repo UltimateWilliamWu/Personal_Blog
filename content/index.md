@@ -1,3 +1,15 @@
-# 欢迎来到我的博客
+---
+title: Home
+---
 
-这是主页，可以点左边的导航进入笔记。
+# 🌐 Welcome 欢迎光临
+
+请选择语言 / Please choose your language:
+
+- 🇨🇳 [中文 / Chinese](/zh/)
+- 🇬🇧 [English](/en/)
+
+---
+
+✨ This is my personal blog, where I share notes on AI/ML, quant finance projects, and personal reflections.  
+这是我的个人博客，在这里我会分享人工智能、量化金融项目和个人感悟。
