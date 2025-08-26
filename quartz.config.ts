@@ -3,7 +3,6 @@ import * as Plugin from "./quartz/plugins"
 
 /**
  * Quartz 4 Configuration
- *
  * See https://quartz.jzhao.xyz/configuration for more information.
  */
 const config: QuartzConfig = {
@@ -52,7 +51,87 @@ const config: QuartzConfig = {
         },
       },
     },
+
+    // 自定义 head 注入：多语言切换（支持 SPA）
+    head: {
+      scripts: [
+        {
+          inline: true,
+          content: `
+(function () {
+  const KEY = 'blog.lang';
+  const SUPPORTED = ['en', 'zh'];
+
+  function getLang() {
+    const saved = localStorage.getItem(KEY);
+    if (saved && SUPPORTED.includes(saved)) return saved;
+    const nav = (navigator.language || 'en').toLowerCase();
+    return nav.startsWith('zh') ? 'zh' : 'en';
+  }
+
+  function setLang(lang) {
+    if (!SUPPORTED.includes(lang)) lang = 'en';
+    localStorage.setItem(KEY, lang);
+
+    // 按钮高亮
+    document.querySelectorAll('.i18n-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+
+    // 内容切换（同一个 .i18n-block 中只显示当前语言）
+    document.querySelectorAll('.i18n-block').forEach(block => {
+      block.querySelectorAll('.i18n').forEach(node => {
+        const show = node.classList.contains(lang);
+        node.classList.toggle('i18n-hide', !show);
+      });
+    });
+  }
+
+  // 初始应用
+  let current = getLang();
+  function applyIfNeeded() {
+    setLang(localStorage.getItem(KEY) || current);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyIfNeeded);
+  } else {
+    applyIfNeeded();
+  }
+
+  // 事件委托：一次绑定，适配 SPA
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target instanceof Element && target.matches('.i18n-toggle button')) {
+      const lang = target.getAttribute('data-lang');
+      if (lang) {
+        current = lang;
+        setLang(lang);
+      }
+    }
+  });
+
+  // 监听 DOM 变化（路由切换/重渲染）
+  const obs = new MutationObserver((muts) => {
+    for (const m of muts) {
+      if (m.type === 'childList' && (m.addedNodes.length || m.removedNodes.length)) {
+        applyIfNeeded();
+        break;
+      }
+    }
+  });
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+
+  // 兜底：前端路由事件
+  window.addEventListener('popstate', applyIfNeeded);
+  window.addEventListener('hashchange', applyIfNeeded);
+})();
+          `,
+        },
+      ],
+    },
   },
+
   plugins: {
     transformers: [
       Plugin.FrontMatter(),
@@ -88,7 +167,6 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      // Comment out CustomOgImages to speed up build time
       Plugin.CustomOgImages(),
     ],
   },
