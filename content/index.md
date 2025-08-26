@@ -6,7 +6,7 @@ title: Home
 
 请选择语言 / Please choose your language:
 
-- 🇨🇳 [中文 / Chinese](/zh/)
+- CN [中文 / Chinese](/zh/)
 - EN [English](/en/)
 
 ---
