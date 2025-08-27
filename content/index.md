@@ -85,5 +85,6 @@ title: Home
     </div>
   </div>
 </div>
+<script src="/Personal_Blog/static/i18n.js?v=20250831" defer></script>
 
 
