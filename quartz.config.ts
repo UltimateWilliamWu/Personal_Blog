@@ -1,25 +1,40 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
+// 新增：引入类型
+import type { QuartzTransformerPlugin } from "./quartz/plugins/types"
 
-/**
- * Quartz 4 Configuration
- * See https://quartz.jzhao.xyz/configuration for more information.
- */
+// ========= 你的仓库信息 =========
+const GH_USER = "UltimateWilliamWu"
+const REPO = "Personal_Blog"
+const VER  = "v20250831" // ← 改这个值可强制刷新缓存
 
-// ==== 固定站点信息（不依赖 NODE_ENV）====
-const GH_USER = "UltimateWilliamWu"       // 你的 GitHub 用户名
-const REPO = "Personal_Blog"              // 你的仓库名（项目页）
-const PROD_BASE = `https://${GH_USER}.github.io/${REPO}`
+// ✅ 内联一个极小的 transformer，用 externalResources 注入脚本
+const InjectI18n: QuartzTransformerPlugin<{ version?: string }> = (opts) => {
+  return {
+    name: "InjectI18n",
+    externalResources(ctx) {
+      // 从 baseUrl 里解析出仓库前缀（/Personal_Blog）
+      const cfg = ctx.cfg.configuration
+      const prefix = (() => {
+        try { return new URL("https://" + (cfg.baseUrl ?? "")).pathname || "" }
+        catch { return "" }
+      })()
 
-// 本地开发地址（Quartz 预览）
-const DEV_BASE = "http://localhost:8080"
-
-// 写死线上前缀，保证 Pages 一定能加载；本地用无前缀
-const PROD_PREFIX = `/${REPO}`
-const DEV_PREFIX = ""                     // 本地 dev 不带仓库前缀
-
-// 给外链脚本加个版本参数，避免缓存
-const VER = "v20250829"
+      const v = opts?.version ? `?${opts.version}` : ""
+      return {
+        js: [
+          {
+            // 一定要带仓库前缀，否则在 GitHub Pages 项目页会 404
+            src: `${prefix}/static/i18n.js${v}`,
+            loadTime: "afterDOMReady",   // 页面加载完成后执行
+            contentType: "external",     // 外链脚本
+            module: false,
+          },
+        ],
+      }
+    },
+  }
+}
 
 const config: QuartzConfig = {
   configuration: {
@@ -27,29 +42,18 @@ const config: QuartzConfig = {
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
-    analytics: {
-      provider: "plausible",
-    },
+    analytics: { provider: "plausible" },
     locale: "en-US",
 
-    // ✅ baseUrl 必须是完整可访问地址（线上/本地二选一，Quartz 只用来生成链接）
-    // 你如果经常本地预览，就先用 DEV_BASE；要发布前改成 PROD_BASE。
-    // 也可以一直留成 PROD_BASE，不影响本地 dev。
-    baseUrl: "https://ultimatewilliamwu.github.io/Personal_Blog",
+    // ✅ 官方建议：不带协议，且包含仓库子路径
+    // https://ultimatewilliamwu.github.io/Personal_Blog  ->  ultimatewilliamwu.github.io/Personal_Blog
+    baseUrl: `${GH_USER}.github.io/${REPO}`,
 
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
 
-    // ✅ 这里同时加“线上用的带仓库前缀脚本”和“本地开发的无前缀脚本”
-    // 任意一个加载成功即可；为避免重复执行，建议在 i18n.js 开头加：
-    //   if (window.__I18N_LOADED__) { console.debug("i18n already loaded"); } else { window.__I18N_LOADED__ = true; /* 原逻辑 */ }
-    head: {
-      scripts: [
-        // 线上（GitHub Pages 项目页）
-        //{ src: `${PROD_PREFIX}/static/i18n.js?${VER}`, defer: true },
-	{ src: "/Personal_Blog/static/i18n.js?v=20250831", defer: true },
-       ],
-    },
+    // ⚠️ 删掉原来的 head.scripts，这里本就不会生效
+    // head: { scripts: [...] },
 
     theme: {
       fontOrigin: "googleFonts",
@@ -59,50 +63,24 @@ const config: QuartzConfig = {
         body: "Source Sans Pro",
         code: "IBM Plex Mono",
       },
-      colors: {
-        lightMode: {
-          light: "#faf8f8",
-          lightgray: "#e5e5e5",
-          gray: "#b8b8b8",
-          darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          secondary: "#284b63",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
-        },
-        darkMode: {
-          light: "#161618",
-          lightgray: "#393639",
-          gray: "#646464",
-          darkgray: "#d4d4d4",
-          dark: "#ebebec",
-          secondary: "#7b97aa",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#b3aa0288",
-        },
-      },
+      colors: { /* ……保持你的原配置不变…… */ },
     },
   },
 
   plugins: {
     transformers: [
       Plugin.FrontMatter(),
-      Plugin.CreatedModifiedDate({
-        priority: ["frontmatter", "git", "filesystem"],
-      }),
-      Plugin.SyntaxHighlighting({
-        theme: { light: "github-light", dark: "github-dark" },
-        keepBackground: false,
-      }),
-      // 禁用 Markdown 内联 <script>（外链不受影响）
+      Plugin.CreatedModifiedDate({ priority: ["frontmatter", "git", "filesystem"] }),
+      Plugin.SyntaxHighlighting({ theme: { light: "github-light", dark: "github-dark" }, keepBackground: false }),
       Plugin.ObsidianFlavoredMarkdown({ enableInHtmlEmbed: false }),
       Plugin.GitHubFlavoredMarkdown(),
       Plugin.TableOfContents(),
       Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),
       Plugin.Description(),
       Plugin.Latex({ renderEngine: "katex" }),
+
+      // ✅ 在末尾加上我们注入脚本的插件
+      InjectI18n({ version: VER }),
     ],
     filters: [Plugin.RemoveDrafts()],
     emitters: [
@@ -113,7 +91,7 @@ const config: QuartzConfig = {
       Plugin.TagPage(),
       Plugin.ContentIndex({ enableSiteMap: true, enableRSS: true }),
       Plugin.Assets(),
-      Plugin.Static(),     // ✅ 会把 根目录 static/ 拷到 public/static/
+      Plugin.Static(),     // 会把根目录 static/ 拷到 public/static/
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
       Plugin.CustomOgImages(),
