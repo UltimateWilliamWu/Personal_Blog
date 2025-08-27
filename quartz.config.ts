@@ -6,25 +6,20 @@ import * as Plugin from "./quartz/plugins"
  * See https://quartz.jzhao.xyz/configuration for more information.
  */
 
-// === 环境&前缀（本地无前缀，GitHub 项目页自动加 /<repo>） ===
-const isProd = process.env.NODE_ENV === "production"
-const GH_USER = "UltimateWilliamWu"          // ← 改成你的 GitHub 用户名
-const REPO = "Personal_Blog"                 // ← 若是用户主页，改成 ""（空串）
+// ==== 固定站点信息（不依赖 NODE_ENV）====
+const GH_USER = "UltimateWilliamWu"       // 你的 GitHub 用户名
+const REPO = "Personal_Blog"              // 你的仓库名（项目页）
+const PROD_BASE = `https://${GH_USER}.github.io/${REPO}`
 
-// 线上完整站点地址（非常重要）
-const PROD_BASE =
-  REPO && REPO.length > 0
-    ? `https://${GH_USER}.github.io/${REPO}`
-    : `https://${GH_USER}.github.io`
+// 本地开发地址（Quartz 预览）
+const DEV_BASE = "http://localhost:8080"
 
-// 本地 / 线上 baseUrl
-const baseUrl = isProd ? PROD_BASE : "http://localhost:8080"
+// 写死线上前缀，保证 Pages 一定能加载；本地用无前缀
+const PROD_PREFIX = `/${REPO}`
+const DEV_PREFIX = ""                     // 本地 dev 不带仓库前缀
 
-// 静态资源与路由前缀
-const prefix = isProd && REPO ? `/${REPO}` : ""
-
-// 给外链脚本做个防缓存版本号
-const VER = "v20250827"
+// 给外链脚本加个版本参数，避免缓存
+const VER = "v20250828"
 
 const config: QuartzConfig = {
   configuration: {
@@ -37,16 +32,23 @@ const config: QuartzConfig = {
     },
     locale: "en-US",
 
-    // ✅ 这里必须是完整的、可公开访问的站点地址
-    baseUrl,
+    // ✅ baseUrl 必须是完整可访问地址（线上/本地二选一，Quartz 只用来生成链接）
+    // 你如果经常本地预览，就先用 DEV_BASE；要发布前改成 PROD_BASE。
+    // 也可以一直留成 PROD_BASE，不影响本地 dev。
+    baseUrl: PROD_BASE,
 
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
 
-    // ⬇️ 在 <head> 里注入你的 i18n.js（自动带仓库前缀）
+    // ✅ 这里同时加“线上用的带仓库前缀脚本”和“本地开发的无前缀脚本”
+    // 任意一个加载成功即可；为避免重复执行，建议在 i18n.js 开头加：
+    //   if (window.__I18N_LOADED__) { console.debug("i18n already loaded"); } else { window.__I18N_LOADED__ = true; /* 原逻辑 */ }
     head: {
       scripts: [
-        { src: `${prefix}/static/i18n.js?${VER}`, defer: true },
+        // 线上（GitHub Pages 项目页）
+        { src: `${PROD_PREFIX}/static/i18n.js?${VER}`, defer: true },
+        // 本地（quartz dev / preview）
+        { src: `${DEV_PREFIX}/static/i18n.js?${VER}`, defer: true },
       ],
     },
 
@@ -92,13 +94,10 @@ const config: QuartzConfig = {
         priority: ["frontmatter", "git", "filesystem"],
       }),
       Plugin.SyntaxHighlighting({
-        theme: {
-          light: "github-light",
-          dark: "github-dark",
-        },
+        theme: { light: "github-light", dark: "github-dark" },
         keepBackground: false,
       }),
-      // 禁用 Markdown 中的内联 <script>，外链 <script src="..."> 不受影响
+      // 禁用 Markdown 内联 <script>（外链不受影响）
       Plugin.ObsidianFlavoredMarkdown({ enableInHtmlEmbed: false }),
       Plugin.GitHubFlavoredMarkdown(),
       Plugin.TableOfContents(),
@@ -109,16 +108,13 @@ const config: QuartzConfig = {
     filters: [Plugin.RemoveDrafts()],
     emitters: [
       Plugin.AliasRedirects(),
-      Plugin.ComponentResources(),  // quartz 内部静态资源
+      Plugin.ComponentResources(),
       Plugin.ContentPage(),
       Plugin.FolderPage(),
       Plugin.TagPage(),
-      Plugin.ContentIndex({
-        enableSiteMap: true,
-        enableRSS: true,
-      }),
-      Plugin.Assets(),              // 处理 assets
-      Plugin.Static(),              // ✅ 拷贝根目录 static/ → public/static/
+      Plugin.ContentIndex({ enableSiteMap: true, enableRSS: true }),
+      Plugin.Assets(),
+      Plugin.Static(),     // ✅ 会把 根目录 static/ 拷到 public/static/
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
       Plugin.CustomOgImages(),
