@@ -46,10 +46,9 @@ const config: QuartzConfig = {
     head: {
       scripts: [
         // 线上（GitHub Pages 项目页）
-        { src: `${PROD_PREFIX}/static/i18n.js?${VER}`, defer: true },
-        // 本地（quartz dev / preview）
-        { src: `${DEV_PREFIX}/static/i18n.js?${VER}`, defer: true },
-      ],
+        //{ src: `${PROD_PREFIX}/static/i18n.js?${VER}`, defer: true },
+	{ src: "/Personal_Blog/static/i18n.js?v=20250831", defer: true },
+       ],
     },
 
     theme: {
