@@ -5,6 +5,27 @@ import * as Plugin from "./quartz/plugins"
  * Quartz 4 Configuration
  * See https://quartz.jzhao.xyz/configuration for more information.
  */
+
+// === 环境&前缀（本地无前缀，GitHub 项目页自动加 /<repo>） ===
+const isProd = process.env.NODE_ENV === "production"
+const GH_USER = "UltimateWilliamWu"          // ← 改成你的 GitHub 用户名
+const REPO = "Personal_Blog"                 // ← 若是用户主页，改成 ""（空串）
+
+// 线上完整站点地址（非常重要）
+const PROD_BASE =
+  REPO && REPO.length > 0
+    ? `https://${GH_USER}.github.io/${REPO}`
+    : `https://${GH_USER}.github.io`
+
+// 本地 / 线上 baseUrl
+const baseUrl = isProd ? PROD_BASE : "http://localhost:8080"
+
+// 静态资源与路由前缀
+const prefix = isProd && REPO ? `/${REPO}` : ""
+
+// 给外链脚本做个防缓存版本号
+const VER = "v20250827"
+
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "William's Blog",
@@ -15,9 +36,20 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
+
+    // ✅ 这里必须是完整的、可公开访问的站点地址
+    baseUrl,
+
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
+
+    // ⬇️ 在 <head> 里注入你的 i18n.js（自动带仓库前缀）
+    head: {
+      scripts: [
+        { src: `${prefix}/static/i18n.js?${VER}`, defer: true },
+      ],
+    },
+
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,
@@ -51,7 +83,7 @@ const config: QuartzConfig = {
         },
       },
     },
-},
+  },
 
   plugins: {
     transformers: [
@@ -66,8 +98,7 @@ const config: QuartzConfig = {
         },
         keepBackground: false,
       }),
-      // 这里禁用的是“在 Markdown 里内联 <script>”，
-      // 外链 <script src="..."> 仍可用（我们走 head.scripts 外链）
+      // 禁用 Markdown 中的内联 <script>，外链 <script src="..."> 不受影响
       Plugin.ObsidianFlavoredMarkdown({ enableInHtmlEmbed: false }),
       Plugin.GitHubFlavoredMarkdown(),
       Plugin.TableOfContents(),
@@ -78,7 +109,7 @@ const config: QuartzConfig = {
     filters: [Plugin.RemoveDrafts()],
     emitters: [
       Plugin.AliasRedirects(),
-      Plugin.ComponentResources(),
+      Plugin.ComponentResources(),  // quartz 内部静态资源
       Plugin.ContentPage(),
       Plugin.FolderPage(),
       Plugin.TagPage(),
@@ -86,8 +117,8 @@ const config: QuartzConfig = {
         enableSiteMap: true,
         enableRSS: true,
       }),
-      Plugin.Assets(),
-      Plugin.Static(),
+      Plugin.Assets(),              // 处理 assets
+      Plugin.Static(),              // ✅ 拷贝根目录 static/ → public/static/
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
       Plugin.CustomOgImages(),
