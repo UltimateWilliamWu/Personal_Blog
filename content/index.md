@@ -47,7 +47,7 @@ title: Home
   <!-- 内容块：在同一位置放两份文本，用类名区分语言 -->
   <div class="i18n-block" data-key="intro">
     <div class="i18n en">
-      <h2>Hi, I’m Tianxiong 👋</h2>
+      <h2>Hi, I’m William Wu 👋</h2>
       <p>
         Welcome to my personal blog. I’m a CS/AI student working on machine learning, 
         reinforcement learning and applied systems. Here I share course notes, project write-ups, and occasional market/quant thoughts.
