@@ -28,10 +28,20 @@ jobs:
           check-latest: true
           cache: 'npm'
       - run: |
-          corepack enable
-          corepack prepare npm@10.9.2 --activate
-          node -v
-          npm -v
+        corepack enable
+        corepack prepare npm@10.9.2 --activate
+        node -v
+        npm -v
+
+      # --- 调试：构建前确认仓库里就有 static/i18n.js ---
+      - name: Show repo tree before build (debug)
+        run: |
+          echo "== repo root =="
+          ls -la
+          echo "== static dir (should contain i18n.js) =="
+          ls -la static || true
+          echo "== tracked i18n files =="
+          git ls-files | grep -i i18n || true
 
       - name: Install deps
         run: npm ci
@@ -41,13 +51,19 @@ jobs:
           NODE_ENV: production
         run: npx quartz build
 
-      - name: Verify i18n.js exists in build (debug)
+      # --- 兜底：若 Quartz 没拷贝 static，则手动复制 ---
+      - name: Ensure static copied into public/static (fallback)
         run: |
-          if [ -f public/static/i18n.js ]; then
-            echo "✅ Found public/static/i18n.js"
-          else
-            echo "❌ MISSING public/static/i18n.js"; find public -maxdepth 3 -type f | sed -n '1,200p'; exit 1
-          fi
+          mkdir -p public/static
+          # -r: 递归, -v: 输出日志, -u: 仅当源更新时覆盖
+          cp -rvu static/* public/static/ 2>/dev/null || true
+
+      # --- 调试：构建后列出 public 里的内容，确认 i18n.js 到位 ---
+      - name: Show build tree after copy (debug)
+        run: |
+          echo "== expect: public/static/i18n.js =="
+          find public -maxdepth 3 -type f -print | sed -n '1,200p'
+          test -f public/static/i18n.js && echo "✅ Found public/static/i18n.js" || (echo "❌ STILL MISSING public/static/i18n.js" && exit 1)
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
