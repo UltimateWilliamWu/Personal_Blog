@@ -84,4 +84,6 @@ title: Home
     </div>
   </div>
 </div>
+<script src="/i18n.js" defer></script>
+
 
