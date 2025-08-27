@@ -2,7 +2,7 @@ name: Deploy Quartz to GitHub Pages
 
 on:
   push:
-    branches: [ main ]        # 如用其它分支，改这里
+    branches: [ main ]          # 用哪条分支发布就写哪条
   workflow_dispatch:
 
 permissions:
@@ -20,28 +20,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ✅ 用 Node 22，并启用 corepack
       - uses: actions/setup-node@v4
         with:
-          node-version: 20       # 建议 LTS；22 也行，但 20 更稳
-          cache: npm
+          node-version: '22.x'
+          check-latest: true
+          cache: 'npm'
+      - name: Use npm 10.9.2+
+        run: |
+          corepack enable
+          corepack prepare npm@10.9.2 --activate
+          node -v
+          npm -v
 
       - name: Install deps
         run: npm ci
 
+      # ✅ 生产环境构建（你的 config 若用到 NODE_ENV，这里就是 production）
       - name: Build Quartz (production)
         env:
-          NODE_ENV: production   # ★ 关键：若 config 里按 prod 加仓库前缀，必须设
+          NODE_ENV: production
         run: npx quartz build
 
+      # 可选：看下产物里是否有 static/i18n.js，方便排错
       - name: Show build tree (debug)
         run: |
-          echo "Listing first 200 files under public/:"
+          echo "First 200 files under public/:"
           find public -maxdepth 3 -type f -print | sed -n '1,200p'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public           # 不要写 ./public 也可以，但这个更常见
+          path: public
 
   deploy:
     needs: build
@@ -51,4 +61,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: act
