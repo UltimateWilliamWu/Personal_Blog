@@ -51,14 +51,7 @@ const config: QuartzConfig = {
         },
       },
     },
-
-    // ✅ 外链脚本（/public/i18n.js）——最稳，不受内联 CSP/插件限制
-    head: {
-      scripts: [
-        { src: "/i18n.js", defer: true }, // 保证在 DOM 渲染后执行
-      ],
-    },
-  },
+},
 
   plugins: {
     transformers: [

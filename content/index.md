@@ -54,20 +54,21 @@ title: Home
       </p>
       <ul>
         <li>Current focus: <strong>FinMem</strong> (LLM + memory for time series)</li>
-        <li>Course notes: <strong>COMP9444, COMP9414, Big Data</strong></li>
+        <li>Course notes: <strong>UNSW Master IT (AI direction)</strong></li>
         <li>Hobbies: 🏃‍♂️ gaming, 📷 notes design</li>
       </ul>
     </div>
     <div class="i18n zh i18n-hide">
-      <h2>你好，我是天雄 👋</h2>
+      <h2>你好，我是William Wu 👋</h2>
       <p>
         欢迎来到我的个人博客。我主要研究机器学习、强化学习与应用系统。
-        这里会更新课程笔记、项目总结，以及一些量化与市场相关的随想。
+        在这里，你可以看到：
       </p>
       <ul>
-        <li>当前方向：<strong>FinMem</strong>（LLM + 记忆用于时间序列）</li>
-        <li>课程笔记：<strong>COMP9444、COMP9414、Big Data</strong></li>
-        <li>兴趣：🏃‍♂️ 游戏、📷 笔记设计</li>
+        <li>学习与笔记：<strong>UNSW</strong>学校课程、机器学习、人工智能、数据结构等</li>
+        <li>项目记录：医疗信息系统<strong>HIS</strong>、基于<strong>Qlib</strong>的量化策略研究</li>
+        <li>经验分享：学习技巧、编程心得、工具配置等</li>
+	    <li>成长与随想：一些生活感悟与灵感记录</li>
       </ul>
     </div>
   </div>
@@ -76,11 +77,11 @@ title: Home
   <div class="i18n-block" data-key="contact" style="margin-top:12px">
     <div class="i18n en">
       <h3>Contact</h3>
-      <p>Email: <a href="mailto:you@example.com">you@example.com</a> · GitHub: <a href="https://github.com/yourname">@yourname</a></p>
+      <p>Email: <a href="mailto:you@example.com">william-wu2001@outlook.com</a> · GitHub: <a href="https://github.com/UltimateWilliamWu">@WilliamWu</a></p>
     </div>
     <div class="i18n zh i18n-hide">
       <h3>联系我</h3>
-      <p>邮箱：<a href="mailto:you@example.com">you@example.com</a> · GitHub：<a href="https://github.com/yourname">@yourname</a></p>
+      <p>邮箱：<a href="mailto:you@example.com">william-wu2001@outlook.com</a> · GitHub：<a href="https://github.com/UltimateWilliamWu">@WilliamWu</a></p>
     </div>
   </div>
 </div>
