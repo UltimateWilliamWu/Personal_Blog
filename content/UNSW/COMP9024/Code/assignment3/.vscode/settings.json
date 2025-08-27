@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "graph.h": "c",
+        "chrono": "c",
+        "random": "c",
+        "limits": "c",
+        "valarray": "c",
+        "algorithm": "c"
+    }
+}

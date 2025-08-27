@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="vxdb01.cse.unsw.edu.au" id="9768dc5b-9d4f-4e49-9b77-32c92b05856d" port="22" nameFormat="DESCRIPTIVE" username="z5518601" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>

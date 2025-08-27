@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="147a9015-8925-499a-b388-2d7d5eabee82" name="cse">
+        <fileTransfer rootFolder="/import/kamen/3/z5518601" accessType="SFTP" host="vxdb01.cse.unsw.edu.au" port="22" sshConfigId="9768dc5b-9d4f-4e49-9b77-32c92b05856d" sshConfig="z5518601@vxdb01.cse.unsw.edu.au:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,8 @@
+memory leak
+unchecked malloc
+double free
+buffer overflow
+uninitialised read
+invalid free
+no memory allocated
+dangling pointer

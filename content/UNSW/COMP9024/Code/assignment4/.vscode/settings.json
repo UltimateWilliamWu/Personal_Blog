@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "*.tcc": "c",
+        "cerrno": "c",
+        "complex": "c",
+        "random": "c",
+        "limits": "c",
+        "numbers": "c",
+        "ratio": "c",
+        "system_error": "c",
+        "bitset": "c",
+        "compare": "c",
+        "optional": "c",
+        "algorithm": "c",
+        "istream": "c",
+        "numeric": "c",
+        "streambuf": "c",
+        "valarray": "c"
+    }
+}
