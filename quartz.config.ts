@@ -35,7 +35,7 @@ const config: QuartzConfig = {
     // ✅ baseUrl 必须是完整可访问地址（线上/本地二选一，Quartz 只用来生成链接）
     // 你如果经常本地预览，就先用 DEV_BASE；要发布前改成 PROD_BASE。
     // 也可以一直留成 PROD_BASE，不影响本地 dev。
-    baseUrl: PROD_BASE,
+    baseUrl: "https://ultimatewilliamwu.github.io/Personal_Blog",
 
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
