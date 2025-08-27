@@ -21,27 +21,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node 22 + npm 10.9.2
+      - name: Setup Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '22'
           check-latest: true
           cache: 'npm'
-      - run: |
-        corepack enable
-        corepack prepare npm@10.9.2 --activate
-        node -v
-        npm -v
 
-      # --- 调试：构建前确认仓库里就有 static/i18n.js ---
-      - name: Show repo tree before build (debug)
+      - name: Ensure npm >= 10.9.2
         run: |
-          echo "== repo root =="
-          ls -la
-          echo "== static dir (should contain i18n.js) =="
-          ls -la static || true
-          echo "== tracked i18n files =="
-          git ls-files | grep -i i18n || true
+          npm i -g npm@10.9.2
+          node -v
+          npm -v
 
       - name: Install deps
         run: npm ci
@@ -51,19 +42,21 @@ jobs:
           NODE_ENV: production
         run: npx quartz build
 
-      # --- 兜底：若 Quartz 没拷贝 static，则手动复制 ---
+      # 仓库里已有 static/i18n.js；若 Quartz 没拷贝，则兜底复制一份
       - name: Ensure static copied into public/static (fallback)
         run: |
           mkdir -p public/static
-          # -r: 递归, -v: 输出日志, -u: 仅当源更新时覆盖
-          cp -rvu static/* public/static/ 2>/dev/null || true
+          cp -rvu static/* public/static/ || true
 
-      # --- 调试：构建后列出 public 里的内容，确认 i18n.js 到位 ---
-      - name: Show build tree after copy (debug)
+      - name: Verify i18n.js exists in build (debug)
         run: |
-          echo "== expect: public/static/i18n.js =="
-          find public -maxdepth 3 -type f -print | sed -n '1,200p'
-          test -f public/static/i18n.js && echo "✅ Found public/static/i18n.js" || (echo "❌ STILL MISSING public/static/i18n.js" && exit 1)
+          if [ -f public/static/i18n.js ]; then
+            echo "✅ Found public/static/i18n.js"
+          else
+            echo "❌ MISSING public/static/i18n.js"
+            find public -maxdepth 3 -type f | sed -n '1,200p'
+            exit 1
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
