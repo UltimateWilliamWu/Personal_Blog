@@ -2,7 +2,7 @@
 tags:
   - ComputerScience
 ---
-- [[DiscreteMath]]
+- [[DiscreteMath]] 
 - [[NetWork]]
 - [[Programming]]
 - [[Operating  Systems]]
