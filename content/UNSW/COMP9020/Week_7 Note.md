@@ -4,11 +4,7 @@
 排列：从n个元素中选出m个元素 按一定顺序组成：
 $$\mathrm{A}_m^n= \frac {m!}{(m-n)!}=(m)_n $$
 组合：从n个元素中选出m组元素 排为一组：
-$$\mathrm{C}_m^n=\frac{m!}{n!(m-n)!}= \left(
-\begin{matrix}
-m \\ n
-\end{matrix}
-\right) $$
+$$\mathrm{C}_m^n=\frac{m!}{n!(m-n)!}= \left(\begin{matrix}m \\ n\end{matrix}\right)$$
 ## 2. The Union Rule
 Union rule — S and T disjoint 
 $$∣S ∪ T ∣ = ∣S∣ + ∣T ∣ $$
