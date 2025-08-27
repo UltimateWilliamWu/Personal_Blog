@@ -2,7 +2,7 @@ name: Deploy Quartz to GitHub Pages
 
 on:
   push:
-    branches: [ main ]          # 用哪条分支发布就写哪条
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -18,16 +18,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # ✅ 用 Node 22，并启用 corepack
-      - uses: actions/setup-node@v4
+      - name: Setup Node 22 + npm 10.9.2
+        uses: actions/setup-node@v4
         with:
           node-version: '22.x'
           check-latest: true
           cache: 'npm'
-      - name: Use npm 10.9.2+
-        run: |
+      - run: |
           corepack enable
           corepack prepare npm@10.9.2 --activate
           node -v
@@ -36,19 +36,20 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      # ✅ 生产环境构建（你的 config 若用到 NODE_ENV，这里就是 production）
       - name: Build Quartz (production)
         env:
           NODE_ENV: production
         run: npx quartz build
 
-      # 可选：看下产物里是否有 static/i18n.js，方便排错
-      - name: Show build tree (debug)
+      - name: Verify i18n.js exists in build (debug)
         run: |
-          echo "First 200 files under public/:"
-          find public -maxdepth 3 -type f -print | sed -n '1,200p'
+          if [ -f public/static/i18n.js ]; then
+            echo "✅ Found public/static/i18n.js"
+          else
+            echo "❌ MISSING public/static/i18n.js"; find public -maxdepth 3 -type f | sed -n '1,200p'; exit 1
+          fi
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: public
@@ -60,5 +61,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
-        uses: act
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
