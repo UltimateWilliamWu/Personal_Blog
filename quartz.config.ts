@@ -19,7 +19,7 @@ const PROD_PREFIX = `/${REPO}`
 const DEV_PREFIX = ""                     // 本地 dev 不带仓库前缀
 
 // 给外链脚本加个版本参数，避免缓存
-const VER = "v20250828"
+const VER = "v20250829"
 
 const config: QuartzConfig = {
   configuration: {
