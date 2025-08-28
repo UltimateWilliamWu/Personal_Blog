@@ -1,0 +1,15 @@
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - file.folder == "UNSW/Artificial Intelligence"
+    order:
+      - file.name
+      - file.ctime
+      - file.mtime
+    sort:
+      - property: file.name
+        direction: DESC
+      - property: formula.Untitled
+        direction: ASC
