@@ -75,9 +75,6 @@ const config: QuartzConfig = {
     ],
     filters: [Plugin.RemoveDrafts()],
     emitters: [
-      Plugin.FolderPage({
-        folderNameFilter: (name) => name !== "Excalidraw",
-      }),
       Plugin.AliasRedirects(),
       Plugin.ComponentResources(),
       Plugin.ContentPage(),
