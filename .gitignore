@@ -9,3 +9,16 @@ tsconfig.tsbuildinfo
 private/
 .replit
 replit.nix
+# ===========================
+# content 目录只允许 md 和 pdf
+# ===========================
+
+# 忽略 content 下所有文件
+content/**
+
+# 保留目录结构（否则深层 md 会无法被 track）
+!content/
+!content/**/
+
+# 允许上传 md 文件
+!content/**/*.md

@@ -1,0 +1,5 @@
+---
+tags:
+  - ComputerScience
+---
+[[Discrete Math]]

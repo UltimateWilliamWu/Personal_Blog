@@ -1,0 +1,15 @@
+---
+tags:
+  - UNSW
+---
+
+1. [[Week 1 Note]] Introduction
+2. [[Week 2 Note]] Fundamental Concepts
+3. [[Week 3 Note]] Graph
+4. [[Week 4 Note]] Tree
+5. [[Week 5 Note]] Algorithm
+
+
+
+
+
