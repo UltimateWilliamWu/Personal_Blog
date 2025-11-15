@@ -1,45 +1,120 @@
-name: Deploy Hugo site to GitHub Pages
+# name: Deploy Hugo site to GitHub Pages
+
+# on:
+#   push:
+#     branches: ["v4"]   # <-- 如果你想改用 main，就写 main
+#   workflow_dispatch:
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+#         with:
+#           submodules: true   # 如果你主题是 submodule 必须 true
+
+#       - name: Setup Hugo
+#         uses: peaceiris/actions-hugo@v2
+#         with:
+#           hugo-version: "latest"
+#           extended: true
+
+#       - name: Build
+#         run: hugo --minify
+
+#       - name: Upload artifact
+#         uses: actions/upload-pages-artifact@v3
+#         with:
+#           path: public
+
+#   deploy:
+#     needs: build
+#     permissions:
+#       pages: write
+#       id-token: write
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
+
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Deploy to GitHub Pages
+#         id: deployment
+#         uses: actions/deploy-pages@v4
+name: Deploy Quartz to GitHub Pages
 
 on:
   push:
-    branches: ["v4"]   # <-- 如果你想改用 main，就写 main
+    branches: [ main ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
         with:
-          submodules: true   # 如果你主题是 submodule 必须 true
+          node-version: '22'
+          check-latest: true
+          cache: 'npm'
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: "latest"
-          extended: true
+      - name: Ensure npm >= 10.9.2
+        run: |
+          npm i -g npm@10.9.2
+          node -v
+          npm -v
 
-      - name: Build
-        run: hugo --minify
+      - name: Install deps
+        run: npm ci
 
-      - name: Upload artifact
+      - name: Build Quartz (production)
+        env:
+          NODE_ENV: production
+        run: npx quartz build
+
+      # 仓库里已有 static/i18n.js；若 Quartz 没拷贝，则兜底复制一份
+      - name: Ensure static copied into public/static (fallback)
+        run: |
+          mkdir -p public/static
+          cp -rvu static/* public/static/ || true
+
+      - name: Verify i18n.js exists in build (debug)
+        run: |
+          if [ -f public/static/i18n.js ]; then
+            echo "✅ Found public/static/i18n.js"
+          else
+            echo "❌ MISSING public/static/i18n.js"
+            find public -maxdepth 3 -type f | sed -n '1,200p'
+            exit 1
+          fi
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: public
 
   deploy:
     needs: build
-    permissions:
-      pages: write
-      id-token: write
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-latest
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
