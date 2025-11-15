@@ -38,7 +38,11 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: Component.ReaderMode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer({
+        filterFn: (node) => {
+            return node.displayName.toLowerCase() !== "excalidraw"
+        },
+    }),
   ],
   right: [
     Component.Graph(),
