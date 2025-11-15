@@ -22,3 +22,4 @@ content/**
 
 # 允许上传 md 文件
 !content/**/*.md
+!content/**/*.png
