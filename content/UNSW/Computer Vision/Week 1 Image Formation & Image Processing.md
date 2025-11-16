@@ -5,6 +5,7 @@
 >![[Pasted image 20251114132826.png]]
 
 ![[Pasted image 20251114133716.png]]
+D
 
 >[!important] Types of Image Processing
 >- Spatial domain operations (in image space)
@@ -13,3 +14,4 @@
 >- Transform domain operations (mainly in Fourier space)
 
 ![[Pasted image 20251116130020.png]]
+B
