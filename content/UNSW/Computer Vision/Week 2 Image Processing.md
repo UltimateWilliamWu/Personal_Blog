@@ -1,253 +1,4 @@
 # Part 1
-## 1. **Neighbourhood Operations**
-
-**Neighbourhood operations compute each output pixel using a small local region around the input pixel.**  
-邻域操作通过输入像素周围的一个小区域来计算输出像素。
-
-**This region is typically a 3×3, 5×5, or 7×7 square subimage.**  
-该区域一般是 3×3、5×5 或 7×7 的邻域。
-
-**The weights of this region form the kernel (or filter).**  
-邻域中每个像素对应的权重组成“核（滤波器）”。
-
-**Neighbourhood operations can smooth, sharpen, enhance, or detect features in an image.**  
-邻域操作可以实现平滑、锐化、增强或特征检测等功能。
-
----
-
-## 2. **Spatial Filtering by Convolution**
-
-**Convolution computes the output o(x,y) = ΣΣ f(x−i, y−j) h(i, j).**  
-卷积通过公式 o(x,y) = ΣΣ f(x−i, y−j) h(i,j) 来计算输出。
-
-**The kernel is flipped before sliding over the image (definition of convolution).**  
-根据卷积定义，核在滑动前需要“翻转”。
-
-**Convolution is linear and shift-invariant.**  
-卷积是线性且平移不变的操作。
-
-**Because it is LSI, convolution behaves consistently across the entire image.**  
-由于其 LSI 特性，卷积在整个图像范围内行为一致。
-
----
-
-## 3. **The Border Problem and Fixes**
-
-**Filtering near borders requires defining pixel values outside the image.**  
-在边界进行滤波时需要定义图像外的像素如何处理。
-
-**Common solutions include padding, clamping, wrapping, and mirroring.**  
-常见方案包括零填充、边缘复制、循环复制和镜像扩展。
-
-**Mirroring produces smooth boundaries and avoids artifacts.**  
-镜像扩展可以避免伪影，是最佳边界处理方式之一。
-
----
-
-## 4. **Properties of Convolution**
-
-**Convolution satisfies commutativity, associativity, and distributivity.**  
-卷积满足交换律、结合律和分配律。
-
-**Convolution in spatial domain equals multiplication in frequency domain.**  
-空间域卷积等价于频域中的乘法（下一周详细讲）。
-
----
-
-## 5. **Uniform Smoothing (Mean Filter)**
-
-**The mean filter replaces each pixel with the average of its neighborhood.**  
-均值滤波将每个像素替换为邻域的平均值。
-
-**It reduces noise but also blurs edges.**  
-它可降噪但会导致边缘模糊。
-
-**Uniform smoothing corresponds to a kernel filled with equal weights.**  
-均值滤波对应的核是全 1 的均匀权重矩阵。
-
----
-
-## 6. **Gaussian Filter**
-
-**The Gaussian filter applies a weighted average with weights following a Gaussian distribution.**  
-高斯滤波使用符合高斯分布的权重进行加权平均。
-
-**It is separable and circularly symmetric, making it efficient and stable.**  
-高斯滤波可分离且具有圆对称性，因此高效且稳定。
-
-**It smooths images while preserving structure better than the mean filter.**  
-它比均值滤波更能保留结构信息。
-
-**Sigma (σ) controls the scale—the larger σ is, the stronger the blur.**  
-σ 控制模糊强度，σ 越大模糊越明显。
-
----
-
-## 7. **Median Filter**
-
-**The median filter selects the median value within the neighborhood.**  
-中值滤波选择邻域像素的中位数作为输出。
-
-**It removes salt-and-pepper noise without smoothing edges.**  
-它能移除椒盐噪声，同时保持边缘清晰。
-
-**It is nonlinear (not a convolution operation).**  
-它是非线性的，因此不是卷积。
-
----
-
-## 8. **Gaussian vs Median Filtering**
-
-**Gaussian filtering preserves small structures but blurs noise gradually.**  
-高斯滤波能保留小结构，但对噪声的处理较柔和。
-
-**Median filtering completely removes impulse noise but may erase small objects.**  
-中值滤波对脉冲噪声非常有效，但可能删除小目标。
-
----
-
-## 9. **Sharpening by Unsharp Masking**
-
-**Unsharp masking enhances high-frequency components by adding back (Input − Blurred).**  
-反锐化（Unsharp Masking）通过增强高频成分 (原图 − 平滑图) 来提高锐度。
-
-**This boosts edges and fine details.**  
-该方法主要强化边缘与细节。
-
----
-
-## 10. **Pooling**
-
-**Pooling downsamples an image by selecting a summary statistic over a local region.**  
-池化通过对局部区域取统计值实现图像降采样。
-
-**Common types include max, min, average, and median pooling.**  
-常见方式包括最大池化、最小池化、平均池化和中值池化。
-
-**Pooling reduces computation and removes small variations.**  
-池化减少计算量并抑制小范围噪声变化。
-
-**Widely used in CNNs.**  
-广泛应用于卷积神经网络。
-
----
-
-## 11. **Derivative Filters (for Edge Detection)**
-
-**Spatial derivatives detect intensity changes—key for edge detection.**  
-空间导数用于检测亮度变化，是边缘检测的核心。
-
-**Approximated with finite differences: forward, backward, or central.**  
-数字图像中通过前向差分、后向差分与中心差分近似。
-
-**First derivatives detect edges; second derivatives detect zero crossings.**  
-一阶导数检测边缘，二阶导数检测零交叉。
-
----
-
-## 12. **Prewitt and Sobel Filters**
-
-**Prewitt and Sobel compute derivatives with smoothing in the perpendicular direction.**  
-Prewitt 与 Sobel 通过在垂直方向的平滑来计算导数。
-
-**Sobel gives stronger smoothing, making it more stable to noise.**  
-Sobel 有更强的平滑能力，对噪声更加稳定。
-
----
-
-## 13. **Separable Filters**
-
-**A 2D kernel is separable if it can be written as the product of two 1D kernels.**  
-一个 2D 核可分离，当它能被写成两个一维核的乘积。
-
-**Separable filters reduce computation from O(n²) to O(2n).**  
-分离滤波能将计算从 O(n²) 降到 O(2n)。
-
-**Gaussian, Sobel, and uniform filters are separable.**  
-高斯、Sobel、均值核等都可以分离。
-
----
-
-## 14. **Laplacian Filter**
-
-**The Laplacian approximates the sum of second-order derivatives.**  
-拉普拉斯算子近似计算二阶导数之和。
-
-**It responds strongly to edges and zero-crossings.**  
-它对边缘与零交叉反应明显。
-
-**Kernel:  \[[0,1,0],[1,−4,1],[0,1,0]].**  
-其典型核为 \[\[0,1,0],\[1,−4,1],\[0,1,0]]。
-
----
-
-## 15. **Gradient Vector & Magnitude**
-
-**The gradient vector points in the direction of strongest intensity increase.**  
-梯度向量指向亮度上升最快的方向。
-
-**Magnitude = sqrt(fx² + fy²).**  
-梯度幅值 = sqrt(fx² + fy²)。
-
-**Used for edge maps and edge strength.**  
-用于生成边缘图和计算边缘强度。
-
----
-
-## 16. **Edge Detection**
-
-**Gradient magnitude detects edges via high-intensity changes.**  
-梯度幅值通过检测亮度快速变化找到边缘。
-
-**Laplacian detects edges via zero-crossings.**  
-拉普拉斯通过零交叉点检测边缘。
-
-**Correct scale (σ) is essential — too small detects noise, too large loses detail.**  
-选择合适 σ（尺度）很重要——太小会检测到噪声，太大则会丢失细节。
-
----
-
-## 17. **Differentiation in Fourier Domain**
-
-**Differentiation becomes multiplication by (iω) in the frequency domain.**  
-在频域中，求导对应乘以 (iω)。
-
-**This boosts high frequencies, which also boosts noise.**  
-求导会放大高频，从而也放大噪声。
-
----
-
-## 18. **Sharpening Using Laplacian**
-
-**A sharpened image can be computed as f − Laplacian(f).**  
-锐化图像可以表示为 f − Laplacian(f)。
-
-**This enhances edges by subtracting low-frequency content.**  
-通过去除低频部分来强化边缘。
-
----
-
-## 19. **Typical Exam Points**
-
-**Know convolution definition and why kernels are flipped.**  
-掌握卷积定义以及为什么需要翻转核。
-
-**Mean vs Gaussian vs Median — effects and differences.**  
-必须区分均值、高斯、中值滤波的效果与差异。
-
-**Gradient vs Laplacian — first vs second derivative.**  
-梯度与拉普拉斯：一阶导 vs 二阶导。
-
-**Sobel vs Prewitt — smoothing strength differences.**  
-Sobel 比 Prewitt 更平滑、更抗噪。
-
-**Separable kernels reduce computation — know examples.**  
-可分离核能降低运算量，需要记住哪些核可分离。
-
-**Laplacian kernel approximates second-order derivatives.（考试原题）**  
-拉普拉斯核近似二阶导数（考题中出现）。
-
----
 
 > [!faq] Summary & Question
 > 
@@ -318,6 +69,29 @@ Sobel 比 Prewitt 更平滑、更抗噪。
 > 
 > **Neighborhood operations are the fundamental mechanism → filtering methods are specific tools built on that mechanism → image enhancement uses those tools to achieve practical improvements.**  
 > 邻域操作是底层机制 → 滤波方法是在该机制之上构建的具体工具 → 图像增强利用这些工具来实现实际的增强任务。
+
+> [!NOTE] Note
+> ## **Neighborhood operations**
+> 
+> Local window → convolution → border handling.  
+> 局部窗口 → 卷积滤波 → 边界处理。
+> 
+> ## **Filtering methods**
+> 
+> Mean = simple blur  
+> Gaussian = best blur  
+> Median = salt-pepper removal  
+> Sobel/Prewitt = gradient  
+> Laplacian = second derivative  
+> Separability = fast  
+> Pooling = downsample
+> 
+> ## **Image enhancement**
+> 
+> Sharpen = boost high-frequency  
+> USM = original − blur  
+> Gradient magnitude = edge strength  
+> Edge detection = find high gradients
 
 ## ✅ **1. Laplacian kernel（拉普拉斯算子）— 必考**
 
@@ -534,3 +308,437 @@ C 是错误的 → 高通不会平滑细节，而是强化细节。
 > 傅里叶将图像转换到频域，使我们能做点操作和邻域操作无法实现的全局、按频率选择性的滤波。
 > 
 
+## 1. Fourier transform for image processing
+
+> [!NOTE] Note
+> 
+> ## ⭐ What is the Fourier transform?
+> 
+> **The Fourier transform converts an image from the spatial domain $f(x,y)$ into the frequency domain $F(u,v)$.**  
+> 傅里叶变换把图像从空间域 $f(x,y)$ 转换到频域 $F(u,v)$。
+> 
+> **It represents the image as a sum of sinusoids of different frequencies and orientations.**  
+> 它把图像表示成不同频率和方向的正弦波的加权组合。
+> 
+> ---
+> 
+> ## ⭐ Why do we need the Fourier transform?
+> 
+> **Because many image properties are easier to analyze in frequency domain than in spatial domain.**  
+> 因为许多图像特性在频域中比在空间域更容易被分析。
+> 
+> **Edges, noise, blur, and periodic patterns have clear signatures in frequency space.**  
+> 边缘、噪声、模糊、周期结构在频域中都有清晰的表现形式。
+> 
+> ---
+> 
+> ## ⭐ Forward Fourier Transform (2D FWT)
+> 
+> **It converts $f(x,y)$ into $F(u,v)$:**  
+> 它将空间图像转换为频谱：
+> 
+> $$  
+> F(u,v)=\sum_{x=0}^{M-1}\sum_{y=0}^{N-1} f(x,y)e^{-i2\pi\left(\frac{ux}{M}+\frac{vy}{N}\right)}  
+> $$
+> 
+> **Each frequency pair $(u,v)$ shows how strong a sinusoid of that frequency is in the image.**  
+> 每个频率 $(u,v)$ 表示图像中该频率正弦波的强度。
+> 
+> ---
+> 
+> ## ⭐ Inverse Fourier Transform
+> 
+> **It reconstructs the original image from all frequency components.**  
+> 逆变换负责用所有频率成分重建原始图像。
+> 
+> $$  
+> f(x,y)=\frac{1}{MN}\sum_{u=0}^{M-1}\sum_{v=0}^{N-1}F(u,v)e^{i2\pi\left(\frac{ux}{M}+\frac{vy}{N}\right)}  
+> $$
+> 
+> ---
+> 
+> ## ⭐ Convolution Theorem（非常重要）
+> 
+> **Convolution in spatial domain equals multiplication in frequency domain.**  
+> 空间域的卷积等价于频域中的乘法。
+> 
+> $$  
+> f * h \quad \Longleftrightarrow \quad F(u,v)H(u,v)  
+> $$
+> 
+> **This is why filtering is easier in frequency domain.**  
+> 这就是为什么频域滤波更实际、更容易。
+> 
+> ---
+> 
+> ## ⭐ Properties of Fourier Transform（考试重点）
+> 
+> ### ✔ Linearity
+> 
+> **$a f_1 + b f_2$ transforms to $aF_1 + bF_2$.**  
+> 线性组合在变换后依然保持线性。
+> 
+> ---
+> 
+> ### ✔ Shift property
+> 
+> **Shifting the image causes a phase shift in $F(u,v)$, but magnitude stays the same.**  
+> 图像平移会改变频域相位，但不会影响幅度。
+> 
+> ---
+> 
+> ### ✔ Differentiation property
+> 
+> **Taking spatial derivatives multiplies by frequency:**  
+> 空间求导相当于乘以频率：
+> 
+> $$  
+> \frac{\partial f}{\partial x} \Longleftrightarrow (i2\pi u)F(u,v)  
+> $$
+> 
+> **This explains why edges appear strong in high frequencies.**  
+> 这解释了为什么边缘在高频区域非常强烈。
+> 
+> ---
+> 
+> ## ⭐ Discrete Fourier Transform (DFT)
+> 
+> **Images are discrete → must use DFT instead of continuous FT.**  
+> 图像是离散的 → 必须使用 DFT。
+> 
+> **DFT always exists and gives an $M\times N$ transform of an $M\times N$ image.**  
+> DFT 对任意 $M \times N$ 图像都定义良好，并且结果也是同样大小。
+> 
+> ---
+> 
+> ## ⭐ Relationship between spatial patterns and frequencies
+> 
+> ### ✔ Smooth regions = low frequencies
+> 
+> 平滑区域对应低频。
+> 
+> ### ✔ Fine details and edges = high frequencies
+> 
+> 细节与边缘对应高频。
+> 
+> ### ✔ Periodic patterns = sharp spikes
+> 
+> 周期结构对应尖锐的频率“亮点”。
+> 
+> ---
+> 
+> ## ⭐ Why use Fourier transform in image processing?
+> 
+> **1. To perform precise frequency filtering (low-pass, high-pass, band-pass).**  
+> 用于精准滤波（低通、高通、带通）。
+> 
+> **2. To remove periodic noise using notch filtering.**  
+> 用陷波滤波去除周期噪声。
+> 
+> **3. To analyze textures and repeating patterns.**  
+> 分析纹理与重复结构。
+> 
+> **4. To enable multi-scale (multiresolution) analysis.**  
+> 支持多尺度分析（如 DoG、金字塔）。
+> 
+> **5. To perform operations impractical in spatial domain (e.g., large filters).**  
+> 执行空间域难以实现的大范围滤波。
+> 
+> ---
+> 
+> ## ⭐ Final 1-sentence summary
+> 
+> **Fourier transform enables a frequency-based view of images, allowing global analysis and precise filtering that spatial operations cannot achieve.**  
+> 傅里叶变换让我们从频率角度理解图像，实现空间域无法完成的全局分析与精准滤波。
+> 
+
+## 2. Fourier domain filtering methods
+
+> [!NOTE] Note
+> 
+> ## ⭐ What is Fourier domain filtering?
+> 
+> **Fourier domain filtering modifies an image by multiplying its Fourier transform $F(u,v)$ with a frequency filter $H(u,v)$.**  
+> 频域滤波通过将图像的傅里叶变换 $F(u,v)$ 与频域滤波器 $H(u,v)$ 相乘来修改图像。
+> 
+> **Filtering happens frequency-by-frequency instead of pixel-by-pixel.**  
+> 滤波在频率维度逐频率进行，而不是像素维度。
+> 
+> ---
+> 
+> ## ⭐ Why filter in the frequency domain?
+> 
+> **Frequency domain filtering allows precise control over which frequencies are kept or suppressed.**  
+> 频域滤波可以精确控制保留或去除哪些频率。
+> 
+> **It is ideal for removing periodic noise, smoothing, sharpening, and multi-scale analysis.**  
+> 非常适合去除周期噪声、平滑、锐化与多尺度分析。
+> 
+> ---
+> 
+> ## ⭐ The Fourier Filtering Procedure（PPT 强调步骤，必考）
+> 
+> **Step 1: Multiply input image $f(x,y)$ by $(-1)^{x+y}$ to center low frequencies.**  
+> 步骤1：给输入乘以 $(-1)^{x+y}$，将低频移到中心。
+> 
+> **Step 2: Compute the 2D DFT → $F(u,v)$.**  
+> 步骤2：计算二维 DFT，得到 $F(u,v)$。
+> 
+> **Step 3: Multiply with the filter mask → $G(u,v)=F(u,v)H(u,v)$.**  
+> 步骤3：与频域滤波器相乘，得到 $G(u,v)=F(u,v)H(u,v)$。
+> 
+> **Step 4: Compute inverse DFT to go back to spatial domain.**  
+> 步骤4：对 $G(u,v)$ 做逆 DFT 回到空间域。
+> 
+> **Step 5: Take the real part (imaginary part should be negligible).**  
+> 步骤5：取实部（虚部通常是数值误差）。
+> 
+> **Step 6: Multiply again by $(-1)^{x+y}$ to undo the centering.**  
+> 步骤6：再次乘 $(-1)^{x+y}$ 恢复图像。
+> 
+> ---
+> 
+> ## ⭐ Low-Pass Filtering（低通滤波）
+> 
+> **Low-pass filters keep low frequencies and suppress high frequencies.**  
+> 低通滤波器保留低频，抑制高频。
+> 
+> **Result: smooth, blurred image with removed noise and fewer edges.**  
+> 结果：图像更平滑、更模糊，高频噪声和边缘被移除。
+> 
+> **Common shapes: Gaussian LPF, ideal LPF, Butterworth LPF.**  
+> 常见形状有：高斯低通、理想低通、巴特沃斯低通。
+> 
+> ---
+> 
+> ## ⭐ High-Pass Filtering（高通滤波）
+> 
+> **High-pass filters keep high frequencies and suppress low frequencies.**  
+> 高通滤波器保留高频，抑制低频。
+> 
+> **Result: edge enhancement or edge extraction.**  
+> 结果：增强边缘或提取边缘。
+> 
+> **Used for sharpening and detecting fine details.**  
+> 用于锐化和检测细节。
+> 
+> ---
+> 
+> ## ⭐ Band-Pass / Band-Stop Filtering（带通 / 带阻滤波）
+> 
+> **Band-pass filters keep a specific frequency band and remove others.**  
+> 带通滤波保留特定频段。
+> 
+> **Band-stop (notch) filters suppress specific frequency bands only.**  
+> 带阻（陷波）滤波只抑制特定频段。
+> 
+> 👉 两者都是频域才能轻松实现的。
+> 
+> ---
+> 
+> ## ⭐ Notch Filtering（陷波滤波）
+> 
+> **Notch filters remove specific frequency spikes caused by periodic noise.**  
+> 陷波滤波用于移除周期性噪声引起的尖点频率。
+> 
+> **Periodic stripes or repeating patterns in spatial domain become isolated bright points in frequency domain.**  
+> 空间中的周期条纹噪声在频域中变成单独的亮点。
+> 
+> **By zeroing out those points, the unwanted stripes disappear.**  
+> 把这些尖点设为 0，条纹噪声就消失了。
+> 
+> 👉 **Only frequency domain can do this cleanly.**  
+> 👉 **这类去噪只有频域能做得干净！**
+> 
+> ---
+> 
+> ## ⭐ Why use Gaussian filters in frequency domain?
+> 
+> **The Fourier transform of a Gaussian is also a Gaussian, so filtering is smooth and ring-free.**  
+> 高斯的傅里叶变换仍是高斯 → 滤波平滑且无振铃（无假边缘）。
+> 
+> **Gaussian LPF and HPF produce the most natural results.**  
+> 高斯低通与高通通常效果最好。
+> 
+> ---
+> 
+> ## ⭐ How spatial filters relate to frequency filters
+> 
+> **Convolution in spatial domain = multiplication in frequency domain.**  
+> 空间域卷积等价于频域中的乘法。
+> 
+> **This is the convolution theorem (important!).**  
+> 这就是卷积定理（考试重点）。
+> 
+> **Large spatial filters ↔ small simple frequency masks.**  
+> 空间域的大卷积核对应频域中的小而简单的频率掩膜。
+> 
+> ---
+> 
+> ## ⭐ Visual intuition (must understand)
+> 
+> **Low frequencies = slow changes → smooth regions.**  
+> 低频 = 变化慢 → 图像平滑部分。
+> 
+> **High frequencies = fast changes → edges and noise.**  
+> 高频 = 变化快 → 边缘和噪声。
+> 
+> 👉 所以：
+> 
+> - 去噪 = 去高频
+>     
+> - 模糊 = 去高频
+>     
+> - 锐化 = 增强高频
+>     
+> - 去条纹 = 去掉特定频率的尖点
+>     
+> 
+> ---
+> 
+> ## ⭐ Final summary (exam-short version)
+> 
+> **Fourier domain filtering = multiply $F(u,v)$ by $H(u,v)$**  
+> 频域滤波 = 让 $F(u,v)$ 和 $H(u,v)$ 相乘
+> 
+> **Low-pass → blur**  
+> 低通 → 模糊
+> 
+> **High-pass → edges/sharpen**  
+> 高通 → 边缘/锐化
+> 
+> **Notch → remove periodic noise**  
+> 陷波 → 去周期噪声
+> 
+> **Gaussian filters → smoothest, no ringing**  
+> 高斯滤波 → 最平滑、无伪影
+> 
+> **Procedure = center → DFT → multiply → IDFT → uncenter**  
+> 流程 = 居中 → DFT → 相乘 → IDFT → 取消居中
+
+## 3. Multiresolution image processing
+
+> [!NOTE] Note
+> ## ⭐ What is multiresolution image processing?
+> 
+> **Multiresolution image processing represents an image at multiple scales or resolutions simultaneously.**  
+> 多分辨率图像处理是在多个尺度或分辨率下同时表示一幅图像。
+> 
+> **It allows us to analyze coarse (large-scale) structures and fine (detail) structures separately.**  
+> 它让我们可以分别分析图像的粗结构（大范围）和细节（小范围）。
+> 
+> ---
+> 
+> ## ⭐ Why do we need multiple resolutions?
+> 
+> **Some information is visible only at coarse scale, others only at fine scale.**  
+> 图像中有些结构在“粗尺度”才明显，有些在“细尺度”才明显。
+> 
+> **Human vision naturally processes images at multiple scales.**  
+> 人类视觉系统也天然按多尺度理解图像。
+> 
+> **Many tasks—blending, compression, edge-preserving filtering—require separating scales.**  
+> 诸如融合、压缩、边缘保持滤波等任务都需要按尺度分解图像。
+> 
+> ---
+> 
+> ## ⭐ How do we achieve multiresolution processing?
+> 
+> **We create multiple smoothed and downsampled versions of the image, forming a pyramid.**  
+> 我们通过多次平滑和下采样来创建图像的多尺度版本，形成图像金字塔。
+> 
+> ---
+> 
+> ## ⭐ Gaussian Pyramid（高斯金字塔）
+> 
+> **A Gaussian pyramid is created by repeatedly low-pass filtering and downsampling the image.**  
+> 高斯金字塔通过不断地低通滤波和下采样构建。
+> 
+> **Each level removes more high-frequency detail to provide a coarser version of the image.**  
+> 每一层都会移除更多的高频细节，让图像更加粗糙。
+> 
+> ---
+> 
+> ## ⭐ Laplacian Pyramid（拉普拉斯金字塔）
+> 
+> **A Laplacian pyramid stores the difference between Gaussian levels, capturing band-pass details.**  
+> 拉普拉斯金字塔存储高斯层之间的差值，从而捕获中频/细节信息。
+> 
+> **Each level represents details that were lost during smoothing.**  
+> 每一层表示在平滑过程中“丢失的细节”。
+> 
+> ---
+> 
+> ## ⭐ Why build pyramids?
+> 
+> **Pyramids separate an image into smooth components and detail components.**  
+> 金字塔将图像分解为平滑部分与细节部分。
+> 
+> **This enables operations like image blending, texture analysis, and efficient compression.**  
+> 这样就能实现图像融合、纹理分析、高效压缩等功能。
+> 
+> ---
+> 
+> ## ⭐ Pyramid construction steps (Gaussian)
+> 
+> **1. Apply low-pass filter (usually Gaussian).**
+> 
+> 1. 对图像做低通滤波（通常是高斯滤波）。
+>     
+> 
+> **2. Downsample by factor 2 (take every second pixel).**  
+> 2. 下采样（每隔一个像素取一个）。
+> 
+> **3. Repeat to create multiple levels.**  
+> 3. 重复执行多次，得到多层金字塔。
+> 
+> ---
+> 
+> ## ⭐ Pyramid reconstruction (Laplacian)
+> 
+> **1. Upsample the coarse image (insert zeros).**
+> 
+> 4. 上采样（插入零）。
+>     
+> 
+> **2. Low-pass filter to smooth interpolation.**  
+> 5. 用低通滤波器平滑插值。
+> 
+> **3. Add the stored detail layer back.**  
+> 6. 将之前保存的细节层加回去。
+> 
+> **Repeat until original size is restored.**  
+> 重复该步骤直到重建原始图像。
+> 
+> ---
+> 
+> ## ⭐ Difference of Gaussians (DoG) and multiresolution
+> 
+> **DoG = Gaussian($\sigma_2$) − Gaussian($\sigma_1$) approximates a band-pass filter.**  
+> DoG = $G(\sigma_2) - G(\sigma_1)$，近似一个带通滤波器。
+> 
+> **This acts like one level of the Laplacian pyramid.**  
+> 它的效果就像拉普拉斯金字塔的一层。
+> 
+> ---
+> 
+> ## ⭐ Why multiresolution is powerful
+> 
+> **Different tasks need different scales: edges, textures, illumination, shapes.**  
+> 不同任务需要不同尺度：边缘、纹理、光照、形状等。
+> 
+> **Multiresolution processing allows each scale to be handled properly.**  
+> 多分辨率处理能让每个尺度的信息都得到恰当处理。
+> 
+> **This produces cleaner, more natural results than single-scale methods.**  
+> 比单尺度方法得到更自然、更干净的结果。
+> 
+> ---
+> 
+> ## ⭐ Final Summary
+> 
+> **Multiresolution processing decomposes an image into multiple spatial scales using Gaussian and Laplacian pyramids.**  
+> 多分辨率处理通过高斯和拉普拉斯金字塔把图像分解为多个空间尺度。
+> 
+> **It enables operations like blending, compression, and scale-space analysis that single-scale filtering cannot achieve.**  
+> 它能实现单尺度滤波无法做到的图像融合、压缩、尺度空间分析等操作。
