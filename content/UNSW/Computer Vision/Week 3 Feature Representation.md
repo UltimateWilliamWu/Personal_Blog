@@ -233,8 +233,6 @@ SIFT 提取对尺度、旋转、光照、视角变化具有不变性的关键点
 显著提升匹配鲁棒性。
 
 ---
-
-
 # ⭐ 7. Spatial Transformations & Alignment
 ## ⭐ Types of transformations
 
