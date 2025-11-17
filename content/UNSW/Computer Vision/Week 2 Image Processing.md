@@ -320,3 +320,4 @@ Sobel 比 Prewitt 更平滑、更抗噪。
 
 ![[Pasted image 20251116132108.png]]
 B
+
