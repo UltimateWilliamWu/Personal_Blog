@@ -318,6 +318,105 @@ Sobel 比 Prewitt 更平滑、更抗噪。
 > **Neighborhood operations are the fundamental mechanism → filtering methods are specific tools built on that mechanism → image enhancement uses those tools to achieve practical improvements.**  
 > 邻域操作是底层机制 → 滤波方法是在该机制之上构建的具体工具 → 图像增强利用这些工具来实现实际的增强任务。
 
+# ✅ **1. Laplacian kernel（拉普拉斯算子）— 必考**
+
+**Kernel:  
+[\begin{bmatrix}0 & 1 & 0 \ 1 & -4 & 1 \ 0 & 1 & 0\end{bmatrix}]  
+Approximates the sum of second-order derivatives → detects zero-crossings (edges).**  
+近似二阶导数之和，用于检测零交叉与边缘，是 PPT “例题”考题。
+
+---
+
+# ✅ **2. Sobel kernels — 必会的一阶导数滤波器**
+
+### **Sobel X**
+
+**Kernel:  
+[\begin{bmatrix}1 & 0 & -1 \ 2 & 0 & -2 \ 1 & 0 & -1\end{bmatrix}]  
+Computes ∂f/∂x with smoothing → detects vertical edges.**  
+计算 x 方向一阶导（带平滑），用于检测垂直边缘。
+
+### **Sobel Y**
+
+**Kernel:  
+[\begin{bmatrix}1 & 2 & 1 \ 0 & 0 & 0 \ -1 & -2 & -1\end{bmatrix}]  
+Computes ∂f/∂y with smoothing → detects horizontal edges.**  
+计算 y 方向一阶导，检测水平边缘。
+
+---
+
+# ✅ **3. Prewitt kernels — 考点：与 Sobel 对比**
+
+### **Prewitt X**
+
+**Kernel:  
+[\begin{bmatrix}1 & 0 & -1 \ 1 & 0 & -1 \ 1 & 0 & -1\end{bmatrix}]  
+First-order derivative in x with weaker smoothing than Sobel.**  
+x方向一阶导，平滑较弱（考试爱问差异）。
+
+### **Prewitt Y**
+
+**Kernel:  
+[\begin{bmatrix}1 & 1 & 1 \ 0 & 0 & 0 \ -1 & -1 & -1\end{bmatrix}]  
+First-order derivative in y.**  
+y方向一阶导。
+
+---
+
+# ✅ **4. Uniform averaging filter（均值滤波）— 必会**
+
+### **3×3 Uniform**
+
+**Kernel:  
+[\frac{1}{9}\begin{bmatrix}1 & 1 & 1 \ 1 & 1 & 1 \ 1 & 1 & 1\end{bmatrix}]  
+Performs simple smoothing; reduces noise but blurs edges.**  
+简单平滑，降噪但模糊边缘。
+
+---
+
+# ✅ **5. Gaussian filter kernels — 高频考点（可分离）**
+
+### **Example 3×3 Gaussian kernel**
+
+**Kernel (σ≈1):  
+[\frac{1}{16}\begin{bmatrix}1 & 2 & 1 \ 2 & 4 & 2 \ 1 & 2 & 1\end{bmatrix}]  
+Performs smooth, natural blurring; separable; best for noise reduction.**  
+自然平滑、最好的降噪滤波器，并且核可分离（重要考点）。
+
+---
+
+# ✅ **6. Gaussian derivative filters — PPT 明确强调**
+
+### **First derivative of Gaussian (DoG)**
+
+**Kernel example:  
+X-derivative: [\begin{bmatrix}1 & 0 & -1 \ 2 & 0 & -2 \ 1 & 0 & -1\end{bmatrix}]  
+Equivalent to smoothed derivative — used for edge detection.**  
+平滑的一阶导数，最常用于边缘检测（比 Sobel 更理论标准）。
+
+PPT 强调：  
+**Gaussian derivative = 边缘检测的基础（scale-space theory）**
+
+---
+
+# ✅ **7. Second derivative of Gaussian（LoG）— 也在PPT提到**
+
+**This is the basis of Laplacian of Gaussian.**  
+这是高斯拉普拉斯算子的基础。
+
+**Used for detecting edges via zero-crossings.**  
+用于通过零交叉检测边缘。
+
+---
+
+# ✅ **8. Min / Max filters（非线性滤波器）**
+
+**Kernel structure: neighborhood window; output = min or max of all pixels.**  
+结构就是邻域窗口，但输出是最大或最小值。
+
+**Used for morphology-like effects.**  
+用于形态学效果。
+
 ![[Pasted image 20251116132108.png]]
 B
 
