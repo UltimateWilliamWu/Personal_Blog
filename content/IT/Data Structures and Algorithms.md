@@ -2,4 +2,4 @@
 tags:
   - ComputerScience
 ---
-[[Data Structures & Algorithms]]
+[[COMP 9024]]
