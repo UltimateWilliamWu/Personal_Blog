@@ -30,9 +30,6 @@
 对象检测、图像分割、分类、检索、拼接、跟踪都需要特征。
 
 ---
-
-
-
 # ⭐ 2. Major Categories of Image Features
 图像特征分三类：
 
@@ -66,7 +63,6 @@
 表达能力强但维度高。
 
 ---
-
 ## ⭐ Colour Moments
 
 **Colour distributions can also be represented using statistical moments (per channel).**  
@@ -93,9 +89,6 @@
 ---
 
 # ⭐ 4. Texture Features
-
-
-
 **Texture describes patterns created by local variations in intensity.**  
 纹理描述由局部亮度变化形成的图案特征。
 
@@ -179,8 +172,6 @@ LBP 快速、紧凑，对光照单调变化有鲁棒性。
 特征维度从 256 大幅降到 36。
 
 ---
-
-
 # ⭐ 5. Scale-Invariant Feature Transform (SIFT)
 ## ⭐ Concept
 
@@ -245,7 +236,6 @@ SIFT 提取对尺度、旋转、光照、视角变化具有不变性的关键点
 
 
 # ⭐ 7. Spatial Transformations & Alignment
-
 ## ⭐ Types of transformations
 
 Translation, rotation, scaling, affine, perspective.  
@@ -270,7 +260,7 @@ Translation, rotation, scaling, affine, perspective.
 
 ---
 
-# ## ⭐ Final Exam Summary (Super Short)
+# ⭐ Final Exam Summary (Super Short)
 ### **Colour**
 
 Histogram = strong but large  
