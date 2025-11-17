@@ -203,5 +203,312 @@ KNN 根据最近的 $K$ 个邻居中占多数的类别进行分类。
 正确陈述：增加单树的强度会降低随机森林的错误率。
 ![[Pasted image 20251117221211.png]]
 对应选项为：
-### ✔ **D**
+✔ **D**
+
+# 🟦 **1. Separability（可分性）**
+
+### **• Separable classes**
+
+Classes are separable when a subspace exists that separates the classes.  
+👉 若存在某个空间能让各类互不重叠 → 可分。
+
+### **• Linearly separable**
+
+Classes are separable by a hyperplane.  
+👉 用直线/平面/超平面就能分开 → 线性可分。
+
+---
+
+# 🟦 **2. Linear Classifier（线性分类器）**
+
+### **• Model**
+
+A linear classifier uses  
+$$ f(x) = W^T x + b $$  
+👉 线性函数决定分类边界。
+
+### **• Decision rule**
+
+$$  
+f(x) > 0 \rightarrow y = +1,\qquad  
+f(x) < 0 \rightarrow y = -1  
+$$  
+👉 符号决定类别。
+
+### **• Best hyperplane = largest margin**
+
+Large margin improves generalization.  
+👉 间隔越大越稳健。
+
+---
+
+# 🟦 **3. Support Vector Machine（支持向量机）**
+
+---
+
+## **3.1 Hard-Margin SVM（硬间隔）**
+
+### **Optimization problem**
+
+$$  
+\min \frac{1}{2}|W|^2  
+$$
+
+subject to  
+$$  
+y_i(W^T x_i + b) \ge 1  
+$$
+
+👉 完全正确分类 + 最大化间隔。
+
+---
+
+## **3.2 Soft-Margin SVM（软间隔）**
+
+加入松弛变量 $\xi_i$：
+
+$$  
+y_i(W^T x_i + b) \ge 1 - \xi_i,\qquad \xi_i \ge 0  
+$$
+
+优化目标：
+
+$$  
+\min \frac{1}{2}|W|^2 + C\sum_i \xi_i  
+$$
+
+👉 $C$ 控制“容错 vs 过拟合”。
+
+- $C$ 小：允许更多错误，间隔更大
+    
+- $C$ 大：尽量不犯错，容易过拟合
+    
+
+---
+
+## **3.3 Kernel Trick（核技巧）**
+
+Kernel implicitly maps data into high dimension.  
+👉 不显式升维，却能做非线性分类。
+
+---
+
+## **3.4 SVM 优缺点**
+
+### **Pros**
+
+- Strong in high-dimensional space
+    
+- Works well when features > samples
+    
+- Sparse data friendly  
+    👉 特征多、数据稀疏时特别强。
+    
+
+### **Cons**
+
+- Slow on large datasets
+    
+- Poor on overlapping classes
+    
+- Hyperparameter tuning required  
+    👉 数据大慢、类重叠差、调参麻烦。
+    
+
+---
+
+# 🟦 **4. Multiclass Classification（多类分类）**
+
+### **• One-vs-Rest (OvR)**
+
+One classifier per class vs the rest.  
+👉 一个类别 vs 其他所有。
+
+### **• One-vs-One (OvO)**
+
+One classifier per pair of classes.  
+👉 每两类训练一个分类器。
+
+---
+
+# 🟦 **5. Classification Error（分类误差）**
+
+### **• Error rate**
+
+$$
+\text{Error rate} = \frac{\#\text{ errors}}{\#\text{ samples}}
+$$
+  
+👉 基本错误率。
+
+### **• Reject class**
+
+Generic class for “cannot classify” samples.  
+👉 无法判断时归入拒识类。
+
+---
+
+# 🟦 **6. False Positive / False Negative（假阳性/假阴性）**
+
+### **• False positive**
+
+Predict positive when actually negative.  
+👉 错把健康判成病人。
+
+### **• False negative**
+
+Predict negative when actually positive.  
+👉 错把病人判成健康（更严重）。
+
+---
+
+# 🟦 **7. ROC Curve（ROC 曲线）**
+
+### **• TPR vs FPR at different thresholds**
+
+绘制：
+
+- TPR（真阳率）
+    
+- FPR（假阳率）
+    
+
+通过：
+
+$$  
+\text{AUC} = \text{Area under ROC}  
+$$
+
+👉 AUC 越大模型性能越好。
+
+---
+
+# 🟦 **8. Confusion Matrix（混淆矩阵）**
+
+Binary version：
+
+||Pred P|Pred N|
+|---|---|---|
+|**Actual P**|TP|FN|
+|**Actual N**|FP|TN|
+
+### **Accuracy**
+
+$$  
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}  
+$$
+
+---
+
+# 🟦 **9. Precision / Recall / F1**
+
+### **Precision**
+
+$$  
+P = \frac{TP}{TP + FP}  
+$$  
+👉 被预测为正的里有多少是真的？
+
+### **Recall**
+
+$$  
+R = \frac{TP}{TP + FN}  
+$$  
+👉 真正例里找到了多少？
+
+### **F1 score**
+
+$$  
+F1 = \frac{2PR}{P + R}  
+$$  
+👉 平衡 Precision 与 Recall。
+
+---
+
+# 🟦 **10. Regression（回归）**
+
+### **• Linear model**
+
+$$  
+f(x) = xW  
+$$
+
+### **• RSS（残差平方和）**
+
+$$  
+RSS(W) = (Y - XW)^T (Y - XW)  
+$$
+
+### **• Closed-form solution**
+
+$$  
+\hat{W} = (X^T X)^{-1} X^T Y  
+$$  
+👉 最小二乘法的解析解。
+
+---
+
+# 🟦 **11. Regression Metrics（回归指标）**
+
+### **RMSE**
+
+$$  
+RMSE = \sqrt{\frac{1}{N}\sum (y_i - \hat y_i)^2}  
+$$
+
+### **MAE**
+
+$$  
+MAE = \frac{1}{N}\sum |y_i - \hat y_i|  
+$$
+
+### **$R^2$**
+
+$$  
+R^2 = 1 -  
+\frac{\sum (y_i - \hat y_i)^2}{\sum (y_i - \bar y)^2}  
+$$
+
+### **Adjusted $R^2$**
+
+$$  
+R^2_{\text{adj}} =  
+1 - (1-R^2)\frac{N-1}{N-d-1}  
+$$
+
+---
+
+# 🟦 **12. Normalization（归一化）**
+
+### **Z-score**
+
+$$  
+z = \frac{x - \mu}{\sigma}  
+$$
+
+### **Min-max**
+
+$$  
+x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}  
+$$
+
+---
+
+# 🟦 **13. Cross Validation（交叉验证）**
+
+### **K-fold CV**
+
+每次训练 $K-1$ 个 fold，测试 1 个 fold。
+
+性能 = 所有 fold 平均结果。
+
+👉 用来防止过拟合 + 调参。
+
+---
+
+# 🟦 **14. Exam Example（例题）**
+
+正确答案：**C**
+![[Pasted image 20251117234443.png]]
+原因：kNN 使用距离 → 特征必须同尺度。
 
