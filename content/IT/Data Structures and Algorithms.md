@@ -2,4 +2,6 @@
 tags:
   - ComputerScience
 ---
-[[COMP 9024]]
+## Contents
+1. [[COMP 9024]]
+

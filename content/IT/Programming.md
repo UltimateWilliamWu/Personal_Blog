@@ -2,6 +2,10 @@
 tags:
   - ComputerScience
 ---
-[[Java]]
-[[Python]]
-[[Rust]]
+## Contents
+1. [[Java]]
+2. [[Python]]
+3. [[Rust]]
+
+
+

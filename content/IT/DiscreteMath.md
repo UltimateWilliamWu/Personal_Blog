@@ -2,4 +2,6 @@
 tags:
   - ComputerScience
 ---
-[[Discrete Math]]
+## Contents
+1. [[COMP 9020]]
+
