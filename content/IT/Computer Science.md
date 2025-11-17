@@ -1,7 +1,3 @@
----
-tags:
-  - ComputerScience
----
 - [[DiscreteMath]] 
 - [[NetWork]]
 - [[Programming]]
