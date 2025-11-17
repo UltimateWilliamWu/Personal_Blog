@@ -279,3 +279,7 @@ NNDR < 0.8
 ### **Alignment**
 
 Least squares + RANSAC
+
+C
+![[Pasted image 20251117204730.png]]
+
