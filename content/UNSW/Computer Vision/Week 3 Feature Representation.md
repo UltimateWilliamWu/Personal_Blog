@@ -283,3 +283,166 @@ Least squares + RANSAC
 C
 ![[Pasted image 20251117204730.png]]
 
+---
+
+# ⭐ 1. Shape Features（形状特征）
+
+**Shape features describe an object’s geometry, outline, and boundary structure.**  
+形状特征用于描述物体的几何结构、轮廓和边界信息。
+
+**They are typically extracted after segmentation.**  
+通常在图像分割之后提取。
+
+---
+
+# ⭐ 2. Basic Geometric Shape Features（基础几何形状特征）
+
+### ✔ Convexity / Concavity（凸性 / 凹性）
+
+**Convex shapes contain all line segments between interior points; concave shapes do not.**  
+凸形物体包含内部任意两点间的直线；凹形物体则不满足。
+
+### ✔ Convex Hull（凸包）
+
+**The convex hull is the smallest convex region enclosing the object.**  
+凸包是包围物体的最小凸区域。
+
+### ✔ Convex Deficiency（凸缺陷）
+
+**Convex deficiency = convex hull area − actual object area.**  
+凸缺陷 = 凸包面积 − 物体面积。
+
+### ✔ Circularity（圆度）
+
+**Circularity = $4\pi A / P^2$ (equals 1 for a perfect circle).**  
+圆度 = $4\pi A / P^2$（完美圆的值为 1）。
+
+### ✔ Eccentricity（偏心率）
+
+**Eccentricity = minor axis / major axis of the fitted ellipse.**  
+偏心率 = 拟合椭圆的短轴 / 长轴。
+
+### ✔ Elongation（细长度）
+
+**Elongation = length / width of the bounding rectangle.**  
+细长度 = 外接矩形的长宽比。
+
+---
+
+# ⭐ 3. Boundary Descriptors（边界描述子）
+
+### ✔ Chain Code
+
+**Represents boundary as a sequence of directional codes.**  
+链码用方向序列表示物体边界。
+
+### ✔ Curvature（曲率）
+
+**Curvature measures how sharply the boundary bends.**  
+曲率描述边界在某点的弯曲程度。
+
+- 凸曲率为正
+    
+- 凹曲率为负
+    
+
+### ✔ Bending Energy / Absolute Curvature
+
+**Bending energy = $\int \kappa(s)^2 ds$, smallest for circles.**  
+弯曲能量 = $\int \kappa(s)^2 ds$，圆形最小。
+
+**Absolute curvature = $\int |\kappa(s)| ds$, convex shapes have minimum $2\pi$.**  
+绝对曲率 = $\int |\kappa(s)| ds$，凸形物体最小值 $2\pi$。
+
+### ✔ Radial Distance Descriptor
+
+**Record distance from each boundary point to the centroid.**  
+记录边界每个点与重心的距离。
+
+**Normalize by maximum distance for scale invariance.**  
+通过最大距离归一化实现尺度不变性。
+
+---
+
+# ⭐ 4. Shape Context（形状上下文）
+
+**Shape Context is a powerful descriptor for comparing two shapes point-by-point.**  
+Shape Context 是一种强大的逐点形状比较方法。
+
+### ✔ How it works
+
+1. 在边界上采样 $n$ 个点
+    
+2. 每个点对其他点做 log-polar 直方图
+    
+3. 每个直方图就是该点的 shape context 特征
+    
+
+### ✔ Matching
+
+**Use histogram distances + Hungarian algorithm to match points.**  
+通过直方图距离 + 匈牙利算法匹配形状点。
+
+**Then estimate transformation with least squares or RANSAC.**  
+再用最小二乘或 RANSAC 求变换。
+
+---
+
+# ⭐ 5. Bag-of-Words (BoW)
+
+**BoW converts many local features (e.g., SIFT) into one global histogram.**  
+BoW 将大量局部特征（如 SIFT）转换为一个全局直方图。
+
+### ✔ Step 1: Build Visual Vocabulary
+
+- 从训练图提取 SIFT
+    
+- 用 k-means 聚类得到 $k$ 个簇 → 视觉词汇
+    
+
+### ✔ Step 2: Encode Image
+
+- 将每个 SIFT 匹配到最近的“视觉词”
+    
+- 统计词频 → 得到 $k$ 维直方图（即图像特征）
+    
+
+---
+
+# ⭐ 6. Histogram of Oriented Gradients (HOG)
+
+**HOG describes shape by accumulating gradient orientation histograms.**  
+HOG 通过累积梯度方向直方图来描述形状。
+
+### ✔ How HOG works
+
+1. 计算梯度方向与幅度
+    
+2. 按 cell 累积方向直方图
+    
+3. 按 block 归一化以获得光照不变性
+    
+4. 拼接所有 block histogram → HOG 特征
+    
+
+**Widely used for pedestrian detection.**  
+广泛用于行人检测。
+
+---
+
+# ⭐ 7. Final Exam Summary（超级精简版）
+
+- **几何特征**：圆度、偏心率、细长度、凸包、凸缺陷
+    
+- **边界特征**：链码、曲率、径向距离
+    
+- **Shape Context**：点到点的 log-polar 分布直方图
+    
+- **BoW**：k-means 视觉词 + 直方图
+    
+- **HOG**：局部梯度方向直方图（行人检测经典）
+    
+
+---
+![[Pasted image 20251117210154.png]]
+选A
