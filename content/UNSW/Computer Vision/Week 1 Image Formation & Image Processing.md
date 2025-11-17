@@ -1,3 +1,7 @@
+---
+tags:
+  - LectureNotes
+---
 # 1. **What is Image Processing?**
 
 **Image processing transforms an input image into an improved or more useful output image.**  

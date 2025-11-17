@@ -1,3 +1,8 @@
+---
+tags:
+  - LectureNotes
+---
+
 ## ⭐ 1. What is Pattern Recognition?
 
 **Pattern recognition is the scientific discipline of recognizing patterns and regularities in data.**  

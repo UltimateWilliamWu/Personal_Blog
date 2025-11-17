@@ -4,5 +4,4 @@ tags:
 ---
 [[Java]]
 [[Python]]
-[[C]]
 [[Rust]]

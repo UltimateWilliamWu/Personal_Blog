@@ -1,3 +1,8 @@
+---
+tags:
+  - LectureNotes
+---
+
 # ⭐ 1. Why do we need feature representation?
 
 **Image features are compact vectors representing important visual information.**  

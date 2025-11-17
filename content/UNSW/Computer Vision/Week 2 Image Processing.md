@@ -1,3 +1,7 @@
+---
+tags:
+  - LectureNotes
+---
 # Part 1
 
 > [!faq] Summary & Question

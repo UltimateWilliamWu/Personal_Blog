@@ -5,7 +5,7 @@ tags:
 - [[DiscreteMath]] 
 - [[NetWork]]
 - [[Programming]]
-- [[Operating  Systems]]
+- [[Operating Systems]]
 - [[Data Structures and Algorithms]]
 - [[Blockchain]]
 - [[Database]]
