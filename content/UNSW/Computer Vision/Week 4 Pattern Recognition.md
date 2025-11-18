@@ -2,6 +2,7 @@
 tags:
   - LectureNotes
 ---
+# Part 1
 ## ⭐ 1. What is Pattern Recognition?
 
 **Pattern recognition is the scientific discipline of recognizing patterns and regularities in data.**  
@@ -208,8 +209,8 @@ KNN 根据最近的 $K$ 个邻居中占多数的类别进行分类。
 ![[Pasted image 20251117221211.png]]
 对应选项为：
 ✔ **D**
-
-# 🟦 **1. Separability（可分性）**
+# Part 2
+## 🟦 **1. Separability（可分性）**
 
 ### **• Separable classes**
 
@@ -223,7 +224,7 @@ Classes are separable by a hyperplane.
 
 ---
 
-# 🟦 **2. Linear Classifier（线性分类器）**
+## 🟦 **2. Linear Classifier（线性分类器）**
 
 ### **• Model**
 
@@ -246,13 +247,13 @@ Large margin improves generalization.
 
 ---
 
-# 🟦 **3. Support Vector Machine（支持向量机）**
+## 🟦 **3. Support Vector Machine（支持向量机）**
 
 ---
 
-## **3.1 Hard-Margin SVM（硬间隔）**
+### **3.1 Hard-Margin SVM（硬间隔）**
 
-### **Optimization problem**
+#### **Optimization problem**
 
 $$  
 \min \frac{1}{2}|W|^2  
@@ -267,7 +268,7 @@ $$
 
 ---
 
-## **3.2 Soft-Margin SVM（软间隔）**
+### **3.2 Soft-Margin SVM（软间隔）**
 
 加入松弛变量 $\xi_i$：
 
@@ -290,16 +291,16 @@ $$
 
 ---
 
-## **3.3 Kernel Trick（核技巧）**
+### **3.3 Kernel Trick（核技巧）**
 
 Kernel implicitly maps data into high dimension.  
 👉 不显式升维，却能做非线性分类。
 
 ---
 
-## **3.4 SVM 优缺点**
+### **3.4 SVM 优缺点**
 
-### **Pros**
+#### **Pros**
 
 - Strong in high-dimensional space
     
@@ -309,7 +310,7 @@ Kernel implicitly maps data into high dimension.
     👉 特征多、数据稀疏时特别强。
     
 
-### **Cons**
+#### **Cons**
 
 - Slow on large datasets
     
@@ -321,7 +322,7 @@ Kernel implicitly maps data into high dimension.
 
 ---
 
-# 🟦 **4. Multiclass Classification（多类分类）**
+## 🟦 **4. Multiclass Classification（多类分类）**
 
 ### **• One-vs-Rest (OvR)**
 
@@ -335,7 +336,7 @@ One classifier per pair of classes.
 
 ---
 
-# 🟦 **5. Classification Error（分类误差）**
+## 🟦 **5. Classification Error（分类误差）**
 
 ### **• Error rate**
 
@@ -352,7 +353,7 @@ Generic class for “cannot classify” samples.
 
 ---
 
-# 🟦 **6. False Positive / False Negative（假阳性/假阴性）**
+## 🟦 **6. False Positive / False Negative（假阳性/假阴性）**
 
 ### **• False positive**
 
@@ -366,7 +367,7 @@ Predict negative when actually positive.
 
 ---
 
-# 🟦 **7. ROC Curve（ROC 曲线）**
+## 🟦 **7. ROC Curve（ROC 曲线）**
 
 ### **• TPR vs FPR at different thresholds**
 
@@ -387,7 +388,7 @@ $$
 
 ---
 
-# 🟦 **8. Confusion Matrix（混淆矩阵）**
+## 🟦 **8. Confusion Matrix（混淆矩阵）**
 
 Binary version：
 
@@ -404,7 +405,7 @@ $$
 
 ---
 
-# 🟦 **9. Precision / Recall / F1**
+## 🟦 **9. Precision / Recall / F1**
 
 ### **Precision**
 
@@ -429,7 +430,7 @@ $$
 
 ---
 
-# 🟦 **10. Regression（回归）**
+## 🟦 **10. Regression（回归）**
 
 ### **• Linear model**
 
@@ -452,7 +453,7 @@ $$
 
 ---
 
-# 🟦 **11. Regression Metrics（回归指标）**
+## 🟦 **11. Regression Metrics（回归指标）**
 
 ### **RMSE**
 
@@ -482,7 +483,7 @@ $$
 
 ---
 
-# 🟦 **12. Normalization（归一化）**
+## 🟦 **12. Normalization（归一化）**
 
 ### **Z-score**
 
@@ -498,7 +499,7 @@ $$
 
 ---
 
-# 🟦 **13. Cross Validation（交叉验证）**
+## 🟦 **13. Cross Validation（交叉验证）**
 
 ### **K-fold CV**
 
@@ -510,7 +511,7 @@ $$
 
 ---
 
-# 🟦 **14. Exam Example（例题）**
+## 🟦 **14. Exam Example（例题）**
 
 正确答案：**C**
 ![[Pasted image 20251117234443.png]]
