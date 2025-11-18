@@ -605,6 +605,6 @@ Both are essential tools for segmentation tasks.
 > Step 3: Reconstruction R from B  
 > Step 4: O = I – R  
 > What is O?
-
+![[Pasted image 20251118210656.png]]
 正确答案：**C. The same objects as the input image except the boundary objects.**  
 解释：从图像边界作为 seed 做重建 => 得到所有接触边界的物体 => 用原图减去它们 => 输出就是**删掉所有接触边界的物体**。
