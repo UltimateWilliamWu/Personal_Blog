@@ -313,3 +313,298 @@ Dice 系数，IoU 的对称版本。
 “How many objects are there with 4-connectivity?”  
 考点：连通性影响物体数量。
 ![[Pasted image 20251118134207.png]]
+# Part 2
+## ⭐ What is Mathematical Morphology?
+
+Mathematical morphology is nonlinear image processing based on set operations.  
+形态学是基于集合运算的非线性图像处理工具。
+
+It improves segmentation by cleaning noise, separating objects, filling holes, and extracting shapes.  
+形态学用于清理噪声、分离物体、填补孔洞、提取形状等，辅助分割。
+
+---
+
+# 🚩 **Part 1：Binary Morphology（二值形态学）**
+
+---
+
+## ⭐ Binary Image Representation
+
+Binary images use 1 for foreground and 0 for background.  
+二值图像中：1 表示前景，0 表示背景。
+
+A binary image can be represented as a set of foreground pixel coordinates.  
+也可表示为所有前景像素坐标的集合。
+
+---
+
+## ⭐ Basic Set Operations（集合运算）
+
+Translation, reflection, complement, union, intersection, difference.  
+集合的平移、反射、补集、并集、交集、差集。
+
+Morphology is built entirely from these operations.  
+形态学所有操作都基于这些集合运算。
+
+---
+
+## ⭐ Dilation（膨胀）
+
+Dilation expands objects by adding pixels near boundaries.  
+膨胀会“扩张”物体，使边界向外生长。
+
+Definition:  
+$$I \oplus S = {x \mid (S)_x \cap I \neq \emptyset }$$
+
+It fills small holes and connects nearby components.  
+用于填补小洞、连接相近物体。
+
+---
+
+## ⭐ Erosion（腐蚀）
+
+Erosion shrinks objects by removing boundary pixels.  
+腐蚀会“收缩”物体，去掉边界像素。
+
+Definition:  
+$$I \ominus S = {x \mid (S)_x \subseteq I }$$
+
+It removes small objects and separates touching ones.  
+用于去除小噪声、分离接触物体。
+
+---
+
+## ⭐ Structuring Element（结构元素）
+
+The structuring element defines the neighborhood for dilation/erosion.  
+结构元素定义膨胀/腐蚀的邻域。
+
+Commonly a symmetric 3×3 block.  
+最常用的是 3×3 的对称结构元素。
+
+---
+
+## ⭐ Opening（开运算）
+
+Opening = Erosion → Dilation.  
+开运算 = 腐蚀 → 膨胀。
+
+It removes small foreground noise and smooths object boundaries.  
+开运算删除小前景噪声、平滑边缘。
+
+Formula:  
+$$(I \circ S) = (I \ominus S) \oplus S$$
+
+---
+
+## ⭐ Closing（闭运算）
+
+Closing = Dilation → Erosion.  
+闭运算 = 膨胀 → 腐蚀。
+
+It fills small holes and connects close objects.  
+闭运算填补小孔洞、连接靠近物体。
+
+Formula：  
+$$(I \bullet S) = (I \oplus S) \ominus S$$
+
+---
+
+## ⭐ Edge Detection via Morphology
+
+Morphological gradient = dilation – erosion.  
+形态梯度 = 膨胀 – 腐蚀。
+
+It highlights both inner and outer boundaries.  
+能检测物体的内外边缘。
+
+Formula：  
+$$G = (I \oplus S) - (I \ominus S)$$
+
+---
+
+## ⭐ One-pixel Object Outlines
+
+Outline = dilated image minus original.  
+物体轮廓 = 膨胀后图像 – 原图像。
+
+Produces thin (1-pixel) borders.  
+可生成一像素宽度的轮廓。
+
+---
+
+## ⭐ Binary Reconstruction（重建）
+
+Reconstruction recovers objects from seed markers.  
+重建根据种子像素“恢复”原物体。
+
+Useful for selecting specific objects or removing unwanted ones.  
+用于提取特定目标或删除不要的区域。
+
+---
+
+## ⭐ Removing Boundary-touching Objects
+
+Take boundary pixels as seeds and reconstruct.  
+用图像边界作为种子进行重建。
+
+Subtract result → remove all objects touching the border.  
+减去重建图 → 删除所有接触边界的物体。
+
+---
+
+## ⭐ Filling Holes in Objects
+
+Take complement → reconstruct from boundary → complement.  
+先取补集 → 从外边界做重建 → 再取补集。
+
+This fills all interior holes.  
+可填满所有封闭物体内部孔洞。
+
+---
+
+## ⭐ Distance Transform（距离变换）
+
+Distance transform computes distance of object pixels to background.  
+距离变换计算每个前景像素到背景的距离。
+
+Iterative erosion counts how many erosions a pixel survives.  
+通过多次腐蚀计数实现。
+
+---
+
+## ⭐ Ultimate Erosion（极限腐蚀）
+
+Ultimate erosion keeps only local maxima of the distance transform.  
+极限腐蚀保留所有距离变换的局部最大值。
+
+Used to find representative object centers.  
+用于估计物体中心。
+
+---
+
+## ⭐ Ultimate Erosion + Reconstruction
+
+Used to separate touching round objects.  
+用于分离接触的圆形物体。
+
+Works less well for elongated shapes.  
+对细长物体效果较差。
+
+---
+
+## ⭐ Ultimate Dilation（Voronoi Tessellation）
+
+Iteratively dilate objects without merging → produce Voronoi regions.  
+迭代膨胀且禁止物体合并 → 得到对应的 Voronoi 区域。
+
+---
+
+## ⭐ Skeletonization（细化）
+
+Iteratively erode while preserving connectivity to get a 1-pixel skeleton.  
+反复腐蚀但保持连通，得到一像素宽的骨架。
+
+Useful for shape representation and analysis.  
+用于形状表示与分析。
+
+---
+
+# 🚩 **Part 2：Gray-scale Morphology（灰度形态学）**
+
+---
+
+## ⭐ Gray-scale Morphology = Binary Morphology on Umbra
+
+A gray-scale image is treated as a 3D surface (umbra).  
+灰度图像可视为 3D 体积（伞形）。
+
+Morphology is applied to the umbra.  
+所有形态学操作都在伞形上进行。
+
+---
+
+## ⭐ Gray-scale Dilation
+
+Equivalent to a local maximum filter.  
+灰度膨胀等价于局部最大值滤波。
+
+Adds bright structures.  
+使图像中的亮结构扩张。
+
+---
+
+## ⭐ Gray-scale Erosion
+
+Equivalent to a local minimum filter.  
+灰度腐蚀等价于局部最小值滤波。
+
+Removes bright structures.  
+会削弱亮区域。
+
+---
+
+## ⭐ Gray-scale Opening & Closing
+
+Opening removes small bright objects; closing removes small dark objects.  
+开运算消除小亮点；闭运算消除小暗点。
+
+Used for smoothing while preserving shape.  
+可平滑图像且保持结构。
+
+---
+
+## ⭐ Morphological Gradient (Gray-scale)
+
+Gradient = Dilation – Erosion.  
+梯度 = 膨胀 – 腐蚀。
+
+Highlights edges and transitions.  
+强调边缘与灰度变化。
+
+---
+
+## ⭐ Morphological Laplacian
+
+Outer + inner gradient differences detect rapid transitions.  
+利用外/内梯度差检测强烈灰度变化。
+
+---
+
+## ⭐ Top-hat Filtering
+
+White top-hat = input – opening → finds small bright structures.  
+白帽 = 原图 – 开运算 → 检测小亮点。
+
+Black top-hat = closing – input → finds small dark structures.  
+黑帽 = 闭运算 – 原图 → 检测小暗点。
+
+Useful for illumination correction and feature extraction.  
+用于光照校正和特征增强。
+
+---
+
+# 🚩 **Summary**
+
+Binary morphology → post-processing (clean noise, remove boundary objects, fill holes).  
+二值形态学主要用于分割后的后处理。
+
+Gray-scale morphology → pre-processing (denoise, background correction).  
+灰度形态学主要用于分割前的预处理。
+
+Both are essential tools for segmentation tasks.  
+两者是分割的重要工具箱。
+
+---
+
+# ⭐ Example Exam Question（非常典型！）
+
+> 输入图像 I  
+> Step 1: Copy I → C  
+> Step 2: C’s boundary pixels → B  
+> Step 3: Reconstruction R from B  
+> Step 4: O = I – R  
+> What is O?
+
+正确答案：**C. The same objects as the input image except the boundary objects.**  
+解释：从图像边界作为 seed 做重建 => 得到所有接触边界的物体 => 用原图减去它们 => 输出就是**删掉所有接触边界的物体**。
