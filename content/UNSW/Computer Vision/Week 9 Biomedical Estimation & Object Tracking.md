@@ -241,3 +241,243 @@ Optical flow is under-determined → need neighbourhood constraints.
 
 Lucas–Kanade = least-squares solution in small patch.  
 Lucas–Kanade = 小邻域内最小二乘求解。
+
+## ⭐ What is Object Tracking?
+
+Object tracking estimates the motion and location of an object across time in a video.  
+目标跟踪是在视频中随时间持续推测物体的位置与运动。
+
+Tracking outputs a “trajectory” rather than a single detection.  
+跟踪的输出是物体的轨迹，而不是单帧检测结果。
+
+---
+
+## ⭐ Why do we need tracking?
+
+Tracking helps follow objects over time in surveillance, navigation, and recognition tasks.  
+跟踪可以持续追踪目标，在监控、导航、识别等任务中至关重要。
+
+It connects detections into a time-consistent sequence.  
+它把逐帧检测结果连成连续的轨迹。
+
+---
+
+# ⭐ Object Tracking Applications
+
+Object tracking is used in motion capture, surveillance, recognition from motion, and targeting.  
+目标跟踪用于动作捕捉、监控、利用运动识别物体、目标打击等场景。
+
+Tracking systems must handle noise, occlusion, fast motion, and illumination changes.  
+跟踪系统需要应对噪声、遮挡、快速运动和光照变化。
+
+---
+
+# ⭐ Challenges in Object Tracking
+
+Tracking must cope with noise, image artifacts, occlusions, nonrigid objects, and real-time constraints.  
+跟踪必须应对噪声、伪影、遮挡、非刚性物体、以及实时性需求。
+
+Object appearance may change over time, making tracking unstable.  
+物体外观随时间变化会导致跟踪不稳定。
+
+---
+
+# ⭐ Motion Assumptions (Very Important!)
+
+Objects move smoothly in position and velocity.  
+物体的“位置”与“速度”随时间缓慢变化。
+
+Objects cannot occupy the same space at the same time.  
+两个物体不能在相同位置重叠。
+
+Motion continuity is key to connecting detections into tracks.  
+运动连续性是假设轨迹连续的关键。
+
+---
+
+# ⭐ Approaches to Tracking
+
+COMP9517 focuses on **Bayesian inference**, **Kalman filtering**, and **Particle filtering**.  
+本课程重点介绍 **贝叶斯推断**、**卡尔曼滤波**、与 **粒子滤波**。
+
+These methods combine prediction + measurement to estimate state over time.  
+这些方法通过“预测 + 测量”迭代更新物体状态。
+
+---
+
+# ⭐ State and Measurement
+
+The object has a hidden state (position, velocity, shape).  
+目标具有隐藏状态（位置、速度、形状等）。
+
+We observe measurements derived from image features.  
+从图像特征中得到可观测的测量值。
+
+Tracking = infer the hidden state from noisy measurements.  
+跟踪 = 从噪声测量中恢复隐藏的真实状态。
+
+---
+
+# ⭐ Bayesian Inference (General Framework)
+
+Tracking is a recursive Bayesian estimation problem.  
+跟踪是一个递归的贝叶斯估计问题。
+
+Each timestep consists of:  
+每个时间步骤包含三部分：
+
+---
+
+## ⭐ Prediction
+
+Predict current state from previous state using a motion model.  
+根据运动模型，从前一状态预测当前状态。
+
+---
+
+## ⭐ Association
+
+Select which measurements correspond to the object.  
+选择哪些测量值属于该物体（数据关联）。
+
+---
+
+## ⭐ Correction
+
+Update prediction using current measurement and Bayes rule.  
+用当前测量通过贝叶斯规则修正预测。
+
+---
+
+# ⭐ Hidden Markov Model Assumptions
+
+The next state depends only on the previous state.  
+下一状态只依赖上一状态（马尔可夫性）。
+
+The measurement depends only on the current state.  
+测量值只依赖当前状态。
+
+Tracking under these assumptions becomes HMM inference.  
+在这些假设下，跟踪变为隐马尔可夫模型问题。
+
+---
+
+# ⭐ Estimating the Final State
+
+Two common estimates are:  
+常用的两种估计是：
+
+- EAP: expected a posteriori (mean)  
+    EAP：后验分布的均值
+    
+- MAP: maximum a posteriori  
+    MAP：后验概率最大的点
+    
+
+---
+
+# ⭐ Kalman Filtering (Linear + Gaussian Case)
+
+Kalman filter assumes linear dynamics and Gaussian noise.  
+卡尔曼滤波假设线性系统 + 高斯噪声。
+
+It represents state as a Gaussian with mean + covariance.  
+状态被表示为高斯分布的均值和方差。
+
+---
+
+## ⭐ Kalman Filter Steps
+
+### Prediction
+
+Use matrix A to predict next state.  
+用矩阵 A 预测下一状态。
+
+### Correction
+
+Use Kalman gain K to combine prediction and measurement.  
+用卡尔曼增益 K 把预测与测量结合。
+
+Kalman filter is optimal for linear-Gaussian systems.  
+卡尔曼滤波是线性高斯系统的最优估计器。
+
+---
+
+# ⭐ Particle Filtering (Nonlinear + Non-Gaussian Case)
+
+Particle filtering represents state distribution using many weighted samples.  
+粒子滤波通过大量带权重的样本（粒子）表示状态分布。
+
+It approximates Bayesian inference without assuming Gaussian/linear models.  
+无需高斯/线性假设，可以近似任意复杂分布。
+
+Each timestep:  
+每一步包含：
+
+1. Propagate particles (predict)  
+    传播粒子（预测）
+    
+2. Reweight them using measurement likelihood  
+    根据测量更新权重
+    
+3. Resample to keep high-weight particles  
+    重采样保留高权重粒子
+    
+
+---
+
+# ⭐ Kalman vs Particle Filtering
+
+Kalman → fast, optimal for linear-Gaussian; cannot handle complex motion.  
+卡尔曼 → 快速、适用于线性高斯；无法处理复杂非线性运动。
+
+Particle → handles arbitrary nonlinear motion and multi-modal distributions.  
+粒子 → 可处理任意非线性、多峰运动，但计算更慢。
+
+---
+
+# ⭐ Example Applications
+
+Tracking active contours of objects.  
+用于主动轮廓（snake）模型的跟踪。
+
+Pedestrian tracking using bounding box state.  
+用于行人框位置跟踪。
+
+Particle filtering works well in clutter or occlusions.  
+粒子滤波在遮挡、杂乱背景中表现更佳。
+
+---
+
+# ⭐ Example Exam Question
+
+Which statement is incorrect?  
+哪个选项是错误的？
+
+Correct answer: **A**（假设错误）  
+正确答案：**A**
+
+Explain: Particle filtering does **not** assume a parametric form; it uses samples.  
+原因：粒子滤波不要求模型参数化，它用样本近似分布。
+
+---
+
+# ⭐ Summary（你考试需要背下来的）
+
+Object tracking = predict + associate + correct.  
+跟踪 = 预测 + 关联 + 修正。
+
+Bayesian inference is the general framework.  
+贝叶斯推断是通用框架。
+
+Kalman filter works for linear-Gaussian systems.  
+卡尔曼滤波适用于线性高斯系统。
+
+Particle filter handles nonlinear + non-Gaussian motion.  
+粒子滤波适用于非线性 + 非高斯情况。
+
+State transitions follow Markov assumption.  
+状态转移满足马尔可夫假设。
+
+Measurements depend only on current state.  
+测量只依赖当前状态。
