@@ -267,5 +267,24 @@ Rust's macro system offers an extremely flexible method for code generation and 
 (Note that your downsides may span any amount and combination of the categories above. e.g. you could write all 3 on just one category, or one on each, or anything in-between.)
 
 > [!NOTE] Answer
+> ### ✅ **Model Answer (Concise + Exam-Ready)**
+> 
+> #### **1. Macros harm readability and error messages**
+> 
+> Rust macros operate on raw token streams before type checking.  
+> This often leads to **obscure compiler errors**, poor diagnostics, and code that is harder to read because the actual executed code is not written explicitly.
+> 
+> ---
+> 
+> #### **2. Macros complicate the compiler and language design**
+> 
+> Rust must support both hygienic macros (`macro_rules!`) and procedural macros, which significantly increases **compiler complexity**, slows compile times, and makes the language harder to evolve without breaking existing macro behavior.
+> 
+> ---
+> ## **3. Macros reduce IDE support and tooling quality**
+>
+Because macro-generated code is created before semantic analysis, editors struggle with **code navigation, autocompletion, refactoring, and static analysis** inside macro-expanded regions, harming developer experience.
+>
+> ---
 > Rust macros are powerful but come with drawbacks: worse readability and error messages, increased compiler complexity, and weaker tooling/IDE support due to code generation happening before type checking.
 
