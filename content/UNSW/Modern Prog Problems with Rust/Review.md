@@ -266,4 +266,6 @@ Rust's macro system offers an extremely flexible method for code generation and 
 
 (Note that your downsides may span any amount and combination of the categories above. e.g. you could write all 3 on just one category, or one on each, or anything in-between.)
 
-Rust macros are powerful but come with drawbacks: worse readability and error messages, increased compiler complexity, and weaker tooling/IDE support due to code generation happening before type checking.
+> [!NOTE] Answer
+> Rust macros are powerful but come with drawbacks: worse readability and error messages, increased compiler complexity, and weaker tooling/IDE support due to code generation happening before type checking.
+
