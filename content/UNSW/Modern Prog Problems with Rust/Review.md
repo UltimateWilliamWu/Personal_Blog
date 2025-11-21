@@ -288,3 +288,112 @@ Because macro-generated code is created before semantic analysis, editors strugg
 > ---
 > Rust macros are powerful but come with drawbacks: worse readability and error messages, increased compiler complexity, and weaker tooling/IDE support due to code generation happening before type checking.
 
+# Question 5
+## Q5.1 (3 marks)
+In many other popular programming languages, mutexes provide `lock()` and `unlock()` methods which generally do not return any value (i.e. `void`).
+
+What issues could this cause?
+How does Rust differently implement the interface of a `Mutex`, and what potential problems does that help solve
+
+> [!NOTE] Answer
+> **Issues in languages where `lock()`/`unlock()` return void:**
+> 
+> 1. _Forgetting to call `unlock()`_ (e.g., early return / exception) → causes deadlock.
+>     
+> 2. _Unlocking the wrong mutex or unlocking without owning it_ (no compile-time checking).
+>     
+> 3. _Accessing shared data without holding the lock_ (language cannot enforce correctness).
+>     
+> 
+> **Rust’s approach:**  
+> Rust’s `Mutex::lock()` returns a **MutexGuard**, and the lock is released when the guard is dropped (RAII).
+> 
+> - Prevents forgetting to unlock (automatic release).
+>     
+> - Prevents unlocking the wrong mutex (no manual `unlock()` API).
+>     
+> - Ensures shared data can only be accessed via the guard, guaranteeing it is always accessed under the lock.
+
+## Q5.2 (2 marks)
+In Rust, locking a `Mutex` returns a `Result`, instead of simply a `MutexGuard`. Explain what utility this provides, and why a programmer might find this important.
+
+> [!NOTE] Answer
+> **Why `lock()` returns a `Result`:**
+> 
+> - If the holding thread panics, the mutex becomes **poisoned**. `lock()` then returns `Err(PoisonError)` instead of silently giving a potentially inconsistent value.
+>     
+> 
+> **Utility / importance to programmers:**
+> 
+> - Allows the programmer to **detect and handle** poisoned locks (decide to abort, retry, or recover data).
+>     
+> - Prevents silently continuing with corrupted shared state, improving **safety and correctness** in concurrent programs.
+
+## Q5.3 (3 marks)
+While reviewing someone's code, you find the following type: `Box<dyn Fn() -> i32 + Send>`.
+
+Explain what the `+ Send` means in the code above?
+
+Explain one reason you might need to mark a type as `Send`, and what restrictions apply when writing a closure that must be `Send`.
+
+> [!NOTE] Answer
+> ### **What does `+ Send` mean?**
+> 
+> `Box<dyn Fn() -> i32 + Send>` means the trait object must implement **Send**,  
+> i.e. the closure can be **safely transferred to another thread**.
+> 
+> ---
+> 
+> ### **Why might you need a type to be `Send`?**
+> 
+> When sending the closure to another thread (e.g., via `std::thread::spawn` or a channel), Rust requires the value to implement `Send`.  
+> Marks that the value can be moved across thread boundaries **without data races**.
+> 
+> ---
+> 
+> ### **What restrictions apply to a `Send` closure?**
+> 
+> A closure is `Send` only if **all captured variables are also `Send`**.  
+> Thus it **cannot capture non-Send types** (e.g., `Rc<T>`, raw pointers, etc.),  
+> and must only capture data that is safe to move to another thread.
+
+## Q5.4 (2 marks)
+
+Your friend tells you they don't need the standard library's channels, since they've implemented their own alternative with the following code:
+```Rust
+use std::collections::VecDeque;
+use std::sync::Mutex;
+use std::sync::Arc;
+use std::thread;
+#[derive(Clone, Debug)]
+struct MyChannel<T> {
+    internals: Arc<Mutex<VecDeque<T>>>
+}
+impl<T> MyChannel<T> {
+    fn new() -> MyChannel<T> {
+        MyChannel {            internals: Arc::new(Mutex::new(VecDeque::new()))
+        }    }    fn send(&mut self, value: T) {        let mut internals = self.internals.lock().unwrap();
+        internals.push_front(value);
+    }
+    fn try_recv(&mut self) -> Option<T> {
+        let mut internals = self.internals.lock().unwrap();
+        internals.pop_back()
+    }
+}
+fn main() {
+    let mut sender = MyChannel::<i32>::new();
+    let mut receiver = sender.clone();
+    sender.send(5);
+    thread::spawn(move || {
+        println!("{:?}", receiver.try_recv())
+    }).join().unwrap();
+}
+```
+
+Identify a use-case where this implementation would not be sufficient, but the standard library's channel would be.
+
+Furthermore, explain why this is the case.
+# Question 7
+
+# Question 8
+
