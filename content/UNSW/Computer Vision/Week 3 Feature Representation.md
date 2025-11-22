@@ -283,7 +283,7 @@ NNDR < 0.8
 
 Least squares + RANSAC
 
-C
+B
 ![[Pasted image 20251117204730.png]]
 
 ---
@@ -448,4 +448,4 @@ HOG 通过累积梯度方向直方图来描述形状。
 
 ---
 ![[Pasted image 20251117210154.png]]
-选A
+选B
