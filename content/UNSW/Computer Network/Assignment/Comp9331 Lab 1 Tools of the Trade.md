@@ -99,13 +99,13 @@ _Note: Include all traceroute outputs in your report._
 3. Several servers are distributed worldwide to provide a web interface from which you can perform a traceroute to any other host on the Internet. Here are two examples: (i) [http://lg.nexlinx.net.pk/](http://lg.nexlinx.net.pk/) and (ii) [www.as13030.net/traceroute.php](http://www.as13030.net/traceroute.php) .
 
 >[!note] Answer & Screenshots
->![[Pasted image 20260224214217.png]]
->![[Pasted image 20260224214250.png]]
+>![[Pasted image 20260224214217.png|900]]
+>![[Pasted image 20260224214250.png|900]]
 >#### 1. What are the IP addresses of the two servers that you have chosen?
 >The IP addresses of the two looking-glass servers are **202.59.80.52 (lg.nexlinx.net.pk)** and **213.144.137.198 (as13030.net)**, as shown in the first line of my traceroute outputs.
 >#### 2. Does the reverse path go through the same routers as the forward path?
->![[Pasted image 20260224220336.png]]
->![[Pasted image 20260224220904.png]]
+>![[Pasted image 20260224220336.png|1800]]
+>![[Pasted image 20260224220904.png|1800]]
 >The reverse path does **not** traverse exactly the same set of routers as the forward path. This is expected due to **asymmetric routing** on the Internet, where BGP policies and peering arrangements may select different routes in each direction.
 >#### 3. If you observe common routers between the forward and the reverse path, do you also observe the same IP addresses? Why or why not?
 >No, some parts of the forward and reverse paths traverse common networks (e.g., Zayo `64.125.*` and AARNet `113.197.15.*`). However, even when a router is “common”, the **observed IP address may not be identical**. Traceroute shows the IP address of the interface that sends the ICMP reply, and routers have multiple interfaces; different interfaces may be used in each direction. In addition, ECMP load balancing, ICMP rate-limiting, and MPLS tunneling can cause some hops to appear as `* * *` or appear with different IPs across runs.
