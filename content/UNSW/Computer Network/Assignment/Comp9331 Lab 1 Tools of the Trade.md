@@ -147,15 +147,15 @@ _Note: Include all traceroute outputs in your report._
 > 
 > 
 > 4. The measured delay (i.e., the delay you can see in the graphs) comprises propagation, transmission, processing, and queuing delays. Which of these delays depend on the packet size and which do not?
-- **Propagation delay**: **does not depend** on packet size. It is determined by the physical path length and the propagation speed of the medium.
-    
-- **Processing delay**: **does not depend** (or only very weakly depends) on packet size. It is mainly the time routers/switches spend examining headers and making forwarding decisions.
-    
-- **Transmission delay**: **depends directly** on packet size. It is the time to push L bits onto a link of rate R:
-    
-    $$d_{tx} = \frac{L}{R}$$​
-    
-    so larger packets take longer to transmit.
-    
-- **Queuing delay**: **not a fixed function** of packet size, but it can **increase with larger packets**, especially under load, because larger packets occupy the link longer and can build up queues. In practice, queuing delay is mainly driven by congestion, but packet size influences it indirectly.
+> - **Propagation delay**: **does not depend** on packet size. It is determined by the physical path length and the propagation speed of the medium.
+>     
+> - **Processing delay**: **does not depend** (or only very weakly depends) on packet size. It is mainly the time routers/switches spend examining headers and making forwarding decisions.
+>     
+> - **Transmission delay**: **depends directly** on packet size. It is the time to push L bits onto a link of rate R:
+>     
+>     $$d_{tx} = \frac{L}{R}$$​
+>     
+>     so larger packets take longer to transmit.
+>     
+> - **Queuing delay**: **not a fixed function** of packet size, but it can **increase with larger packets**, especially under load, because larger packets occupy the link longer and can build up queues. In practice, queuing delay is mainly driven by congestion, but packet size influences it indirectly.
 
