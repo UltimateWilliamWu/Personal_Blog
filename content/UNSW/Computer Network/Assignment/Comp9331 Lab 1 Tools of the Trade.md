@@ -113,8 +113,49 @@ _Note: Include all traceroute outputs in your report._
 ## **Exercise 4: Use ping to gain insights into network performance (4 marks)**
 >[!note] Answer & Screenshots
 >1. For each location, ﬁnd the (approximate) physical distance from UNSW . You can use a site like [Distance Calculator](https://www.distancecalculator.net/) , [Google Maps](https://www.google.com/maps) , or whatever you prefer to take this measurement. Then, compute the shortest possible time T for a packet from UNSW to reach that location. You should assume that the packet moves (i.e. propagates) at the speed of light, 3 x 10^8 m/s. Note that the shortest possible time will be the distance divided by the propagation speed.
+>$$
+>\begin{aligned}
+>T=D/C,c=3\times10^8m/s \\
+>D_{NewYork}=15594.27km \\
+>D_{NewZealand}=2157.17km \\
+>D_{Nottingham}=16974.84km \\
+>T_{NewYork}=0.052s \\
+>T_{NewZealand}=0.007s \\
+>T_{Nottingham}=0.057s \\
+>\end{aligned}
+>$$
+>
 > 2. Plot a graph where the x-axis represents the distance to each city (i.e. **New York, USA** , **Auckland, New Zealand** and **Nottingham, UK** ). The y-axis represents the ratio between the minimum delay (i.e. RTT) measured by the ping program (select the values for 50-byte packets) and the shortest possible time T to reach that city from UNSW. (Note that the y-values are no smaller than 2 since it takes at least 2*T time for any packet to reach the destination from UNSW and return).You can also use the provided [generate_plot.py](https://webcms3.cse.unsw.edu.au/COMP3331/26T1/resources/118373) to generate the plot. Download (to Vlab or personal machines with Python 3 installed). Open the [generate_plot.py](https://webcms3.cse.unsw.edu.au/COMP3331/26T1/resources/118373) and uncomment the designated lists, and replace them with the actual values.Can you think of at least two reasons why the y-axis values you plot are greater than 2?
+> ![[Figure_1.png]]
+> 
+> The plotted ratios are greater than 2 because the RTT is not purely the propagation delay. 
+> - First, packets propagate mostly in optical fibre where the speed is significantly lower than $3\times10^8 m/s$ (vacuum), so the physical lower bound is underestimated. 
+> - Second, Internet routing rarely follows the shortest geographic path: BGP policies and submarine cable topology often lead to longer routes than the great-circle distance. 
+> - In addition, even the minimum RTT includes processing, transmission and (non-zero) queuing delays at routers and links.
+> 
 > 3. Is the delay to the destinations constant, or does it vary over time? Explain why.
+> 
+> The delay is **not constant**; it **varies over time**.
+> Even when the physical path length (propagation delay) is essentially fixed, the measured RTT changes because:
+> 
+> - **Queuing delay fluctuates** as traffic load on links and routers changes (congestion comes and goes), which is usually the main source of short-term variation.
+>     
+> - **Routing and load balancing** (e.g., ECMP) can cause packets to take slightly different paths with different latencies.
+>     
+> - Routers and firewalls may **rate-limit or deprioritise ICMP** (ping) responses, introducing additional variability.
+>     
+> 
+> 
 > 4. The measured delay (i.e., the delay you can see in the graphs) comprises propagation, transmission, processing, and queuing delays. Which of these delays depend on the packet size and which do not?
-
+- **Propagation delay**: **does not depend** on packet size. It is determined by the physical path length and the propagation speed of the medium.
+    
+- **Processing delay**: **does not depend** (or only very weakly depends) on packet size. It is mainly the time routers/switches spend examining headers and making forwarding decisions.
+    
+- **Transmission delay**: **depends directly** on packet size. It is the time to push L bits onto a link of rate R:
+    
+    $$d_{tx} = \frac{L}{R}$$​
+    
+    so larger packets take longer to transmit.
+    
+- **Queuing delay**: **not a fixed function** of packet size, but it can **increase with larger packets**, especially under load, because larger packets occupy the link longer and can build up queues. In practice, queuing delay is mainly driven by congestion, but packet size influences it indirectly.
 
