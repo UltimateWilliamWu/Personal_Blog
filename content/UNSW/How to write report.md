@@ -7,7 +7,7 @@
 | A trailer rig was used to analyse the properties of an undamped system and experiment with a range of instrumentation. [1]<br>It was found that two modes of vibration exist, these being longitudinal vibration and rotational. The damping ratio and natural frequency were calculated and are included in this report. The damping was found to be linear. [2] While the experiment was useful it did not closely resemble road conditions. Actual road conditions would result in successive bumps and constant vibration while the wheels rotated the whole time. [3] Finally, it was decided that given cost considerations, the XY plotter provided accurate results and manageable data. [4] | [1] Setup procedure<br><br>[2] Initial findings<br><br>[3]Conclusions<br><br>[4] Recommendations |
 **Table of Contents**
 - A list of the major and minor sections of your report.
-**Introductio**
+**Introduction**
 - Set the scene; give some background information about the topic. State the aim/purpose of the investigation. Outline the body sections.
 
 | **Example introduction **                                                                                                                                                                                                                                                                                                                                                                                                                    | Elements                                                                                       |
