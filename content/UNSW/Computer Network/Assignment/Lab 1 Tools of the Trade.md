@@ -57,6 +57,18 @@ _Note: Include all traceroute outputs in your report._
 > So the **first router outside Australia is the AARNet Singapore router** (113.197.15.231).
 > #### 3. Try to identify the approximate locations of the routers.
 > ![[Pasted image 20260224211514.png]]
+> The traceroute results reveal a long-distance terrestrial and transoceanic path. The journey begins in **Sydney (UNSW)**, moving westward across Australia to **Adelaide** and **Perth**. From Perth, the packet transitions to a subsea cable reaching **Singapore**, evidenced by the RTT increasing from ~46ms to ~92ms. A significant latency jump occurs between Singapore and **Amsterdam** (from 92ms to 296ms), representing the intercontinental transit to Europe. Finally, the path concludes in Germany, passing through **Frankfurt** before reaching the destination in **Heidelberg**.
+>
+|**Hop**|**Hostname / IP**|**Identified Acronym**|**Physical Location**|**Rationale / Clues**|
+|---|---|---|---|---|
+|**1-5**|`cse.unsw.EDU.AU`|**UNSW**|**Sydney, Australia**|The source node is located within the University of New South Wales campus network.|
+|**6-8**|`nsw.aarnet.net.au`|**NSW**|**Sydney, Australia**|AARNet (Australia's Academic and Research Network) nodes in New South Wales.|
+|**9**|`sa.aarnet / wa.aarnet`|**SA / WA**|**Adelaide / Perth**|Indicates the packet is traversing the Australian continent from South Australia (SA) to Western Australia (WA).|
+|**10-11**|`sing.sin.aarnet.net.au`|**SIN / SING**|**Singapore**|Standard airport code for Singapore; a major subsea cable landing station for traffic leaving Australia.|
+|**12-13**|`ams.nl.geant.net`|**AMS / NL**|**Amsterdam, Netherlands**|"AMS" refers to Amsterdam; "NL" is the country code for the Netherlands. GÉANT is the European pan-European data network.|
+|**14**|`fra.de.geant.net`|**FRA / DE**|**Frankfurt, Germany**|"FRA" refers to Frankfurt, the primary internet hub in Germany ("DE").|
+|**15-16**|`x-win.dfn.de`|**DFN / DE**|**Karlsruhe, Germany**|DFN is the German National Research and Education Network. "fzk" likely refers to the Forschungszentrum Karlsruhe.|
+|**17-18**|`uni-heidelberg.de`|**Heidelberg**|**Heidelberg, Germany**|The final destination at the University of Heidelberg.|
 
 2. Run a traceroute from your machine to the following destinations: (i) [www.nyu.edu](http://www.nyu.edu/) (ii) [www.aut.ac.nz](http://www.aut.ac.nz/) and (iii) [www.nottingham.ac.uk](http://www.nottingham.ac.uk/)
 
@@ -104,13 +116,13 @@ _Note: Include all traceroute outputs in your report._
 >
 | Location   | Distance(km) | T(ms) | RTT(ms) | Actual RTT(ms) | Ratio |
 | ---------- | ------------ | ----- | ------- | -------------- |-------|
-| NewYork    | 15594.27     | 51.98 | 103.96  | 247.14         | 2.377 |
-| NewZealand | 2157.17      | 7.19  | 14.38   | 34.89          | 2.426 |
-| Nottingham | 16974.84     | 56.58 | 113.16  | 261.76         | 2.313 |
+| NewYork    | 15594.27     | 51.98 | 103.96  | 247.14         | 4.75 |
+| NewZealand | 2157.17      | 7.19  | 14.38   | 34.89          | 4.85 |
+| Nottingham | 16974.84     | 56.58 | 113.16  | 261.76         | 4.63 |
 >
 > 2. Plot a graph where the x-axis represents the distance to each city (i.e. **New York, USA** , **Auckland, New Zealand** and **Nottingham, UK** ). The y-axis represents the ratio between the minimum delay (i.e. RTT) measured by the ping program (select the values for 50-byte packets) and the shortest possible time T to reach that city from UNSW. (Note that the y-values are no smaller than 2 since it takes at least 2*T time for any packet to reach the destination from UNSW and return).You can also use the provided [generate_plot.py](https://webcms3.cse.unsw.edu.au/COMP3331/26T1/resources/118373) to generate the plot. Download (to Vlab or personal machines with Python 3 installed). Open the [generate_plot.py](https://webcms3.cse.unsw.edu.au/COMP3331/26T1/resources/118373) and uncomment the designated lists, and replace them with the actual values.Can you think of at least two reasons why the y-axis values you plot are greater than 2?
 > 
-> ![[Figure_1 1.png]]
+> ![[Figure_1.png]]
 > 
 > The plotted ratios are greater than 2 because the RTT is not purely the propagation delay. 
 > - First, packets propagate mostly in optical fibre where the speed is significantly lower than $3\times10^8 m/s$ (vacuum), so the physical lower bound is underestimated. 
