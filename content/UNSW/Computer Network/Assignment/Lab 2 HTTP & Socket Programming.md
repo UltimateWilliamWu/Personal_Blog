@@ -7,7 +7,12 @@ tags:
 ## **Exercise 3: Using Wireshark to understand basic HTTP request/response messages (2.5 marks, include in your report)**
 >[!note] Answer & Screenshots
 >#### Question 1: What is the status code and phrase returned from the server to the client browser?
->505
+>
+
+| Source | Destination | Status Code |
+| ------ | ----------- | ----------- |
+|        |             |             |
+
 > #### Question 2: When was the HTML file the browser retrieves last modified at the server? Does the response also contain a DATE header? How are these two fields different?
 > 
 > #### Question 3: Is the connection established between the browser and the server persistent or non-persistent? How can you infer this?
@@ -16,6 +21,7 @@ tags:
 > 
 > #### Question 5: What is the data contained inside the HTTP response packet?
 > 
+
 > ![[Pasted image 20260301220651.png]]
 
 ## **Exercise 4: Using Wireshark to understand the HTTP CONDITIONAL GET/response interaction (2.5 marks, include in your report)**
