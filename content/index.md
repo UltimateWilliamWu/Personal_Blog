@@ -1,7 +1,7 @@
 ---
 title: Home
+sticker: emoji//1f642
 ---
-
 # 🌐 Welcome 欢迎光临
 ---
 

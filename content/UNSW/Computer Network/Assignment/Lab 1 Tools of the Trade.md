@@ -1,3 +1,7 @@
+---
+tags:
+  - Assignment
+---
 **ZID**: z5518601
 **Name**: Tianxiong Wu
 ## **Exercise 2: Use ping to test host reachability (2 marks. 0.2 per each host)**
