@@ -1,6 +1,8 @@
 ---
 title: Home
 sticker: emoji//1f642
+banner: background.png
+banner_y: "41"
 ---
 # 🌐 Welcome 欢迎光临
 ---
