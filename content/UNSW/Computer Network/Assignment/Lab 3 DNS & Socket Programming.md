@@ -1,11 +1,23 @@
 ## **Exercise 3: Digging into DNS (marked, include in the lab report, 5 Marks)**
 
 >[!note] Answer & Screenshots
+>![[Pasted image 20260303142602.png]]
+>
 >**Question 1.** What is the IP address of **[www.optus.com.au](http://www.optus.com.au/)** ? What type of DNS query is sent to get this answer?  
 >
+>The IPv4 addresses returned for [www.optus.com.au](http://www.optus.com.au) are 23.55.242.122, 23.55.242.146, and 23.55.242.152. The DNS query type is A (address record).
+>
 > **Question 2.** What is the canonical name for the webserver (i.e., **[www.optus.com.au](http://www.optus.com.au/)** )? Suggest a reason for having an alias for this server.
+>
+>The canonical name (CNAME chain) for [www.optus.com.au](http://www.optus.com.au) is:
+> [www.optus.com.au](http://www.optus.com.au) → optus.com.au.edgekey.net → e189255.a.akamaiedge.net
+> So the canonical (final) name that the A records apply to is e189255.a.akamaiedge.net.
+> - Reason for using an alias: This allows optus.com.au to map the “www” hostname to a CDN (Akamai) hostname. Using a CNAME enables traffic to be directed to nearby edge servers and supports load balancing, performance optimisation, and easier failover without changing the public [www.optus.com.au](http://www.optus.com.au) name.
+>
 > 
 > **Question 3.** What can you make of the rest of the response/what is it used for (i.e., the details available in the DNS response (cookies and other fields))?  
+>
+>The additional fields show that the response was provided by a recursive resolver (`rd` and `ra` flags), and that EDNS was used (OPT pseudo-section with UDP size). The DNS COOKIE option indicates extra security/anti-spoofing support. `Query time`, `SERVER`, and `MSG SIZE` provide performance and debugging information.
 > 
 > **Question 4.** What is the IP address of the local nameserver for your machine?
 > 
