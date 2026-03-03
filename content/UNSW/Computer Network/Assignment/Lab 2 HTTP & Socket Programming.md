@@ -61,3 +61,32 @@ tags:
 > I implemented a UDP-based Ping client in Python (PingClient.py). The client sends 15 ping requests to the server. Each request contains the keyword **PING**, a sequence number starting from a random value between 10,000 and 15,000, and a timestamp (epoch milliseconds) indicating when the request was sent. For each request, the client waits up to 600 ms for a reply. If no reply is received within 600 ms, the request is recorded as a timeout (packet loss). For each successful reply, the Round-Trip Time (RTT) is measured.
 > 
 > ![[Pasted image 20260303134107.png]]
+> At the end of execution, the client reports:
+> 1. Per-ping RTT or timeout  
+>     For each sequence number, print RTT_i if a reply arrives, otherwise print “timeout”.
+>     
+> 2. Packet loss percentage  
+>     sent = 15  
+>     received = number of replies received within 600 ms  
+>     $lost = sent − received$  
+>     $loss = (lost / sent) × 100\%$
+> 3. Minimum / Maximum / Average RTT  
+>     These are computed only over successful RTT samples (timeouts excluded):  
+>     $min_{RTT} = min(RTT_i)$ 
+>     $max_{RTT} = max(RTT_i)$  
+>     $avg_{RTT} = (\sum RTT_i) / received$
+>     
+> 4. Total transmission time  
+>     The client records the time of the first packet sent ($t_{firstSend}$) and the time when the last event occurs ($t_{lastEvent}$), where $t_{lastEvent}$ is either the receive time of the last successful reply or the time when the last request times out. Then:
+>     
+> 
+> $total_{time} (ms) = t_{lastEvent} − t_{firstSend}$
+> 
+> 5. Jitter (as required in the assignment)  
+>     Jitter is computed using successive RTT values of received packets in the order they are received (timeouts ignored). If received ≥ 2:
+>     
+> 
+>$jitter (ms) = \sum |RTT(n) − RTT(n−1)| / (received − 1)$
+> 
+> If received < 2, jitter is reported as 0.
+
