@@ -40,4 +40,4 @@
 > 
 > **Question 10.** In this exercise, you will simulate the iterative DNS query process to find the IP address of your machine (e.g., lyre00.cse.unsw.edu.au). If you are using VLAB, your hostname will begin with **vx** . Begin by finding the nameservers (query type **NS** ) for the **root (“.”) domain** . From the list of root nameservers in the response, choose one authoritative server and query it for the next step in the delegation chain. Use the **correct DNS query type** each time.Receiving a DNS response does **not** guarantee that the answer is correct or authoritative. Pay close attention to the **ANSWER** section and the **authority flags** in each response. Repeat this process by querying each successive authoritative nameserver until you eventually retrieve the **authoritative IP address** for the given hostname. **How many DNS servers did you have to query** before obtaining the final authoritative answer (the IP address of your lab machine)?
 
-## Exercise 4: A Simple Web Server (Marked, submit your code, 5 Marks
+## Exercise 4: A Simple Web Server (Marked, submit your code, 5 Marks)
