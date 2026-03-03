@@ -56,3 +56,8 @@ tags:
 >Yes, the ETag value is the same as in the 1st response (the 200 OK response), which also has **ETag: "1bfef-173-8f4ae900"**.
 
 ## **Exercise 5: Ping Client (5 marks, submit source code as a separate file, include sample output in the report)**
+
+> [!note] Answer & Screenshots
+> I implemented a UDP-based Ping client in Python (PingClient.py). The client sends 15 ping requests to the server. Each request contains the keyword **PING**, a sequence number starting from a random value between 10,000 and 15,000, and a timestamp (epoch milliseconds) indicating when the request was sent. For each request, the client waits up to 600 ms for a reply. If no reply is received within 600 ms, the request is recorded as a timeout (packet loss). For each successful reply, the Round-Trip Time (RTT) is measured.
+> 
+> ![[Pasted image 20260303134107.png]]
