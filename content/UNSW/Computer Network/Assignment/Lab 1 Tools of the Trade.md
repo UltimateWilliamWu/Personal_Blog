@@ -78,11 +78,8 @@ _Note: Include all traceroute outputs in your report._
 
 >[!note] Answer & Screenshots
 >#### 1. Last common router (where the three paths diverge)
-> 
 > The **last hop that is common to all three destinations is hop 2**:
-> 
 > - **Hop 2:** `129.94.39.17`
-> 
 > After that they diverge:
 > 
 > - **NYU** goes to `172.17.47.11` at hop 3
