@@ -1,9 +1,9 @@
 ## **Exercise 3: Digging into DNS (marked, include in the lab report, 5 Marks)**
 
 >[!note] Answer & Screenshots
->![[Pasted image 20260303142602.png]]
+>![[Pasted image 20260303142602.png |1000]]
 >
->## **Question 1.** What is the IP address of **[www.optus.com.au](http://www.optus.com.au/)** ? What type of DNS query is sent to get this answer?  
+>### **Question 1.** What is the IP address of **[www.optus.com.au](http://www.optus.com.au/)** ? What type of DNS query is sent to get this answer?  
 >
 >The IPv4 addresses returned for [www.optus.com.au](http://www.optus.com.au) are 23.55.242.122, 23.55.242.146, and 23.55.242.152. The DNS query type is A (address record).
 >
@@ -25,7 +25,7 @@
 > 
 > ### **Question 5.** What are the DNS nameservers for the " **netflix.com** ” domain (note: the domain name is **netflix.com.** and not **[www.netflix.com](http://www.netflix.com/)** . This is an example of what is referred to as the apex/naked domain)? Find their IP addresses. Which DNS query type is used to obtain this information?
 >
->![[Pasted image 20260304223440.png]]
+>![[Pasted image 20260304223440.png|1000]]
 The apex domain **netflix.com.** has the following DNS nameservers (from an **NS** query):
 > 
 > - **ns-1984.awsdns-56.co.uk.**
@@ -53,19 +53,19 @@ The apex domain **netflix.com.** has the following DNS nameservers (from an **NS
 > 
 > ### **Question 6** . What is the DNS name associated with the IP address 9.9.9.9? Which DNS query type is used to obtain this information?
 > 
-> ![[Pasted image 20260304224126.png]]
+> ![[Pasted image 20260304224126.png|1000]]
 > The DNS name (reverse DNS / PTR record) associated with **9.9.9.9** is **dns9.quad9.net.**  
 >The DNS query type used to obtain this information is **PTR** (a reverse lookup, e.g., `dig -x 9.9.9.9`).
 > 
 > ### **Question 7.** Run dig and query the CSE nameserver (129.94.242.2) for the mail servers for google.com (again, the domain name is google.com, not [www.google.com](http://www.google.com/) ). Did you get an authoritative answer? Why? (HINT: Just because a response contains information in the authoritative part of the DNS response message does not mean it came from an authoritative name server. You should examine the flags in the response message to determine the answer)
 > 
-> ![[Pasted image 20260304224256.png]]
+> ![[Pasted image 20260304224256.png|1000]]
 > I queried the CSE nameserver using `dig @129.94.242.2 google.com MX`. The reply was **not authoritative** because the **`aa` flag is not set** in the response (the flags are `qr rd ra`). This indicates that **129.94.242.2 is acting as a recursive resolver**, returning an answer obtained via recursion and/or cache, rather than being an authoritative nameserver for the `google.com` zone. The presence (or absence) of an AUTHORITY section alone does not prove authoritativeness; the **DNS flags** are the reliable indicator.
 > 
 > ### **Question 8.** Obtain the authoritative answer for the mail servers for google.com. What type of DNS query is sent to obtain this information?
 > 
-> ![[Pasted image 20260304224526.png]]
-> ![[Pasted image 20260304224644.png]]
+> ![[Pasted image 20260304224526.png|1000]]
+> ![[Pasted image 20260304224644.png|1000]]
 > To obtain an authoritative answer for the mail servers of **google.com**, I queried one of Google’s authoritative nameservers directly:
 > `dig @ns1.google.com google.com MX`
 > 
