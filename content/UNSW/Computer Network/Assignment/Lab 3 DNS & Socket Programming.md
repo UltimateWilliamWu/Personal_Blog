@@ -20,9 +20,13 @@
 >The additional fields show that the response was provided by a recursive resolver (`rd` and `ra` flags), and that EDNS was used (OPT pseudo-section with UDP size). The DNS COOKIE option indicates extra security/anti-spoofing support. `Query time`, `SERVER`, and `MSG SIZE` provide performance and debugging information.
 > 
 > **Question 4.** What is the IP address of the local nameserver for your machine?
+>
+>The IP address of my machine’s local name server is **129.94.208.2**. This is shown on the `SERVER:` line in the `dig` output (`SERVER: 129.94.208.2#53`).
 > 
 > **Question 5.** What are the DNS nameservers for the " **netflix.com** ” domain (note: the domain name is **netflix.com.** and not **[www.netflix.com](http://www.netflix.com/)** . This is an example of what is referred to as the apex/naked domain)? Find their IP addresses. Which DNS query type is used to obtain this information?
-> 
+>
+>![[Pasted image 20260304223333.png]]
+>
 > **Question 6** . What is the DNS name associated with the IP address 9.9.9.9? Which DNS query type is used to obtain this information?
 > 
 > **Question 7.** Run dig and query the CSE nameserver (129.94.242.2) for the mail servers for google.com (again, the domain name is google.com, not [www.google.com](http://www.google.com/) ). Did you get an authoritative answer? Why? (HINT: Just because a response contains information in the authoritative part of the DNS response message does not mean it came from an authoritative name server. You should examine the flags in the response message to determine the answer)
