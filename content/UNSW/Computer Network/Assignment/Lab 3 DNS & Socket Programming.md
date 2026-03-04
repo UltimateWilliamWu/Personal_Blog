@@ -25,8 +25,33 @@
 > 
 > **Question 5.** What are the DNS nameservers for the " **netflix.com** ” domain (note: the domain name is **netflix.com.** and not **[www.netflix.com](http://www.netflix.com/)** . This is an example of what is referred to as the apex/naked domain)? Find their IP addresses. Which DNS query type is used to obtain this information?
 >
->![[Pasted image 20260304223333.png]]
->
+>![[Pasted image 20260304223440.png]]
+The apex domain **netflix.com.** has the following DNS nameservers (from an **NS** query):
+> 
+> - **ns-1984.awsdns-56.co.uk.**
+>     
+> - **ns-659.awsdns-18.net.**
+>     
+> - **ns-81.awsdns-10.com.**
+>     
+> - **ns-1372.awsdns-43.org.**
+>     
+> 
+> Their IPv4 addresses (from **A** queries) are:
+> 
+> - **ns-1984.awsdns-56.co.uk.** → **205.251.199.192**
+>     
+> - **ns-659.awsdns-18.net.** → **205.251.194.147**
+>     
+> - **ns-81.awsdns-10.com.** → **205.251.192.81**
+>     
+> - **ns-1372.awsdns-43.org.** → **205.251.197.92**
+>     
+> 
+> **DNS query type used to obtain the nameserver list:** **NS**  
+> **DNS query type used to obtain the IP addresses:** **A** (for IPv4; **AAAA** would be used for IPv6 if needed)
+> 
+
 > **Question 6** . What is the DNS name associated with the IP address 9.9.9.9? Which DNS query type is used to obtain this information?
 > 
 > **Question 7.** Run dig and query the CSE nameserver (129.94.242.2) for the mail servers for google.com (again, the domain name is google.com, not [www.google.com](http://www.google.com/) ). Did you get an authoritative answer? Why? (HINT: Just because a response contains information in the authoritative part of the DNS response message does not mean it came from an authoritative name server. You should examine the flags in the response message to determine the answer)
