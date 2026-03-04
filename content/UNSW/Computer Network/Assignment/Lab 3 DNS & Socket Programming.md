@@ -85,9 +85,7 @@ The apex domain **netflix.com.** has the following DNS nameservers (from an **NS
 > Measure and compare the DNS resolution times for each chosen resolver against the CSE DNS server. In your answer, include the resolution time for each server. Any notable differences you observe (e.g., caching behaviour, DNSSEC flags, response size, etc.). Discuss any interesting patterns or variations in performance across the resolve.
 > 
 > I compared DNS resolution performance for the **A record of `www.discord.com`** using the CSE DNS resolver and three public resolvers (Google Public DNS, Cloudflare DNS, OpenDNS). I queried each resolver once with `dig @<resolver> www.discord.com A` and recorded the reported **Query time**.
-> 
 > #### Resolution times
-> 
 > - **CSE DNS (129.94.242.2):** **7 ms**
 >     
 > - **Google Public DNS (8.8.8.8):** **7 ms**
@@ -96,9 +94,7 @@ The apex domain **netflix.com.** has the following DNS nameservers (from an **NS
 >     
 > - **OpenDNS (208.67.222.222):** **27 ms**
 >     
-> 
 > #### Notable observations
-> 
 > 1. **Fastest resolver:** Cloudflare (**3 ms**) was the fastest in this measurement, suggesting lower latency from the test host to Cloudflare or a very warm cache for this query.
 >     
 > 2. **Slowest resolver:** OpenDNS (**27 ms**) was noticeably slower than the others (3–7 ms range). This could be due to higher network latency to OpenDNS from the test environment or different caching/anycast routing behaviour.
@@ -117,14 +113,10 @@ The apex domain **netflix.com.** has the following DNS nameservers (from an **NS
 >         
 >     - OpenDNS used **1410**, `MSG SIZE rcvd: 124`.  
 >         The response size variation (e.g., CSE’s larger size) is likely due to additional EDNS options such as cookies or resolver-specific metadata, not differences in the A-record content.
+> #### Overall pattern
+> For this single measurement, **Cloudflare performed best**, **CSE and Google were similar**, and **OpenDNS was significantly slower**. All resolvers behaved as **recursive resolvers** (they all had `rd` and `ra` set) and returned consistent A-record data.
 > 
 > ### **Question 10.** In this exercise, you will simulate the iterative DNS query process to find the IP address of your machine (e.g., lyre00.cse.unsw.edu.au). If you are using VLAB, your hostname will begin with **vx** . Begin by finding the nameservers (query type **NS** ) for the **root (“.”) domain** . From the list of root nameservers in the response, choose one authoritative server and query it for the next step in the delegation chain. Use the **correct DNS query type** each time.Receiving a DNS response does **not** guarantee that the answer is correct or authoritative. Pay close attention to the **ANSWER** section and the **authority flags** in each response. Repeat this process by querying each successive authoritative nameserver until you eventually retrieve the **authoritative IP address** for the given hostname. **How many DNS servers did you have to query** before obtaining the final authoritative answer (the IP address of your lab machine)?
 
 
-
-        
-
-### Overall pattern
-
-For this single measurement, **Cloudflare performed best**, **CSE and Google were similar**, and **OpenDNS was significantly slower**. All resolvers behaved as **recursive resolvers** (they all had `rd` and `ra` set) and returned consistent A-record data.
 ## Exercise 4: A Simple Web Server (Marked, submit your code, 5 Marks)
