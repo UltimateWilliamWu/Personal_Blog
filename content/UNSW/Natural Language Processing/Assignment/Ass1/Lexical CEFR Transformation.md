@@ -5,9 +5,9 @@ tags:
 ### 1. Task and Objective
 
 The goal of this assignment is to transform a sentence from one CEFR level to another (e.g., A2 to B2) while preserving the original meaning and grammaticality as much as possible.  
-Given three inputs, sentence, source_level, and target_level, the system should produce a revised sentence whose lexical difficulty better matches the target CEFR level.
+Given three inputs, sentence, source_level, and target_level, the system should produce a revised sentence whose lexical difficulty better matches the target CEFR level.
 
-My approach treats this as a **controlled lexical substitution** problem. It changes only selected content words (nouns, verbs, adjectives, adverbs) and leaves sentence structure mostly unchanged to avoid unnecessary errors. The objective is to balance three constraints:
+My approach treats this as a **controlled lexical substitution** problem. It changes only selected content words (nouns, verbs, adjectives, adverbs) and leaves sentence structure mostly unchanged to avoid unnecessary errors. The objective is to balance three constraints:
 
 1. semantic preservation,
 2. contextual fluency, and
@@ -42,13 +42,13 @@ The main implementation challenge was semantic drift in verbs during simplificat
 Another issue was grammatical side effects after replacement. The common errors were article agreement (`a`/`an`) and occasional form mismatch. I added a post-processing pass for article correction and stricter POS/form filters before accepting candidates. This improved fluency without using any hand-written answer lexicon.
 
 Overall, the final pipeline is still lightweight, but it is much more stable than the initial baseline because each scoring component has explicit guardrails against meaning loss and grammar breakage.
-### 3.  Experiments and Results
+### 3. Experiments and Results
 #### 3.1 Experimental Setup
 
 I evaluated the system in a local conda environment (cefr) using:
 
-- python main.py z5518601 for qualitative inspection on public unit tests.
-- python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_final_unit for quantitative metrics.
+- python main.py z5518601 for qualitative inspection on public unit tests.
+- python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_final_unit for quantitative metrics.
 
 The public test set (unit_tests.csv) contains 10 sentence-level CEFR transfer cases (mostly downward transfers such as B2/C1 to A2/B1).  
 I report four metrics:
@@ -60,9 +60,9 @@ I report four metrics:
 
 #### 3.2 Quantitative Results
 
-On unit_tests.csv, the final system achieved:
+On unit_tests.csv, the final system achieved:
 
-- success_rate = 1.0000 (10/10, no runtime errors)
+- success_rate = 1.0000 (10/10, no runtime errors)
 - avg_changed_ratio = 0.1888
 - avg_difficulty_shift = -0.1009
 - direction_success_rate = 0.9000
@@ -74,22 +74,22 @@ These numbers indicate that the method is stable and generally performs controll
 #### 3.3 Qualitative Examples
 
 **Example 1 (C1 -> A2)**  
-Input: _I purchased a magnificent house yesterday._  
-Output: _I purchased an impressive home yesterday._  
-Discussion: The model simplified one noun phrase (_house -> home_) and corrected article agreement (_a -> an_ before _impressive_). The sentence remains grammatical and close in meaning, though simplification strength is moderate.
+Input: _I purchased a magnificent house yesterday._  
+Output: _I purchased an impressive home yesterday._  
+Discussion: The model simplified one noun phrase (_house -> home_) and corrected article agreement (_a -> an_ before _impressive_). The sentence remains grammatical and close in meaning, though simplification strength is moderate.
 
 ![[Pasted image 20260307230925.png]]
 
 **Example 2 (B2 -> A2)**  
-Input: _The scientist conducted an experiment._  
-Output: _The scientist did an experiment._  
-Discussion: A previous version produced semantically drifted verbs (e.g., _conveyed/moved_). The final version adds a context-sensitive verb filter and keeps a simpler but semantically safer replacement.
+Input: _The scientist conducted an experiment._  
+Output: _The scientist did an experiment._  
+Discussion: A previous version produced semantically drifted verbs (e.g., _conveyed/moved_). The final version adds a context-sensitive verb filter and keeps a simpler but semantically safer replacement.
 
 ![[Pasted image 20260307231023.png]]
 
 **Example 3 (C1 -> B1)**  
-Input: _The committee will evaluate the proposal tomorrow._  
-Output: _The committee will judge the proposal tomorrow._  
+Input: _The committee will evaluate the proposal tomorrow._  
+Output: _The committee will judge the proposal tomorrow._  
 Discussion: The replacement preserves the core meaning and reduces lexical complexity.
 
 ![[Pasted image 20260307231043.png]]
@@ -120,3 +120,4 @@ Evaluation is still limited in scale. Results on `unit_tests.csv` are useful for
 This project implemented a CEFR lexical transformation system using a hybrid pipeline: corpus-based difficulty scoring, smoothed bigram language modeling, WordNet candidate generation, and embedding-based semantic filtering with spaCy. The final model is robust on the provided unit tests (100% runtime success) and usually moves outputs in the intended CEFR direction while keeping edits controlled.
 
 The main engineering focus was balancing simplification strength and meaning preservation. Through iterative refinement, I reduced common failure modes such as semantic drift in verb substitution and local grammatical errors after replacement. Although the method remains limited by lexical resources and does not perform full syntactic rewriting, it provides a practical and interpretable baseline for CEFR-aware text transformation. Future work should prioritize broader evaluation and stronger context-sensitive candidate generation for more natural outputs.
+
