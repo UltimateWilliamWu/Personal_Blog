@@ -68,5 +68,57 @@ with an additional tie-break term favoring better movement toward target level.
 If strict candidates are weak, a relaxed pass is used with looser thresholds and a frequency bonus.
 
 ---
+### 3.  Experiments and Results
+#### 3.1 Experimental Setup
 
-Finally, the method controls edit aggressiveness via min_replacements and  max_replacements, based on CEFR gap and sentence candidate count. It selects top replacements in priority order (change_candidates, then backups, then forced candidates), applies them by token index, and reconstructs the sentence while preserving original whitespace and punctuation.
+I evaluated the system in a local conda environment (cefr) using:
+
+- python main.py z5518601 for qualitative inspection on public unit tests.
+- python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_final_unit for quantitative metrics.
+
+The public test set (unit_tests.csv) contains 10 sentence-level CEFR transfer cases (mostly downward transfers such as B2/C1 to A2/B1).  
+I report four metrics:
+
+- success_rate: fraction of cases without runtime errors.
+- avg_changed_ratio: proportion of changed tokens.
+- avg_difficulty_shift: average lexical difficulty movement (negative = simplification).
+- direction_success_rate: fraction of outputs moving in the expected CEFR direction.
+
+#### 3.2 Quantitative Results
+
+On unit_tests.csv, the final system achieved:
+
+- success_rate = 1.0000 (10/10, no runtime errors)
+- avg_changed_ratio = 0.1888
+- avg_difficulty_shift = -0.1009
+- direction_success_rate = 0.9000
+
+These numbers indicate that the method is stable and generally performs controlled simplification while avoiding excessive rewriting.
+
+![[Pasted image 20260307230734.png]]
+
+#### 3.3 Qualitative Examples
+
+**Example 1 (C1 -> A2)**  
+Input: _I purchased a magnificent house yesterday._  
+Output: _I purchased an impressive home yesterday._  
+Discussion: The model simplified one noun phrase (_house -> home_) and corrected article agreement (_a -> an_ before _impressive_). The sentence remains grammatical and close in meaning, though simplification strength is moderate.
+
+![[Pasted image 20260307230925.png]]
+
+**Example 2 (B2 -> A2)**  
+Input: _The scientist conducted an experiment._  
+Output: _The scientist did an experiment._  
+Discussion: A previous version produced semantically drifted verbs (e.g., _conveyed/moved_). The final version adds a context-sensitive verb filter and keeps a simpler but semantically safer replacement.
+
+![[Pasted image 20260307231023.png]]
+
+**Example 3 (C1 -> B1)**  
+Input: _The committee will evaluate the proposal tomorrow._  
+Output: _The committee will judge the proposal tomorrow._  
+Discussion: The replacement preserves the core meaning and reduces lexical complexity.
+
+![[Pasted image 20260307231043.png]]
+#### 3.4 Result Interpretation
+
+Overall, the system shows a good trade-off between lexical control and meaning preservation. The model is robust (no crashes) and directionally correct in most cases (90%). Remaining errors are mainly due to limited candidate quality for some words, where stronger simplification may conflict with semantic precision.
