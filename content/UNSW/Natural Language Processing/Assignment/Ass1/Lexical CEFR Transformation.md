@@ -45,10 +45,10 @@ Overall, the final pipeline is still lightweight, but it is much more stable tha
 ### 3. Experiments and Results
 #### 3.1 Experimental Setup
 
-I re-ran the final version in my local conda environment (`cefr`) with:
+I re-ran the current version in my local conda environment (`cefr`) with:
 
 - python main.py z5518601 for qualitative inspection on public unit tests.
-- python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_report_refresh for quantitative metrics.
+- python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_report_current for quantitative metrics.
 
 The test file `unit_tests.csv` has 10 transfer cases, mostly downward transformations (B2/C1 to A2/B1).  
 I report four metrics:
@@ -63,45 +63,44 @@ I report four metrics:
 The refreshed run produced:
 
 - success_rate = 1.0000 (10/10, no runtime errors)
-- avg_changed_ratio = 0.1888
-- avg_difficulty_shift = -0.1009
-- direction_success_rate = 0.9000
+- avg_changed_ratio = 0.1721
+- avg_difficulty_shift = -0.1315
+- direction_success_rate = 1.0000
 
 My reading of these numbers is:
 
 - Stability is strong (no crashes at all).
-- Simplification is real but not aggressive (`avg_changed_ratio` below 0.2).
-- The 0.9 direction rate comes from exactly one problematic case, not many small failures.
+- Simplification is consistent but still controlled (`avg_changed_ratio` is below 0.2).
+- All 10 test cases move in the expected CEFR direction in this run.
 
-![[Pasted image 20260307230734.png]]
-
+![[Pasted image 20260308015022.png]]
 #### 3.3 Qualitative Examples
 
-**Example 1 (Most unexpected case, C1 -> A2)**  
+**Example 1 (C1 -> A2)**  
 Input: _I purchased a magnificent house yesterday._  
-Output: _I purchased an impressive home yesterday._  
-Discussion: This is the only case that moved in the wrong direction in the metric file (`difficulty_shift = +0.019`, `direction_success = False`). The sentence is fluent, but replacing _magnificent_ with _impressive_ is not a real simplification, and _purchased_ remained unchanged. This single example is why overall direction success is 0.9 instead of 1.0.
+Output: _I purchased a wonderful house yesterday._  
+Discussion: This version is a clearer simplification than earlier runs because _magnificent -> wonderful_ lowers lexical difficulty without changing core meaning (`difficulty_shift = -0.1719`).
 
-![[Pasted image 20260307230925.png]]
+![[Pasted image 20260308015127.png]]
 
 **Example 2 (Strong simplification, B2 -> A2)**  
 Input: _He quickly realised his mistake._  
 Output: _He quickly saw his mistake._  
 Discussion: This is one of the strongest downward moves in the set (`difficulty_shift = -0.2599`). The verb change is simple but effective, and meaning is preserved.
 
-![[Pasted image 20260307231023.png]]
+![[Pasted image 20260308015305.png]]
 
 **Example 3 (Semantic safety improvement, B2 -> A2)**  
 Input: _The scientist conducted an experiment._  
 Output: _The scientist did an experiment._  
 Discussion: Earlier iterations sometimes produced semantic drift here (e.g., odd verb substitutions). In this run, the system chose _did_, which is simpler and semantically safe in context. This is a representative case of the new verb filtering logic working as intended.
 
-![[Pasted image 20260307231043.png]]
+![[Pasted image 20260308015341.png]]
 #### 3.4 Result Interpretation
 
-The pair-level breakdown makes the bottleneck very clear: `C1 -> A2` has only one test case, and it failed directionally (`0.0` for that pair), while all other pairs are `1.0`. So the current gap is not general instability; it is insufficient simplification strength for some high-level adjectives/verbs in very small samples.
+The pair-level breakdown is now fully consistent on unit tests: all tested source-target pairs reached `direction_success = 1.0`. The strongest average downward movement appears in `B2 -> A2` and `C1 -> A2`, which matches the intended behavior for simplification-heavy cases.
 
-In short, this run confirms two things I care about most: the system is stable and usually semantically safe, but it can still miss the target level when simplification candidates are mild rather than truly easier.
+In short, the current system is stable and directionally reliable on the public test set, while still keeping edits relatively conservative rather than aggressively rewriting whole sentences.
 
 ### 4. Limitations of the Current Approach
 
