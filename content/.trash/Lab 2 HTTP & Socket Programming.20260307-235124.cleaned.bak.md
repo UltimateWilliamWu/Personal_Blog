@@ -86,7 +86,7 @@ tags:
 >     Jitter is computed using successive RTT values of received packets in the order they are received (timeouts ignored). If received ≥ 2:
 >
 >
->$$jitter (ms) = \frac{\sum |RTT(n) − RTT(n−1)|}{(received − 1)}$$
+>$$jitter (ms) = \sum |RTT(n) − RTT(n−1)| / (received − 1)$$
 >
 > If received < 2, jitter is reported as 0.
 
