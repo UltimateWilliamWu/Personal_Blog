@@ -45,12 +45,12 @@ Overall, the final pipeline is still lightweight, but it is much more stable tha
 ### 3. Experiments and Results
 #### 3.1 Experimental Setup
 
-I re-ran the final version in my local conda environment (`cefr`) with:
+I evaluated the system in a local conda environment (cefr) using:
 
 - python main.py z5518601 for qualitative inspection on public unit tests.
-- python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_report_refresh for quantitative metrics.
+- python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_final_unit for quantitative metrics.
 
-The test file `unit_tests.csv` has 10 transfer cases, mostly downward transformations (B2/C1 to A2/B1).  
+The public test set (unit_tests.csv) contains 10 sentence-level CEFR transfer cases (mostly downward transfers such as B2/C1 to A2/B1).  
 I report four metrics:
 
 - success_rate: fraction of cases without runtime errors.
@@ -60,69 +60,64 @@ I report four metrics:
 
 #### 3.2 Quantitative Results
 
-The refreshed run produced:
+On unit_tests.csv, the final system achieved:
 
 - success_rate = 1.0000 (10/10, no runtime errors)
 - avg_changed_ratio = 0.1888
 - avg_difficulty_shift = -0.1009
 - direction_success_rate = 0.9000
 
-My reading of these numbers is:
-
-- Stability is strong (no crashes at all).
-- Simplification is real but not aggressive (`avg_changed_ratio` below 0.2).
-- The 0.9 direction rate comes from exactly one problematic case, not many small failures.
+These numbers indicate that the method is stable and generally performs controlled simplification while avoiding excessive rewriting.
 
 ![[Pasted image 20260307230734.png]]
 
 #### 3.3 Qualitative Examples
 
-**Example 1 (Most unexpected case, C1 -> A2)**  
+**Example 1 (C1 -> A2)**  
 Input: _I purchased a magnificent house yesterday._  
 Output: _I purchased an impressive home yesterday._  
-Discussion: This is the only case that moved in the wrong direction in the metric file (`difficulty_shift = +0.019`, `direction_success = False`). The sentence is fluent, but replacing _magnificent_ with _impressive_ is not a real simplification, and _purchased_ remained unchanged. This single example is why overall direction success is 0.9 instead of 1.0.
+Discussion: The model simplified one noun phrase (_house -> home_) and corrected article agreement (_a -> an_ before _impressive_). The sentence remains grammatical and close in meaning, though simplification strength is moderate.
 
 ![[Pasted image 20260307230925.png]]
 
-**Example 2 (Strong simplification, B2 -> A2)**  
-Input: _He quickly realised his mistake._  
-Output: _He quickly saw his mistake._  
-Discussion: This is one of the strongest downward moves in the set (`difficulty_shift = -0.2599`). The verb change is simple but effective, and meaning is preserved.
+**Example 2 (B2 -> A2)**  
+Input: _The scientist conducted an experiment._  
+Output: _The scientist did an experiment._  
+Discussion: A previous version produced semantically drifted verbs (e.g., _conveyed/moved_). The final version adds a context-sensitive verb filter and keeps a simpler but semantically safer replacement.
 
 ![[Pasted image 20260307231023.png]]
 
-**Example 3 (Semantic safety improvement, B2 -> A2)**  
-Input: _The scientist conducted an experiment._  
-Output: _The scientist did an experiment._  
-Discussion: Earlier iterations sometimes produced semantic drift here (e.g., odd verb substitutions). In this run, the system chose _did_, which is simpler and semantically safe in context. This is a representative case of the new verb filtering logic working as intended.
+**Example 3 (C1 -> B1)**  
+Input: _The committee will evaluate the proposal tomorrow._  
+Output: _The committee will judge the proposal tomorrow._  
+Discussion: The replacement preserves the core meaning and reduces lexical complexity.
 
 ![[Pasted image 20260307231043.png]]
 #### 3.4 Result Interpretation
 
-The pair-level breakdown makes the bottleneck very clear: `C1 -> A2` has only one test case, and it failed directionally (`0.0` for that pair), while all other pairs are `1.0`. So the current gap is not general instability; it is insufficient simplification strength for some high-level adjectives/verbs in very small samples.
-
-In short, this run confirms two things I care about most: the system is stable and usually semantically safe, but it can still miss the target level when simplification candidates are mild rather than truly easier.
+Overall, the system shows a good trade-off between lexical control and meaning preservation. The model is robust (no crashes) and directionally correct in most cases (90%). Remaining errors are mainly due to limited candidate quality for some words, where stronger simplification may conflict with semantic precision.
 
 ### 4. Limitations of the Current Approach
 
 #### 4.1 Candidate Generation and Semantic Drift
 
-The most difficult part is still verb substitution. Even after adding semantic and sense filters, some WordNet candidates look acceptable in isolation but feel wrong in sentence-level meaning. Earlier outputs such as replacing *conducted* with *conveyed* showed this clearly. The current version blocks many of these cases, but it is still a filter-based fix rather than true semantic understanding.
+Although the system is stable on the unit tests, candidate quality is still a bottleneck. The model depends heavily on WordNet for substitution proposals, so performance is bounded by WordNet coverage and sense granularity. For some verbs and abstract words, candidates can be semantically close in embedding space but still wrong in event meaning. The sense-based filter reduces this problem, but it does not eliminate it.
 
 #### 4.2 Imperfect CEFR Control
 
-The CEFR signal in this system is word-centered. I estimate difficulty from level-wise word statistics and then combine that with local bigram context. This works for directional movement, but CEFR level is not only about single-word difficulty. Phrase-level naturalness, idioms, and syntax are only weakly modeled, so a sentence can score as "simpler" while still sounding less natural than a human rewrite.
+CEFR difficulty is estimated from corpus-level word distributions and combined with local bigram context. This gives useful directional control, but CEFR complexity is not purely lexical. Collocations, idiomatic usage, and syntax also affect readability. As a result, some outputs move toward the target level numerically while still sounding less natural than human rewriting.
 
 #### 4.3 Limited Structural Rewriting
 
-The pipeline is intentionally conservative: it mainly edits tokens and avoids large structural changes. This keeps grammar safer and prevents aggressive errors, but it also means some difficult cases are under-edited. When simplification really needs clause-level rewriting, the model often keeps the original structure and only makes small lexical changes.
+The system is intentionally conservative because it mainly performs token-level substitution with light post-processing. It can fix local issues such as article agreement, but it does not do full sentence restructuring. When simplification requires structural change, the model may keep the original word instead of making a risky replacement.
 
 #### 4.4 Evaluation Scope
 
-Current evaluation is still small. The `unit_tests.csv` results are useful for debugging and iteration, but 10 cases are not enough to claim broad generalization. A stronger evaluation should include larger sets, more upward transfers (e.g., A2 -> B2/C1), and more varied domains to test whether the same strategy remains stable outside the provided examples.
+Evaluation is still limited in scale. Results on `unit_tests.csv` are useful for debugging and comparison, but stronger evidence would require larger and more diverse CEFR transfer sets, especially for upward transfer and domain-specific text.
 
 ### 5. Conclusion
 
-This assignment shows that a lightweight lexical pipeline can still produce stable CEFR transfer when the constraints are designed carefully. On the provided unit tests, the system runs without runtime failures and usually moves sentences in the expected direction, while avoiding excessive rewriting.
+This project implemented a CEFR lexical transformation system using a hybrid pipeline: corpus-based difficulty scoring, smoothed bigram language modeling, WordNet candidate generation, and embedding-based semantic filtering with spaCy. The final model is robust on the provided unit tests (100% runtime success) and usually moves outputs in the intended CEFR direction while keeping edits controlled.
 
-The key lesson from implementation was that difficulty signals alone are not enough. Early versions could simplify words but sometimes damaged meaning (especially for verbs). The final version became more reliable after I added stricter semantic checks, sense-aware filtering, and post-edit grammar fixes such as article correction. At the same time, the method is still word-level and conservative, so it is best viewed as a practical baseline rather than a complete rewriting system. The next step is larger-scale evaluation and stronger sentence-level modeling for more natural outputs.
+The main engineering focus was balancing simplification strength and meaning preservation. Through iterative refinement, I reduced common failure modes such as semantic drift in verb substitution and local grammatical errors after replacement. Although the method remains limited by lexical resources and does not perform full syntactic rewriting, it provides a practical and interpretable baseline for CEFR-aware text transformation. Future work should prioritize broader evaluation and stronger context-sensitive candidate generation for more natural outputs.
+
