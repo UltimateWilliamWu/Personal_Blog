@@ -17,9 +17,9 @@ To achieve this, the model combines dataset-driven word difficulty estimates wit
 - - - 
 ### 2. Technical Details of the Approach
 
-I implemented the system as a lexical substitution pipeline around `transform_sentence(sentence, source_level, target_level)`. The design goal was practical: change as little as possible, but make lexical difficulty move in the required CEFR direction.
+I implemented the system as a lexical substitution pipeline around **transform_sentence(sentence, source_level, target_level)**. The design goal was practical: change as little as possible, but make lexical difficulty move in the required CEFR direction.
 
-The first step is to build reusable statistics from `data.csv` and cache them globally. I compute a continuous difficulty score for each word from its CEFR distribution:
+The first step is to build reusable statistics from **data.csv** and cache them globally. I compute a continuous difficulty score for each word from its CEFR distribution:
 
 $$\mathrm{score}(w)=\frac{\sum_{i} i \cdot c_i(w)}{\sum_{i} c_i(w)}$$
 
@@ -29,28 +29,28 @@ $$P(w_t \mid w_{t-1})=\frac{\mathrm{count}(w_{t-1}, w_t)+\alpha}{\mathrm{count}(
 
 These probabilities are used to check whether a replacement still fits local context.
 
-At inference time, the sentence is parsed by spaCy, and only content words (NOUN/VERB/ADJ/ADV) are considered. Candidate substitutions are collected from WordNet synsets of the lemma, then filtered to single-word alphabetic forms. To keep grammar stable, each candidate is inflected back to the original surface form using `pyinflect` (tense, number, etc.), and casing is restored.
+At inference time, the sentence is parsed by spaCy, and only content words (NOUN/VERB/ADJ/ADV) are considered. Candidate substitutions are collected from WordNet synsets of the lemma, then filtered to single-word alphabetic forms. To keep grammar stable, each candidate is inflected back to the original surface form using **pyinflect** (tense, number, etc.), and casing is restored.
 
 The final decision is based on a weighted score:
 
 $$\mathrm{final}=0.35\cdot \mathrm{sem}+0.40\cdot \mathrm{ctx}+0.25\cdot \mathrm{level}-0.05\cdot \mathrm{syn\_rank}$$
 
-The score balances semantic similarity (`sem`), context fitness from bigrams (`ctx`), and CEFR movement (`level`). `syn_rank` is a small penalty so very remote WordNet candidates are less preferred. I run a strict pass first; if nothing acceptable is found, a relaxed pass is allowed with extra safety checks.
+The score balances semantic similarity (**sem**), context fitness from bigrams (**ctx**), and CEFR movement (**level**). **syn_rank** is a small penalty so very remote WordNet candidates are less preferred. I run a strict pass first; if nothing acceptable is found, a relaxed pass is allowed with extra safety checks.
 
 The main implementation challenge was semantic drift in verbs during simplification. In early versions, **conducted an experiment** could become verbs like **conveyed** or **moved**, which followed frequency signals but changed meaning. I fixed this by tightening verb constraints: stronger semantic thresholds, sense-aware checks (Lesk/Wu-Palmer when available), and a fallback that keeps the original token if no safe candidate exists.
 
-Another issue was grammatical side effects after replacement. The common errors were article agreement (`a`/`an`) and occasional form mismatch. I added a post-processing pass for article correction and stricter POS/form filters before accepting candidates. This improved fluency without using any hand-written answer lexicon.
+Another issue was grammatical side effects after replacement. The common errors were article agreement (**a**/**an**) and occasional form mismatch. I added a post-processing pass for article correction and stricter POS/form filters before accepting candidates. This improved fluency without using any hand-written answer lexicon.
 
 Overall, the final pipeline is still lightweight, but it is much more stable than the initial baseline because each scoring component has explicit guardrails against meaning loss and grammar breakage.
 ### 3. Experiments and Results
 #### 3.1 Experimental Setup
 
-I re-ran the current version in my local conda environment (`cefr`) with:
+I re-ran the current version in my local conda environment (**cefr**) with:
 
 - python main.py z5518601 for qualitative inspection on public unit tests.
 - python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_report_current for quantitative metrics.
 
-The test file `unit_tests.csv` has 10 transfer cases, mostly downward transformations (B2/C1 to A2/B1).  
+The test file **unit_tests.csv** has 10 transfer cases, mostly downward transformations (B2/C1 to A2/B1).  
 I report four metrics:
 
 - success_rate: fraction of cases without runtime errors.
@@ -70,7 +70,7 @@ The refreshed run produced:
 My reading of these numbers is:
 
 - Stability is strong (no crashes at all).
-- Simplification is consistent but still controlled (`avg_changed_ratio` is below 0.2).
+- Simplification is consistent but still controlled (**avg_changed_ratio** is below 0.2).
 - All 10 test cases move in the expected CEFR direction in this run.
 
 ![[Pasted image 20260308015022.png]]
@@ -79,14 +79,14 @@ My reading of these numbers is:
 **Example 1 (C1 -> A2)**  
 Input: _I purchased a magnificent house yesterday._  
 Output: _I purchased a wonderful house yesterday._  
-Discussion: This version is a clearer simplification than earlier runs because _magnificent -> wonderful_ lowers lexical difficulty without changing core meaning (`difficulty_shift = -0.1719`).
+Discussion: This version is a clearer simplification than earlier runs because _magnificent -> wonderful_ lowers lexical difficulty without changing core meaning (**difficulty_shift = -0.1719**).
 
 ![[Pasted image 20260308015127.png]]
 
 **Example 2 (Strong simplification, B2 -> A2)**  
 Input: _He quickly realised his mistake._  
 Output: _He quickly saw his mistake._  
-Discussion: This is one of the strongest downward moves in the set (`difficulty_shift = -0.2599`). The verb change is simple but effective, and meaning is preserved.
+Discussion: This is one of the strongest downward moves in the set (**difficulty_shift = -0.2599**). The verb change is simple but effective, and meaning is preserved.
 
 ![[Pasted image 20260308015305.png]]
 
@@ -98,7 +98,7 @@ Discussion: Earlier iterations sometimes produced semantic drift here (e.g., odd
 ![[Pasted image 20260308015341.png]]
 #### 3.4 Result Interpretation
 
-The pair-level breakdown is now fully consistent on unit tests: all tested source-target pairs reached `direction_success = 1.0`. The strongest average downward movement appears in `B2 -> A2` and `C1 -> A2`, which matches the intended behavior for simplification-heavy cases.
+The pair-level breakdown is now fully consistent on unit tests: all tested source-target pairs reached **direction_success = 1.0**. The strongest average downward movement appears in **B2 -> A2** and **C1 -> A2**, which matches the intended behavior for simplification-heavy cases.
 
 In short, the current system is stable and directionally reliable on the public test set, while still keeping edits relatively conservative rather than aggressively rewriting whole sentences.
 
