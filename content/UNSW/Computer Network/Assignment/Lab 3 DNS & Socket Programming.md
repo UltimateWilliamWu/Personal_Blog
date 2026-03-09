@@ -116,7 +116,9 @@ The apex domain **netflix.com.** has the following DNS nameservers (from an **NS
 > #### Overall pattern
 > For this single measurement, **Cloudflare performed best**, **CSE and Google were similar**, and **OpenDNS was significantly slower**. All resolvers behaved as **recursive resolvers** (they all had `rd` and `ra` set) and returned consistent A-record data.
 > 
-> ### **Question 10.** In this exercise, you will simulate the iterative DNS query process to find the IP address of your machine (e.g., lyre00.cse.unsw.edu.au). If you are using VLAB, your hostname will begin with **vx** . Begin by finding the nameservers (query type **NS** ) for the **root (“.”) domain** . From the list of root nameservers in the response, choose one authoritative server and query it for the next step in the delegation chain. Use the **correct DNS query type** each time.Receiving a DNS response does **not** guarantee that the answer is correct or authoritative. Pay close attention to the **ANSWER** section and the **authority flags** in each response. Repeat this process by querying each successive authoritative nameserver until you eventually retrieve the **authoritative IP address** for the given hostname. **How many DNS servers did you have to query** before obtaining the final authoritative answer (the IP address of your lab machine)?
+> ### **Question 10.** **How many DNS servers did you have to query** before obtaining the final authoritative answer (the IP address of your lab machine)?
+> ![[Pasted image 20260310002504.png]]
+> 
 
 
 ## Exercise 4: A Simple Web Server (Marked, submit your code, 5 Marks)
