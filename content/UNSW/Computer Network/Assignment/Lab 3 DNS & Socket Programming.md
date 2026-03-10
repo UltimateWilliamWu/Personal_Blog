@@ -1,18 +1,18 @@
 ## **Exercise 3: Digging into DNS (marked, include in the lab report, 5 Marks)**
 
 >[!note] Answer & Screenshots
->![[Pasted image 20260303142602.png |1000]]
+>![[Pasted image 20260310110801.png|1000]]
 >
 >### **Question 1.** What is the IP address of **[www.optus.com.au](http://www.optus.com.au/)** ? What type of DNS query is sent to get this answer?  
 >
->The IPv4 addresses returned for [www.optus.com.au](http://www.optus.com.au) are 23.55.242.122, 23.55.242.146, and 23.55.242.152. The DNS query type is A (address record).
+>The IPv4 addresses returned for [www.optus.com.au](http://www.optus.com.au) are **23.48.247.241** and **23.48.247.242**. The DNS query type is A (address record).
 >
 > ### **Question 2.** What is the canonical name for the webserver (i.e., **[www.optus.com.au](http://www.optus.com.au/)** )? Suggest a reason for having an alias for this server.
 >
->The canonical name (CNAME chain) for [www.optus.com.au](http://www.optus.com.au) is:
-> [www.optus.com.au](http://www.optus.com.au) → optus.com.au.edgekey.net → e189255.a.akamaiedge.net
-> So the canonical (final) name that the A records apply to is e189255.a.akamaiedge.net.
-> - Reason for using an alias: This allows optus.com.au to map the “www” hostname to a CDN (Akamai) hostname. Using a CNAME enables traffic to be directed to nearby edge servers and supports load balancing, performance optimisation, and easier failover without changing the public [www.optus.com.au](http://www.optus.com.au) name.
+>The canonical name of `www.optus.com.au` is **e189255.a.akamaiedge.net**.  
+>From the `dig` output, `www.optus.com.au` is first mapped to `optus.com.au.edgekey.net`, which is then mapped to `e189255.a.akamaiedge.net` through CNAME records.  
+>
+>A reason for using an alias is that it allows the website to use a CDN provider such as Akamai for better performance, load balancing, and reliability. It also makes it easier to change the underlying servers without changing the public hostname.
 >
 > 
 > ### **Question 3.** What can you make of the rest of the response/what is it used for (i.e., the details available in the DNS response (cookies and other fields))?  
@@ -21,11 +21,11 @@
 > 
 > ### **Question 4.** What is the IP address of the local nameserver for your machine?
 >
->The IP address of my machine’s local name server is **129.94.208.2**. This is shown on the `SERVER:` line in the `dig` output (`SERVER: 129.94.208.2#53`).
+>The IP address of my machine’s local name server is **129.94.208.2**. This is shown on the `SERVER:` line in the `dig` output (`SERVER: 129.94.242.2#53`).
 > 
 > ### **Question 5.** What are the DNS nameservers for the " **netflix.com** ” domain (note: the domain name is **netflix.com.** and not **[www.netflix.com](http://www.netflix.com/)** . This is an example of what is referred to as the apex/naked domain)? Find their IP addresses. Which DNS query type is used to obtain this information?
 >
->![[Pasted image 20260304223440.png|1000]]
+>![[Pasted image 20260310112153.png|1000]]
 The apex domain **netflix.com.** has the following DNS nameservers (from an **NS** query):
 > 
 > - **ns-1984.awsdns-56.co.uk.**
@@ -53,19 +53,19 @@ The apex domain **netflix.com.** has the following DNS nameservers (from an **NS
 > 
 > ### **Question 6** . What is the DNS name associated with the IP address 9.9.9.9? Which DNS query type is used to obtain this information?
 > 
-> ![[Pasted image 20260304224126.png|1000]]
+> ![[Pasted image 20260310112327.png|1000]]
 > The DNS name (reverse DNS / PTR record) associated with **9.9.9.9** is **dns9.quad9.net.**  
 >The DNS query type used to obtain this information is **PTR** (a reverse lookup, e.g., `dig -x 9.9.9.9`).
 > 
 > ### **Question 7.** Run dig and query the CSE nameserver (129.94.242.2) for the mail servers for google.com (again, the domain name is google.com, not [www.google.com](http://www.google.com/) ). Did you get an authoritative answer? Why? (HINT: Just because a response contains information in the authoritative part of the DNS response message does not mean it came from an authoritative name server. You should examine the flags in the response message to determine the answer)
 > 
-> ![[Pasted image 20260304224256.png|1000]]
+> ![[Pasted image 20260310112710.png|1000]]
 > I queried the CSE nameserver using `dig @129.94.242.2 google.com MX`. The reply was **not authoritative** because the **`aa` flag is not set** in the response (the flags are `qr rd ra`). This indicates that **129.94.242.2 is acting as a recursive resolver**, returning an answer obtained via recursion and/or cache, rather than being an authoritative nameserver for the `google.com` zone. The presence (or absence) of an AUTHORITY section alone does not prove authoritativeness; the **DNS flags** are the reliable indicator.
 > 
 > ### **Question 8.** Obtain the authoritative answer for the mail servers for google.com. What type of DNS query is sent to obtain this information?
 > 
-> ![[Pasted image 20260304224526.png|1000]]
-> ![[Pasted image 20260304224644.png|1000]]
+> ![[Pasted image 20260310112822.png|1000]]
+> ![[Pasted image 20260310113039.png|1000]]
 > To obtain an authoritative answer for the mail servers of **google.com**, I queried one of Google’s authoritative nameservers directly:
 > `dig @ns1.google.com google.com MX`
 > 
@@ -83,42 +83,23 @@ The apex domain **netflix.com.** has the following DNS nameservers (from an **NS
 > - **NextDNS** 45.90.28.232
 > 
 > Measure and compare the DNS resolution times for each chosen resolver against the CSE DNS server. In your answer, include the resolution time for each server. Any notable differences you observe (e.g., caching behaviour, DNSSEC flags, response size, etc.). Discuss any interesting patterns or variations in performance across the resolve.
+> ![[Pasted image 20260310113644.png]]
+> ![[Pasted image 20260310113710.png]]
+> ![[Pasted image 20260310113735.png]]
+> ![[Pasted image 20260310113759.png]]
 > 
-> I compared DNS resolution performance for the **A record of `www.discord.com`** using the CSE DNS resolver and three public resolvers (Google Public DNS, Cloudflare DNS, OpenDNS). I queried each resolver once with `dig @<resolver> www.discord.com A` and recorded the reported **Query time**.
-> #### Resolution times
-> - **CSE DNS (129.94.242.2):** **7 ms**
->     
-> - **Google Public DNS (8.8.8.8):** **7 ms**
->     
-> - **Cloudflare DNS (1.1.1.1):** **3 ms**
->     
-> - **OpenDNS (208.67.222.222):** **27 ms**
->     
-> #### Notable observations
-> 1. **Fastest resolver:** Cloudflare (**3 ms**) was the fastest in this measurement, suggesting lower latency from the test host to Cloudflare or a very warm cache for this query.
->     
-> 2. **Slowest resolver:** OpenDNS (**27 ms**) was noticeably slower than the others (3–7 ms range). This could be due to higher network latency to OpenDNS from the test environment or different caching/anycast routing behaviour.
->     
-> 3. **Caching / TTL:** All responses returned the same TTL for the A records (**300 seconds**), and the IP set was consistent across resolvers (five `162.159.x.x` addresses). The ordering differed slightly, which is normal (load balancing / round-robin ordering).
->     
-> 4. **DNSSEC-related flags:** All replies included the **`ad`** flag (`flags: qr rd ra ad`), indicating the resolver returned authenticated data (DNSSEC validation performed by the resolver, depending on resolver policy).
->     
-> 5. **EDNS / response size differences:**
->     
->     - CSE used EDNS UDP size **1232** and returned `MSG SIZE rcvd: 152` (it also included a COOKIE line).
->         
->     - Google’s EDNS UDP size was **512**, with `MSG SIZE rcvd: 124`.
->         
->     - Cloudflare used **1232**, `MSG SIZE rcvd: 124`.
->         
->     - OpenDNS used **1410**, `MSG SIZE rcvd: 124`.  
->         The response size variation (e.g., CSE’s larger size) is likely due to additional EDNS options such as cookies or resolver-specific metadata, not differences in the A-record content.
-> #### Overall pattern
-> For this single measurement, **Cloudflare performed best**, **CSE and Google were similar**, and **OpenDNS was significantly slower**. All resolvers behaved as **recursive resolvers** (they all had `rd` and `ra` set) and returned consistent A-record data.
-> 
+| Resolver          | Server IP      | Query Time | TTL | Flags         | Message Size | Notes                          |
+| ----------------- | -------------- | ---------: | --: | ------------- | -----------: | ------------------------------ |
+| CSE DNS server    | 129.94.242.2   |   **3 ms** | 190 | `qr rd ra ad` |    152 bytes | Fastest                        |
+| Google Public DNS | 8.8.8.8        |   **7 ms** | 300 | `qr rd ra ad` |    124 bytes | Slower than CSE and Cloudflare |
+| Cloudflare DNS    | 1.1.1.1        |   **7 ms** | 248 | `qr rd ra ad` |    124 bytes | Fastest public resolver        |
+| OpenDNS           | 208.67.222.222 |   **11 ms** | 300 | `qr rd ra ad` |    124 bytes | Same query time as Google      |
+>
+>
 > ### **Question 10.** **How many DNS servers did you have to query** before obtaining the final authoritative answer (the IP address of your lab machine)?
 > ![[Pasted image 20260310002504.png]]
 > 
 
 
 ## Exercise 4: A Simple Web Server (Marked, submit your code, 5 Marks)
+
