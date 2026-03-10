@@ -153,10 +153,47 @@
 >
 >Unique servers:
 >
->1. Local resolver
+>1. **Local resolver**
 >2. **a.root-servers.net**
 >3. **t.au**
 >4. **ns1-ext.unsw.edu.au**
 >5. **maestro.orchestra.cse.unsw.edu.au**
 
 ## Exercise 4: A Simple Web Server (Marked, submit your code, 5 Marks)
+
+>[!note] Answer & Validation
+>
+>I implemented a custom HTTP server in **WebServer.py** using Python's low-level **socket** API (without using pre-made web server modules such as **http.server**).
+>
+>### Run command
+>
+>```bash
+>python3 WebServer.py 55080
+>```
+>
+>### Test results
+>
+>- Request: **http://127.0.0.1:55080/index.html**  
+>  Result: **200 OK**, page content displayed.
+>
+>- Request: **http://127.0.0.1:55080/myimage.jpeg**  
+>  Result: **200 OK**, image displayed.
+>
+>- Request: **http://127.0.0.1:55080/bio.html** (non-existent file)  
+>  Result: **404 Not Found**.
+>
+>### How the implementation matches requirements (i)-(ix)
+>
+>1. **Create connection socket**: server creates TCP socket, binds to the given port, listens, and accepts browser connections.
+>2. **Receive HTTP requests**: server reads requests from the accepted TCP connection; only **GET** is processed.
+>3. **Parse requested file**: request line is parsed to get the target path (e.g., **/index.html**).
+>4. **Read file from filesystem**: requested file is loaded from the server working directory.
+>5. **Create HTTP response**: response includes status line + headers + file body.
+>6. **Send response via TCP**: response is sent with **sendall()** on the same connection socket.
+>7. **404 handling**: if file is missing, server sends **HTTP/1.1 404 Not Found** with an HTML error body.
+>8. **Listen in loop**: server continuously accepts new client connections in a main loop.
+>9. **HTTP/1.1 persistent connections**: the server handles multiple requests on the same TCP connection (keep-alive by default in HTTP/1.1, closed only when **Connection: close** is requested).
+>
+>### Extra behavior
+>
+>- For **/favicon.ico**, the server returns **204 No Content** (allowed by lab notes).
