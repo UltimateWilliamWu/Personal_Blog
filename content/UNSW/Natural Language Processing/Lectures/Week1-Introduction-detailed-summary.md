@@ -1,4 +1,4 @@
-﻿# COMP6713 Week 1 Introduction 详细总结
+# COMP6713 Week 1 Introduction 详细总结
 
 说明：本总结以 `Lectures/Week1-Introduction.pdf`（共 55 页）为主线整理。由于若干页只写了 `Demo time!` 或只给出工具名，我额外对照了 `Lectures/Week_1.zip` 中的 `simple-nltk.ipynb`、`simple-spacy.ipynb`、`simple-huggingface.ipynb`，补全了演示内容，保证知识点尽量不遗漏。
 
