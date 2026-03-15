@@ -4,16 +4,16 @@ tags:
 ---
 ### 1. Task and Objective
 
-The goal of this assignment is to transform a sentence from one CEFR level to another (e.g., A2 to B2) while preserving the original meaning and grammaticality as much as possible.  
-Given three inputs, sentence, source_level, and target_level, the system should produce a revised sentence whose lexical difficulty better matches the target CEFR level.
+The goal of this assignment is to transform a sentence from one CEFR level to another (e.g., A2 to B2) while preserving meaning and grammaticality as much as possible.  
+Given the three inputs `sentence`, `source_level`, and `target_level`, the system should output a revised sentence whose lexical difficulty moves toward the target level.
 
-My approach treats this as a **controlled lexical substitution** problem. It changes only selected content words (nouns, verbs, adjectives, adverbs) and leaves sentence structure mostly unchanged to avoid unnecessary errors. The objective is to balance three constraints:
+I framed the task as a **controlled lexical substitution** problem instead of full sentence rewriting. This was mainly a practical decision: with the provided training data and the unit-test style evaluation, aggressive rewriting created more grammatical errors than useful CEFR movement. In the final system I therefore edit only a small number of content words (nouns, verbs, adjectives, adverbs) and keep the original sentence structure unless there is a clear benefit. The design tries to balance three constraints:
 
 1. semantic preservation,
 2. contextual fluency, and
 3. CEFR-level alignment.
 
-To achieve this, the model combines dataset-driven word difficulty estimates with lexical resources (WordNet and spaCy), then ranks candidate replacements and applies only a limited number of high-confidence edits.
+To achieve this, the system combines corpus-based word difficulty estimates, WordNet candidate generation, spaCy analysis, and local language-model checks. Replacements are only applied when they improve CEFR direction without causing obvious semantic or grammatical damage.
 - - - 
 ### 2. Technical Details of the Approach
 
@@ -31,15 +31,17 @@ These probabilities are used to check whether a replacement still fits local con
 
 At inference time, the sentence is parsed by spaCy, and only content words (NOUN/VERB/ADJ/ADV) are considered. Candidate substitutions are collected from WordNet synsets of the lemma, then filtered to single-word alphabetic forms. To keep grammar stable, each candidate is inflected back to the original surface form using **pyinflect** (tense, number, etc.), and casing is restored.
 
-The final decision is based on a weighted score:
+The final decision is not a single fixed formula in the code. Instead, I use a **strict mode** and a **relaxed mode** with different weights. In strict mode, context fit is weighted slightly more than level movement:
 
-$$\mathrm{final}=0.35\cdot \mathrm{sem}+0.40\cdot \mathrm{ctx}+0.25\cdot \mathrm{level}-0.05\cdot \mathrm{syn\_rank}$$
+$$\mathrm{final}_{strict}=0.33\cdot \mathrm{sem}+0.44\cdot \mathrm{ctx}+0.17\cdot \mathrm{level}+0.06\cdot \mathrm{colloc}-0.05\cdot \mathrm{syn\_rank}$$
 
-The score balances semantic similarity (**sem**), context fitness from bigrams (**ctx**), and CEFR movement (**level**). **syn_rank** is a small penalty so very remote WordNet candidates are less preferred. I run a strict pass first; if nothing acceptable is found, a relaxed pass is allowed with extra safety checks.
+If strict filtering finds nothing acceptable, the system switches to a relaxed mode that gives more weight to CEFR movement and token frequency:
 
-The main implementation challenge was semantic drift in verbs during simplification. In early versions, **conducted an experiment** could become verbs like **conveyed** or **moved**, which followed frequency signals but changed meaning. I fixed this by tightening verb constraints: stronger semantic thresholds, sense-aware checks (Lesk/Wu-Palmer when available), and a fallback that keeps the original token if no safe candidate exists.
+$$\mathrm{final}_{relaxed}=0.30\cdot \mathrm{sem}+0.25\cdot \mathrm{ctx}+0.33\cdot \mathrm{level}+0.10\cdot \mathrm{freq}+0.02\cdot \mathrm{colloc}-0.03\cdot \mathrm{syn\_rank}$$
 
-Another issue was grammatical side effects after replacement. The common errors were article agreement (**a**/**an**) and occasional form mismatch. I added a post-processing pass for article correction and stricter POS/form filters before accepting candidates. This improved fluency without using any hand-written answer lexicon.
+This two-stage design reflects what happened during debugging. A neat single score looked cleaner in a report, but in practice it was not enough. Different POS types needed different semantic thresholds, and verbs were clearly the hardest case. In early versions, **conducted an experiment** could become verbs like **conveyed** or **moved**, which followed distributional signals but changed the event meaning. I therefore tightened verb-specific checks, especially when a verb is followed by an article, and added sense-based filtering before allowing strong simplifications.
+
+Another recurring issue was grammatical side effects after replacement. The most common ones were article agreement (**a**/**an**) and occasional form mismatch after inflection. I added a post-processing step for article correction and stricter surface-form checks before accepting a candidate. This does not solve every fluency problem, but it reduced several obvious errors in the public test cases.
 
 Overall, the final pipeline is still lightweight, but it is much more stable than the initial baseline because each scoring component has explicit guardrails against meaning loss and grammar breakage.
 ### 3. Experiments and Results
@@ -50,7 +52,7 @@ I re-ran the current version in my local conda environment (**cefr**) with:
 - python main.py z5518601 for qualitative inspection on public unit tests.
 - python test.py z5518601 --tests unit_tests.csv --out_dir test_outputs_report_current for quantitative metrics.
 
-The test file **unit_tests.csv** has 10 transfer cases, mostly downward transformations (B2/C1 to A2/B1).  
+The test file **unit_tests.csv** has 10 transfer cases, and all of them are downward transformations (B1/B2/C1 to A2/B1).  
 I report four metrics:
 
 - success_rate: fraction of cases without runtime errors.
@@ -69,9 +71,9 @@ The refreshed run produced:
 
 My reading of these numbers is:
 
-- Stability is strong (no crashes at all).
-- Simplification is consistent but still controlled (**avg_changed_ratio** is below 0.2).
-- All 10 test cases move in the expected CEFR direction in this run.
+- The current pipeline is operationally stable on this small test set because it completed all 10 cases without runtime errors.
+- Simplification is present but conservative: **avg_changed_ratio** is below 0.2, so the system usually changes only one or two words.
+- All 10 outputs move in the expected direction in this run, but this should be read as a public-test result rather than evidence of broad robustness.
 
 ![[Pasted image 20260308015022.png]]
 #### 3.3 Qualitative Examples
@@ -79,28 +81,28 @@ My reading of these numbers is:
 **Example 1 (C1 -> A2)**  
 Input: _I purchased a magnificent house yesterday._  
 Output: _I purchased a wonderful house yesterday._  
-Discussion: This version is a clearer simplification than earlier runs because _magnificent -> wonderful_ lowers lexical difficulty without changing core meaning (**difficulty_shift = -0.1719**).
+Discussion: This is a useful example because it shows both a success and a limitation. The change _magnificent -> wonderful_ lowers lexical difficulty without distorting the sentence (**difficulty_shift = -0.1719**), but the verb _purchased_ remains untouched. So the output does move downward, yet it is still only a partial simplification rather than a full A2-style rewrite.
 
 ![[Pasted image 20260308015127.png]]
 
 **Example 2 (Strong simplification, B2 -> A2)**  
 Input: _He quickly realised his mistake._  
 Output: _He quickly saw his mistake._  
-Discussion: This is one of the strongest downward moves in the set (**difficulty_shift = -0.2599**). The verb change is simple but effective, and meaning is preserved.
+Discussion: This is one of the strongest downward moves in the set (**difficulty_shift = -0.2599**). The verb change is simple and the sentence remains natural, so this is the type of substitution the system handles best: one local edit with clear semantic overlap and clear CEFR gain.
 
 ![[Pasted image 20260308015305.png]]
 
 **Example 3 (Semantic safety improvement, B2 -> A2)**  
 Input: _The scientist conducted an experiment._  
 Output: _The scientist did an experiment._  
-Discussion: Earlier iterations sometimes produced semantic drift here (e.g., odd verb substitutions). In this run, the system chose _did_, which is simpler and semantically safe in context. This is a representative case of the new verb filtering logic working as intended.
+Discussion: Earlier iterations sometimes produced semantic drift here (e.g., odd verb substitutions). In this run, the system chose _did_, which is simpler and semantically safe in context. It is not the most elegant paraphrase, but it is a better trade-off than a more specific verb with the wrong meaning. This example captures how the final system often prefers safety over stylistic richness.
 
 ![[Pasted image 20260308015341.png]]
 #### 3.4 Result Interpretation
 
-The pair-level breakdown is now fully consistent on unit tests: all tested source-target pairs reached **direction_success = 1.0**. The strongest average downward movement appears in **B2 -> A2** and **C1 -> A2**, which matches the intended behavior for simplification-heavy cases.
+On the public unit tests, the system is consistently moving outputs in the intended direction. The strongest downward effects appear in the larger-gap simplification settings such as **B2 -> A2** and **C1 -> A2**, which is where the scoring function has the most room to reward simpler candidates.
 
-In short, the current system is stable and directionally reliable on the public test set, while still keeping edits relatively conservative rather than aggressively rewriting whole sentences.
+At the same time, these results should be interpreted carefully. The evaluation set is small, all cases are simplification tasks, and several successes are only partial simplifications rather than full target-level rewrites. So the main claim I can support here is directional control with conservative editing, not complete CEFR conversion in a human-like sense.
 
 ### 4. Limitations of the Current Approach
 
@@ -122,6 +124,6 @@ Current evaluation is still small. The `unit_tests.csv` results are useful for d
 
 ### 5. Conclusion
 
-This assignment shows that a lightweight lexical pipeline can still produce stable CEFR transfer when the constraints are designed carefully. On the provided unit tests, the system runs without runtime failures and usually moves sentences in the expected direction, while avoiding excessive rewriting.
+This assignment shows that a lightweight lexical pipeline can produce useful CEFR movement when the constraints are tuned carefully. On the provided public unit tests, the system runs without runtime failures and pushes every case in the expected direction, but it usually does so through small local edits rather than full rewriting.
 
-The key lesson from implementation was that difficulty signals alone are not enough. Early versions could simplify words but sometimes damaged meaning (especially for verbs). The final version became more reliable after I added stricter semantic checks, sense-aware filtering, and post-edit grammar fixes such as article correction. At the same time, the method is still word-level and conservative, so it is best viewed as a practical baseline rather than a complete rewriting system. The next step is larger-scale evaluation and stronger sentence-level modeling for more natural outputs.
+The main lesson from building it was that word difficulty alone is a weak signal. The system became noticeably more reliable only after I added POS-specific thresholds, extra verb checks, and post-edit grammar repair. Even then, the output quality is best described as cautious: when the model is uncertain, it prefers keeping the original token or making only a partial simplification. For that reason, I see the final system as a controlled lexical baseline with good debugging value, not as a complete solution to CEFR-aware rewriting. A better next step would be evaluation on more diverse transfers, especially upward transfer, plus stronger sentence-level modeling.
