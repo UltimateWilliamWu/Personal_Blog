@@ -5,7 +5,7 @@ tags:
 ### 1. Task and Objective
 
 The goal of this assignment is to transform a sentence from one CEFR level to another (e.g., A2 to B2) while preserving meaning and grammaticality as much as possible.  
-Given the three inputs `sentence`, `source_level`, and `target_level`, the system should output a revised sentence whose lexical difficulty moves toward the target level.
+Given the three inputs **sentence**, **source_level**, and **target_level**, the system should output a revised sentence whose lexical difficulty moves toward the target level.
 
 I framed the task as a **controlled lexical substitution** problem instead of full sentence rewriting. This was mainly a practical decision: with the provided training data and the unit-test style evaluation, aggressive rewriting created more grammatical errors than useful CEFR movement. In the final system I therefore edit only a small number of content words (nouns, verbs, adjectives, adverbs) and keep the original sentence structure unless there is a clear benefit. The design tries to balance three constraints:
 
@@ -23,7 +23,7 @@ The first step is to build reusable statistics from **data.csv** and cache them 
 
 $$\mathrm{score}(w)=\frac{\sum_{i} i \cdot c_i(w)}{\sum_{i} c_i(w)}$$
 
-where \(c_i(w)\) is the frequency of word \(w\) at CEFR index \(i\) (A1 to C2 mapped to 0 to 5). This gives a corpus-based estimate of how advanced a word tends to be. I also train bigram language models (one global and one per CEFR level) with add-\(\alpha\) smoothing:
+where \($c_i(w)$\) is the frequency of word \(w) at CEFR index \(i) (A1 to C2 mapped to 0 to 5). This gives a corpus-based estimate of how advanced a word tends to be. I also train bigram language models (one global and one per CEFR level) with add-($\alpha$) smoothing:
 
 $$P(w_t \mid w_{t-1})=\frac{\mathrm{count}(w_{t-1}, w_t)+\alpha}{\mathrm{count}(w_{t-1})+\alpha |V|}$$
 
@@ -120,7 +120,7 @@ The pipeline is intentionally conservative: it mainly edits tokens and avoids la
 
 #### 4.4 Evaluation Scope
 
-Current evaluation is still small. The `unit_tests.csv` results are useful for debugging and iteration, but 10 cases are not enough to claim broad generalization. A stronger evaluation should include larger sets, more upward transfers (e.g., A2 -> B2/C1), and more varied domains to test whether the same strategy remains stable outside the provided examples.
+Current evaluation is still small. The unit_tests.csv results are useful for debugging and iteration, but 10 cases are not enough to claim broad generalization. A stronger evaluation should include larger sets, more upward transfers (e.g., A2 -> B2/C1), and more varied domains to test whether the same strategy remains stable outside the provided examples.
 
 ### 5. Conclusion
 
