@@ -4,9 +4,9 @@ tags:
 ---
 ### 1. Task and Framing
 
-The task is to rewrite a sentence so that it is at a different CEFR level, while ensuring that the original meaning and grammar are retained. In practice, I achieved this by replacing individual words rather than rewriting the entire sentence. Previous attempts at more extensive rewriting typically resulted in a decline in output quality. Although CEFR scores improved, the sentences often sounded unnatural or their meaning changed. Therefore, the final system replaces only a small number of content words while preserving the original sentence structure.
+The task focuses on rewriting a sentence so that it matches a different CEFR level without altering its original meaning or grammatical structure. In the actual implementation, this goal was not pursued through full-sentence rewriting; instead, the system mainly operated by replacing selected individual words. This design choice emerged from repeated experimentation. When broader rewriting strategies were attempted, the resulting sentences often achieved better CEFR scores on the surface, yet the overall quality tended to deteriorate. In many cases, the outputs sounded less natural, and subtle shifts in meaning also began to appear. Against this background, the final system was designed to modify only a limited number of content words while keeping the original sentence structure intact.
 
-This approach also better reflects how the system actually operates. Rather than attempting to rewrite sentences like a human editor, it fine-tunes them to bring them closer to the target CEFR level while avoiding high-risk substitutions. This explains why the final output mostly consists of only partial simplifications. Although these modifications are minor, they are generally more reliable.
+Seen from an operational perspective, this solution also aligns more closely with how the system functions in practice. Rather than behaving like a human editor who rewrites a sentence holistically, the model makes controlled lexical adjustments to move the sentence closer to the target CEFR level, while minimizing the risk of inappropriate substitutions. This is also why the final outputs are typically characterized by partial simplification rather than extensive reformulation. Although such changes may appear modest, they proved to be more dependable in actual testing, especially when preserving meaning and fluency was treated as a priority.
 
 - - -
 ### 2. Final Approach
@@ -91,32 +91,24 @@ These results show a cautious system: it usually simplifies in the correct direc
 #### 4.3 Qualitative Examples
 
 **Example 1: Partial but safe simplification**  
-Input: I purchased a magnificent house yesterday. 
-Output: I purchased a wonderful house yesterday.  
 
 ![[Pasted image 20260316002137.png]]
 
 This is a good example of how the system usually works. While the adjective has changed, the verb 'purchased' has been kept. While the output moves in the right direction, it is still not quite an A2-style rewrite.
 
 **Example 2: A strong local substitution**  
-Input: He quickly realised his mistake.  
-Output: He quickly saw his mistake. 
 
 ![[Pasted image 20260316002153.png]]
 
 This is one of the cleaner successes. The local edit makes sense and is simpler. It's a great example of when the current system works really well.
 
 **Example 3: Conservative no-change**  
-Input: The committee will evaluate the proposal tomorrow.  
-Output: The committee will evaluate the proposal tomorrow. 
 
 ![[Pasted image 20260316002207.png]]
 
 While this is not the best example of simplification strength, it does demonstrate the current trade-off of the system. Although candidate verbs such as 'judge' are simpler, they change the meaning too much in this context. Therefore, the model leaves the sentence unchanged.
 
 **Example 4: Remaining semantic weakness**  
-Input: The results demonstrate a significant improvement.
-Output: The results prove a large improvement. 
 
 ![[Pasted image 20260316002231.png]]
 
@@ -144,8 +136,10 @@ The public unit tests are too small, so I still cannot say that the model perfor
 - - -
 ### 6. Conclusion
 
-The final system is basically a vocabulary benchmark model. It makes lots of sentences easier to understand and avoids the strange substitutions found in older versions. The most significant improvements include: handling verbs more carefully, adding stricter filters, and choosing minor, conservative modifications rather than attempting excessive rewriting.
+The final system is essentially a vocabulary-focused benchmark model. It makes many sentences easier to understand. It also avoids the awkward substitutions seen in earlier versions. These improvements came from tighter control, not from making the system more complex. I handled verbs more carefully during development. I also added stricter filters and limited the system to small, conservative edits.
 
-The most important thing we learned from this task is that more complicated systems are not always better. I tried a few more complex approaches, but some of them actually made things worse, so I stopped them.
+This result led to an important lesson. More complicated systems do not always perform better. I tested several complex approaches, but some reduced overall quality. In some cases, the scores improved. Even so, the rewritten sentences sounded less natural. Their original meaning was also harder to preserve. That pattern shaped the final design. I stopped using methods that pushed the system toward excessive rewriting. Instead, I kept the approach simple and focused.
 
-In the end, the system that was easiest to use was the one that had scores showing how hard the words were, a small number of possible replacements, checked the part of speech, the context, and made simple changes to the sentence. This is not a complete solution to the problem of CEFR-aligned rewriting, but it is a simple and fairly robust method for simplifying vocabulary.
+The most effective version combined several modest features. It used word-difficulty scores and a small set of candidate replacements. It also checked part of speech, context, and whether a simple change was enough.
+
+This system does not fully solve CEFR-aligned rewriting. Even so, it offers a practical and fairly robust way to simplify vocabulary. Within the scope of this project, that was the most reliable outcome.
