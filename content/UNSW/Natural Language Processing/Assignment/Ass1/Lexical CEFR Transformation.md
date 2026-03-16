@@ -15,7 +15,7 @@ The core function is **transform_sentence(sentence, source_level, target_level)*
 
 #### 2.1 Difficulty Signal from the Training Data
 
-From the data contained in the file named "data.csv", I construct global statistics on a single occasion and then cache them. Each word is assigned a continuous difficulty score based on its position across the CEFR levels:
+From **data.csv**, I construct global statistics once and then cache them. Each word is assigned a continuous difficulty score based on how it is distributed across CEFR levels:
 
 $$\mathrm{score}(w)=\frac{\sum_i i \cdot c_i(w)}{\sum_i c_i(w)}$$
 
@@ -29,13 +29,13 @@ While these bigram probabilities are not a strong language model, they are enoug
 
 #### 2.2 Candidate Generation
 
-At this point, the spaCy framework is used to break the sentence into smaller parts and find the possible content words (nouns, verbs, adjectives and adverbs). Most of the candidates come from WordNet synsets of the lemma. The approach used involves keeping single-word alphabetic forms and then ranking them based on how similar they are to each other. The system has a built-in fallback option for content words, which is used when WordNet alone is not enough or too advanced. The fallback function looks for common words in the training data and keeps only those that have both 'semantic overlap' and 'downward CEFR movement'.
+At this stage, spaCy is used to tokenize the sentence and identify content words (nouns, verbs, adjectives, and adverbs). Most candidates come from WordNet synsets of the lemma. I keep only single-word alphabetic forms, assign them a candidate rank based on synset distance, and later filter and rescore them. The system also has a fallback for content words when WordNet alone is too limited or too advanced. This fallback searches common words in the training data and keeps only those that show both semantic overlap and downward CEFR movement.
 
-This part of the machine was changed a lot while it was being made. Using a simple WordNet pipeline was easy, but it didn't include many helpful changes and sometimes gave unusual results. Adding a fallback mechanism based on a corpus has been shown to improve recall, but only when the approach is kept at a conservative level. At first, it looked like having more candidates might be a good idea. However, it has been shown that this often makes semantic drift worse instead of making the system better.
+This part changed a lot during development. A simple WordNet pipeline was easy to build, but it missed many useful substitutions and sometimes returned odd options. A corpus-based fallback improved recall, but only when I kept it conservative. At first, adding more candidates looked helpful, but in practice it often made semantic drift worse.
 
 #### 2.3 Semantic Filtering and Ranking
 
-The code can be used in more than one way. Making a decision is complicated. There are lots of things to think about, and they all have to be considered. One big change that happened during the development process was the decision to stop using spaCy vector similarity as the only way to do things. In the current version of the model, I use a combination of how similar words are to each other and how similar they are to the meanings in WordNet. Verbs are given the strongest sense weighting because they are more likely to cause problems with the meaning of words.
+In the current version, I use a combination of word similarity and WordNet sense similarity. Verbs are given the strongest sense weighting because they are more likely to cause meaning problems.
 
 The core ranking scores are:
 
@@ -45,7 +45,7 @@ and
 
 $$\mathrm{final}_{relaxed}=0.30\cdot \mathrm{sem}+0.25\cdot \mathrm{ctx}+0.33\cdot \mathrm{level}+0.10\cdot \mathrm{freq}+0.02\cdot \mathrm{colloc}-0.03\cdot \mathrm{syn\_rank}$$
 
-The above are the primary ranking formulas, not the entire decision logic.The actual code hides these words behind several layers of complex filters, especially when it comes to replacing verbs and nouns. If the first edits don't improve the sentence enough, you can try adding one or two more safe candidates to see if that helps.
+The above are the primary ranking formulas, not the entire decision logic. They operate after several hard filters, especially for verbs. If the first-pass edits do not move the sentence enough, a second stage can add one or two extra safe candidates with positive directional gain.
 
 #### 2.4 Morphology and Surface Repair
 
@@ -54,11 +54,11 @@ Candidates are inflected back into the original surface form with **pyinflect**,
 - - -
 ### 3. Development
 
-The final system was created after trying and failing many times. The main issue was with verb substitution, where earlier versions could make things simpler in terms of numbers, but also change what events meant. A case in point is the substitution of "push evaluate" for "judge" or the generation of unconventional replacements for "conducted". It was therefore necessary to impose stricter semantic filters on verb filtering than on noun or adjective filtering. This was achieved by the implementation of stronger semantic thresholds and additional sense-based checks.
+The final system was created after several failed attempts. The main issue was verb substitution, where earlier versions could make the sentence simpler in score but also change the event meaning. A clear example is replacing *evaluate* with *judge* or generating odd replacements for *conducted*. I therefore applied stricter semantic filtering to verbs than to nouns or adjectives. This was done by adding stronger semantic thresholds and extra sense-based checks.
 
-The present study also found that candidate ordering mattered. In the absence of stable sorting prior to truncation, WordNet occasionally yielded divergent results across iterations. The sorting of synsets and lemmas rectified the issue and rendered the system deterministic.
+I also found that candidate ordering mattered. Without stable sorting before truncation, WordNet sometimes produced different outputs across runs. Sorting synsets and lemmas fixed this and made the system deterministic.
 
-Ultimately, broader vector-neighbour candidate pools and additional slot-style scoring for adjective-noun and verb-object combinations were employed. The aforementioned concepts appeared to be beneficial, yet their implementation resulted in a decline in overall evaluation performance. Consequently, their removal was deemed necessary. The final system is conservative by design; it demonstrates a preference for a missed edit over a bad edit.
+I also tried broader vector-neighbour candidate pools and extra slot-style scoring for adjective-noun and verb-object combinations. These ideas looked useful, but they reduced overall evaluation performance, so I removed them. The final system is conservative by design and prefers a missed edit over a bad edit.
 
 - - -
 ### 4. Evaluation
@@ -72,7 +72,7 @@ python main.py z5518601
 python evaluate.py z5518601 --tests unit_tests.csv --out_dir evaluation_outputs_unit_current_reportcheck
 ```
 
-The 10-case **unit_tests.csv** file is small, but it is the provided public evaluation file and is enough to inspect whether the system is moving outputs in the intended lexical direction.
+The 10-case **unit_tests.csv** file is small, but it is the provided public evaluation file and is enough to inspect whether the outputs move in the intended direction.
 
 #### 4.2 Public Unit Test Results
 
@@ -96,7 +96,7 @@ Output: I purchased a wonderful house yesterday.
 
 ![[Pasted image 20260316002137.png]]
 
-This is a good example of how the system usually works. The adjective change is reasonable and simpler, but the verb 'purchased' is kept. The sentence is better, but it's not quite an A2-style rewrite.
+This is a good example of how the system usually works. The adjective change is reasonable and simpler, but the verb 'purchased' is kept. The output moves in the right direction, but it is still not quite an A2-style rewrite.
 
 **Example 2: A strong local substitution**  
 Input: He quickly realised his mistake.  
@@ -112,7 +112,7 @@ Output: The committee will evaluate the proposal tomorrow.
 
 ![[Pasted image 20260316002207.png]]
 
-This isn't the best example of simplification strength, but it does show the current trade-offs of the system. Candidate verbs such as 'judge' are easier to understand, but in this context they change the meaning too much. So the model doesn't want to change.
+This is not the best example of simplification strength, but it does show the current trade-off of the system. Candidate verbs such as 'judge' are simpler, but in this context they change the meaning too much. So the model leaves the sentence unchanged.
 
 **Example 4: Remaining semantic weakness**  
 Input: The results demonstrate a significant improvement.
@@ -120,18 +120,18 @@ Output: The results prove a large improvement.
 
 ![[Pasted image 20260316002231.png]]
 
-This sentence still has a problem. The output moves down lexically, but 'prove' is slightly stronger than 'demonstrate', so the meaning doesn't match perfectly. This shows that the current filters reduce semantic drift, but do not completely get rid of it.
+This sentence still has a problem. The output moves down lexically, but 'prove' is slightly stronger than 'demonstrate', so the meaning does not match perfectly. This shows that the current filters reduce semantic drift, but do not fully remove it.
 
 - - -
 ### 5. Limitations
 
 #### 5.1 Candidate Generation Is Still Narrow
 
-Even though it has a system to fall back on if there are problems, the system still relies a lot on WordNet. This suggests that some effective ways of simplifying things may not be included in the candidate pool. For example, a verb like 'review' may be more suitable in the given situation than 'judge', but if it is not chosen early enough, the system cannot choose it.
+Even though it has a fallback mechanism, the system still relies heavily on WordNet. This means that some useful simplification options may never enter the candidate pool. For example, a verb like 'review' may be more suitable in the given situation than 'judge', but if it is not generated early enough, the system cannot choose it.
 
 #### 5.2 CEFR Control Is Mostly Word-Level
 
-The system utilises a word-by-word estimation of difficulty and employs a bigram model to analyse local context. This degree of movement is sufficient for directional movement, but not for full CEFR control. It is evident that a sentence can become lexically simpler while maintaining a level of naturalness that is less pronounced in comparison to a human simplification.
+The system estimates difficulty word by word and uses a bigram model to check local context. This is enough for directional movement, but not for full CEFR control. A sentence can become lexically simpler and still sound less natural than a human simplification.
 
 #### 5.3 The Model Under-Edits Difficult Cases
 
@@ -139,11 +139,11 @@ The system is deliberately cautious. This reduces catastrophic semantic errors, 
 
 #### 5.4 Evaluation Still Has Gaps
 
-The public unit tests are too small, so I still cannot say that the model performs like a human simplifier. A better future evaluation would combine CEFR control with a set of data that directly measures how well meaning is kept when things are rewritten based on a reference.
+The public unit tests are too small, so I still cannot say that the model performs like a human simplifier. A better future evaluation would combine CEFR control with a dataset that directly measures how well meaning is preserved against a reference rewrite.
 
 - - -
 ### 6. Conclusion
 
-The final system is basically a careful lexical baseline. It can move many sentences toward the target CEFR level and avoid many of the bad substitutions that appeared in earlier versions. The biggest improvements came from handling verbs more carefully, adding stronger filters, and choosing small safe edits instead of trying to rewrite too much.
+The final system is basically a lexical baseline. It can move many sentences toward the target CEFR level and avoid many of the bad substitutions that appeared in earlier versions. The biggest improvements came from handling verbs more carefully, adding stronger filters, and choosing small safe edits instead of trying to rewrite too much.
 
 The main lesson from this assignment was that a more complicated system is not always better. I tried several more complex ideas, but some of them actually made the results worse, so I removed them. In the end, a smaller system worked better: word difficulty scores, limited replacement candidates, part-of-speech based filtering, local context checks, and simple grammar fixes. It is not a complete solution to CEFR-aware rewriting, but it does give a simple and fairly stable way to simplify vocabulary.
