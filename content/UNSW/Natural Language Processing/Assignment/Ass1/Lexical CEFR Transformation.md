@@ -4,9 +4,12 @@ tags:
 ---
 ### 1. Task and Framing
 
-The task focuses on rewriting a sentence so that it matches a different CEFR level without altering its original meaning or grammatical structure. In the actual implementation, this goal was not pursued through full-sentence rewriting; instead, the system mainly operated by replacing selected individual words. This design choice emerged from repeated experimentation. When broader rewriting strategies were attempted, the resulting sentences often achieved better CEFR scores on the surface, yet the overall quality tended to deteriorate. In many cases, the outputs sounded less natural, and subtle shifts in meaning also began to appear. Against this background, the final system was designed to modify only a limited number of content words while keeping the original sentence structure intact.
+The task focuses on rewriting a sentence so that it matches a different CEFR level without altering its original meaning or grammatical structure. 
 
-Seen from an operational perspective, this solution also aligns more closely with how the system functions in practice. Rather than behaving like a human editor who rewrites a sentence holistically, the model makes controlled lexical adjustments to move the sentence closer to the target CEFR level, while minimizing the risk of inappropriate substitutions. This is also why the final outputs are typically characterized by partial simplification rather than extensive reformulation. Although such changes may appear modest, they proved to be more dependable in actual testing, especially when preserving meaning and fluency was treated as a priority.
+Typical characterisations are:
+- A1/A2: Basic vocabulary and simple expressions.
+- B1/B2: Intermediate vocabulary, ability to handle more complex topics. 
+- C1/C2: Advanced and highly proficient language use. In interest of simplicity, the assignment ignores non-lexical factors such as grammar complexity or discourse level.
 
 - - -
 ### 2. Final Approach
@@ -58,14 +61,12 @@ The final system was created after trying and failing many times. The main issue
 
 The present study also found that candidate ordering mattered. In the absence of stable sorting prior to truncation, WordNet occasionally yielded divergent results across iterations. The sorting of synsets and lemmas rectified the issue and rendered the system deterministic. 
 
-Ultimately, broader vector-neighbour candidate pools and additional slot-style scoring for adjectivenoun and verb-object combinations were employed. The aforementioned concepts appeared to be beneficial, yet their implementation resulted in a decline in overall evaluation performance. Consequently, their removal was deemed necessary. The final system is conservative by design; it demonstrates a preference for a missed edit over a bad edit.
+Ultimately, broader vector-neighbour candidate pools and additional slot-style scoring for adjectivenoun and verb-object combinations were employed. The aforementioned concepts appeared to be beneficial, yet their implementation resulted in a decline in overall evaluation performance. Consequently, their removal was deemed necessary. 
 
 - - -
 ### 4. Evaluation
 
 #### 4.1 How to Use
-
-I ran the final version in my local **cefr** conda environment with:
 
 ```Python
 python main.py z5518601
@@ -75,8 +76,6 @@ python evaluate.py z5518601 --tests unit_tests.csv --out_dir evaluation_outputs_
 The 10-case **unit_tests.csv** file is small, but it is the provided public evaluation file and is enough to inspect whether the outputs move in the intended direction.
 
 #### 4.2 Public Unit Test Results
-
-The current run on **unit_tests.csv** produced:
 
 ```TXT
 success_rate = 1.0000
@@ -131,15 +130,9 @@ The system is deliberately cautious. This reduces catastrophic semantic errors, 
 
 #### 5.4 Evaluation Still Has Gaps
 
-The public unit tests are too small, so I still cannot say that the model performs like a human simplifier. A better future evaluation would combine CEFR control with a set of data that directly measures how well meaning is kept when things are rewritten based on a reference.
+The public unit tests are too small, so I still cannot say that the model performs like a human simplifier. A better future version would combine CEFR control with a set of data that directly measures how well meaning is kept when things are rewritten based on a reference.
 
 - - -
 ### 6. Conclusion
 
 The final system is essentially a vocabulary-focused benchmark model. It makes many sentences easier to understand. It also avoids the awkward substitutions seen in earlier versions. These improvements came from tighter control, not from making the system more complex. I handled verbs more carefully during development. I also added stricter filters and limited the system to small, conservative edits.
-
-This result led to an important lesson. More complicated systems do not always perform better. I tested several complex approaches, but some reduced overall quality. In some cases, the scores improved. Even so, the rewritten sentences sounded less natural. Their original meaning was also harder to preserve. That pattern shaped the final design. I stopped using methods that pushed the system toward excessive rewriting. Instead, I kept the approach simple and focused.
-
-The most effective version combined several modest features. It used word-difficulty scores and a small set of candidate replacements. It also checked part of speech, context, and whether a simple change was enough.
-
-This system does not fully solve CEFR-aligned rewriting. Even so, it offers a practical and fairly robust way to simplify vocabulary. Within the scope of this project, that was the most reliable outcome.
