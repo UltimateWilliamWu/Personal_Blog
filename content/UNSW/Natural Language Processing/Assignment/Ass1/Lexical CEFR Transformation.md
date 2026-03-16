@@ -63,7 +63,7 @@ Ultimately, broader vector-neighbour candidate pools and additional slot-style s
 - - -
 ### 4. Evaluation
 
-#### 4.1 Setup
+#### 4.1 How to Use
 
 I ran the final version in my local **cefr** conda environment with:
 
