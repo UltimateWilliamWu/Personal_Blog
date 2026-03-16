@@ -4,14 +4,12 @@ tags:
 ---
 ### 1. Task and Framing
 
-The assignment asks for sentence transformation between CEFR levels while preserving meaning. I treated this as a **controlled lexical substitution** problem rather than full rewriting. Early experiments with broader rewriting often produced a larger CEFR shift, but the outputs were less natural and sometimes semantically wrong. The final system therefore edits only a few content words and keeps the original sentence structure unless a replacement is clearly useful.
+The task requires the transformation of sentences between CEFR levels while maintaining semantic integrity. The approach adopted in this case was to treat the problem as a controlled lexical substitution problem rather than a full rewriting. Initial experiments involving broader rewriting frequently resulted in a more pronounced CEFR shift; however, the outputs were often less natural and occasionally semantically inaccurate. The final system is thus employed to edit only a limited number of content words, whilst preserving the original sentence structure, unless a replacement is clearly beneficial.
 
-#### Assumptions
-
-- Only **data.csv** is used to estimate word difficulty and build contextual statistics.
-- CEFR is treated here as a lexical difficulty signal, not a full model of grammar or discourse complexity.
-- Replacing fewer words is preferable to broad rewriting if meaning preservation is uncertain.
-- If no candidate is both simpler and semantically safe, keeping the original word is acceptable.
+It is important to note that the sole purpose of the data.csv file is to estimate word difficulty and to construct contextual statistics.
+In this study, the CEFR is approached as a lexical difficulty signal rather than a comprehensive model of grammar or discourse complexity.
+In instances where the preservation of meaning is uncertain, it is preferable to replace fewer words, as opposed to undertaking extensive rewriting.
+In the event that no candidate is both simpler and semantically safe, it is acceptable to retain the original word.
 
 - - -
 ### 2. Final Approach
@@ -56,11 +54,11 @@ Candidates are inflected back into the original surface form with **pyinflect** 
 
 ### 3. Development
 
-The final system came from several failed iterations. The largest problem was verb substitution: early versions could simplify numerically while changing event meaning, for example pushing *evaluate* toward *judge* or producing odd replacements for *conducted*. I therefore made verb filtering stricter than noun or adjective filtering by adding stronger semantic thresholds and extra sense-based checks.
+The final system was derived from multiple unsuccessful iterations. The most significant issue encountered pertained to verb substitution, where earlier iterations had the capacity to simplify numerically while concomitantly altering the semantics of events. A case in point is the substitution of "push evaluate" for "judge" or the generation of unconventional replacements for "conducted". It was therefore necessary to impose stricter semantic filters on verb filtering than on noun or adjective filtering. This was achieved by the implementation of stronger semantic thresholds and additional sense-based checks.
 
-I also found that candidate ordering mattered. Without stable sorting before truncation, WordNet sometimes produced different outputs across runs. Sorting synsets and lemmas fixed that and made the system deterministic.
+The present study also found that candidate ordering mattered. In the absence of stable sorting prior to truncation, WordNet occasionally yielded divergent results across iterations. The sorting of synsets and lemmas rectified the issue and rendered the system deterministic.
 
-Finally, I tried broader vector-neighbour candidate pools and extra slot-style scoring for adjective-noun or verb-object combinations. Those ideas sounded useful, but they reduced overall evaluation performance, so I removed them. The final system is conservative by design: it prefers a missed edit over a bad edit.
+Ultimately, broader vector-neighbour candidate pools and additional slot-style scoring for adjective-noun and verb-object combinations were employed. The aforementioned concepts appeared to be beneficial, yet their implementation resulted in a decline in overall evaluation performance. Consequently, their removal was deemed necessary. The final system is conservative by design; it demonstrates a preference for a missed edit over a bad edit.
 
 ### 4. Evaluation
 
@@ -68,8 +66,10 @@ Finally, I tried broader vector-neighbour candidate pools and extra slot-style s
 
 I ran the final version in my local **cefr** conda environment with:
 
-- `python main.py z5518601`
-- `python evaluate.py z5518601 --tests unit_tests.csv --out_dir evaluation_outputs_unit_current_reportcheck`
+```python
+python main.py z5518601
+python evaluate.py z5518601 --tests unit_tests.csv --out_dir evaluation_outputs_unit_current_reportcheck
+```
 
 The 10-case **unit_tests.csv** file is small, but it is the provided public evaluation file and is enough to inspect whether the system is moving outputs in the intended lexical direction.
 
@@ -77,11 +77,13 @@ The 10-case **unit_tests.csv** file is small, but it is the provided public eval
 
 The current run on **unit_tests.csv** produced:
 
-- `success_rate = 1.0000`
-- `avg_changed_ratio = 0.1579`
-- `avg_difficulty_shift = -0.1209`
-- `direction_success_rate = 0.9000`
-- `no_change_rate = 0.1000`
+```txt
+ success_rate = 1.0000
+ avg_changed_ratio = 0.1579
+ avg_difficulty_shift = -0.1209
+ direction_success_rate = 0.9000
+ no_change_rate = 0.1000
+```
 
 These results show a cautious system: it usually simplifies in the correct direction, but it does not force a change in every case.
 
@@ -139,6 +141,6 @@ The public unit tests are useful for debugging, but they are too small to suppor
 
 ### 6. Conclusion
 
-The final system is best understood as a cautious lexical baseline. It can move many sentences in the required CEFR direction while avoiding many bad substitutions from earlier versions. The main gains came from tightening verb semantics, adding stronger filtering, and accepting that conservative editing was better than aggressive but wrong rewriting.
+The final system can be best understood as a cautious lexical baseline. The tool has been demonstrated to facilitate the progression of numerous sentences in the required CEFR direction, while simultaneously circumventing a multitude of erroneous substitutions that were prevalent in earlier iterations. The primary gains were derived from the tightening of verb semantics, the incorporation of more robust filtering mechanisms, and the acknowledgement that conservative editing is preferable to aggressive but erroneous rewriting.
 
-The main lesson from the assignment is that more machinery did not automatically improve the model. A smaller pipeline with explicit guardrails, difficulty estimates, constrained candidates, semantic filters, local context checks, and light grammatical repair turned out to be more reliable than several more ambitious variants.
+The primary conclusion derived from the assignment is that the introduction of additional machinery did not inherently enhance the efficacy of the model. A smaller pipeline incorporating explicit guardrails, difficulty estimates, constrained candidates, semantic filters, local context checks and light grammatical repair was found to be more reliable than several more ambitious variants.
