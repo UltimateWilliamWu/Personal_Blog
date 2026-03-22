@@ -20,20 +20,22 @@ Name: Tianxiong Wu
 | Testing and pilot package          | Prepares the system for user testing and pilot use                                                                        | Tested MVP, feedback summary, user guide    |
 
 ### 2.2 Constraints
-- The project will start on 1 March 2026 and continue for 12 months.
-- Its baseline budget is $350,000.
-- Only approved UNSW systems, data sources, and integration tools will be used.
-- The design should consider accessibility needs for students from underrepresented groups.
-- The team must also follow privacy, ethics, and academic integrity requirements.
-- Project scope should stay aligned with the agreed schedule, budget, and risk plan.
+
+- The project will start on 1 March 2026. It will go on for 12 months.
+- The project budget is $350,000.
+- We will only use systems and tools that are approved by UNSW.
+- The design of the project should be accessible to students from groups.
+- The team must follow the rules for privacy, ethics and academic integrity.
+- The project scope should stay on track with the schedule, budget and risk plan for the project.
 
 ### 2.3 Exclusions
-- Deployments at multiple universities are not included.
-- Full-text journal hosting and redistribution are outside the scope of this project.
-- The current minimum viable product (MVP) does not include a mobile app.
-- There are currently no plans for a commercial release.
-- Additional features beyond the scope of the agreed-upon minimum viable product (MVP) require formal approval.
-- The system will not generate complete academic assignments for students.
+
+- We will not be deploying the project at universities.
+- The project does not include hosting or sharing full-text journals.
+- The current minimum viable product of the project does not include an app for the project.
+- There are no plans to release the project commercially.
+- If we want to add features to the project that are not part of the minimum viable product we need to get formal approval for the project.
+- The system for the project will not do complete assignments, for students of the project.
 
 ### 2.4 Work Breakdown Structure (WBS)
 
@@ -52,7 +54,18 @@ The six major WBS branches are:
 Key work packages from the WBS include the semantic search interface, interactive PDF reader and de-jargoniser, visual knowledge graph generator, smart literature matrix extractor, integrity and citation coach module, library API integration, testing, pilot launch, and project handover.
 
 ### 2.5 Scope Statement
-This project aims to provide an AI-powered “Research and Academic Integrity Assistant” to students at the University of New South Wales (UNSW), particularly those in the “Equitable Access Program.” Key deliverables include semantic search of approved UNSW library resources, an interactive PDF term conversion tool, a visualized knowledge graph, an intelligent literature matrix, and support for citation and academic integrity. Additionally, this project includes accessibility features, privacy controls, testing, and pilot handover materials. The project is scheduled to be completed within 12 months, with a budget of approximately AUD 350,000. This project does not include expansion to multiple universities, full-text thesis hosting, commercial release, or additional features beyond the scope of a Minimum Viable Product (MVP) with approved core functionality.
+This project is about creating a tool for students at the University of New South Wales especially those in the Equitable Access Program. The tool is called the Research and Academic Integrity Assistant. It uses artificial intelligence.
+The main things this project will do are:
+* it will help students search for information in the university library in a way
+* it will have a tool to help students convert terms in their assignments to match the university style
+* it will show students a map of the information they are studying
+* it will help students understand what they have read
+* it will also help students to properly reference their work and be honest in their studies.
+
+This project will also make sure that the tool is easy for all students to use and that their private information is safe.
+The project should be finished in 12 months. Will cost around AUD 350,000.
+
+The Research and Academic Integrity Assistant will only be, for the University of New South Wales students. Will not have all the features that a full tool would have, just the basic ones that the university needs.
 
 ### 2.6 PMBOK Referenced PM Methods Used in Scope - Discussion
 
@@ -142,13 +155,13 @@ The team will review stakeholder needs every week and update the engagement appr
 
 ### 5.4 PMBOK Referenced PM Methods Used in Stakeholder Management - Discussion
 
-| PMBOK Method / Process                   | How It Was Used in This Project                                                    | Why It Was Useful                                              |
-| ---------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| Identify stakeholders                    | The team listed specific people or roles who affect or are affected by the project | It kept the stakeholder list clear and project-specific        |
-| Stakeholder analysis                     | Stakeholders were assessed by power, interest, and influence                       | It helped the team decide where to focus attention             |
-| Power-interest grid                      | Stakeholders were grouped by authority and concern about outcomes                  | It supported communication priority decisions                  |
-| Power-influence grid                     | Stakeholders were also grouped by their ability to change outcomes                 | It helped the team see who could affect project direction most |
-| Stakeholder engagement assessment matrix | Current and desired engagement levels were compared                                | It showed what action is needed to improve support             |
-| Plan stakeholder engagement              | Communication and engagement actions were assigned to each group                   | It gave the team a practical plan to follow during execution   |
-| Manage stakeholder engagement            | The team will use meetings, demos, and regular updates to maintain support         | It helps reduce conflict and improve cooperation               |
+| PMBOK Method / Process                   | How It Was Used in This Project                                                         | Why It Was Useful                                              |
+| ---------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Identify stakeholders                    | The team listed specific people or roles who affect or are affected by the project      | It kept the stakeholder list clear and project-specific        |
+| Stakeholder analysis                     | The team looked at the stakeholders to see how power, interest and influence they have. | It helped the team decide where to focus attention             |
+| Power-interest grid                      | Stakeholders were grouped by authority and concern about outcomes                       | It supported communication priority decisions                  |
+| Power-influence grid                     | Stakeholders were also grouped by their ability to change outcomes                      | It helped the team see who could affect project direction most |
+| Stakeholder engagement assessment matrix | Current and desired engagement levels were compared                                     | It showed what action is needed to improve support             |
+| Plan stakeholder engagement              | Communication and engagement actions were assigned to each group                        | It gave the team a practical plan to follow during execution   |
+| Manage stakeholder engagement            | The team will use meetings, demos, and regular updates to maintain support              | It helps reduce conflict and improve cooperation               |
 
