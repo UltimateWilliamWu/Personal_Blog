@@ -5,23 +5,19 @@ tags:
 ZID: z5518601
 Name: Tianxiong Wu
 
-# Task 2 - Scope Plan and Stakeholder Management Plan
-
-This draft follows the updated content guidance for Task 2. It focuses on the two sections assigned to me: Scope Plan and Stakeholder Management Plan. The content is written so it can be pasted into the group PMP and then adjusted if the group changes the final WBS, timeline, budget, or stakeholder names.
-
 ## 2. Scope Plan
 
 ### 2.1 Deliverables
 
-| Deliverable | Description | Main Output |
-| --- | --- | --- |
-| Semantic search module | Allows users to search approved UNSW Library resources and related metadata | Search interface and results page |
-| Interactive PDF de-jargoniser | Explains difficult academic text in plain English | PDF/text explanation tool |
-| Visual knowledge graph | Shows links between papers, topics, and citations | Topic and citation graph |
-| Smart literature matrix | Organises papers by theme, method, and possible research gap | Literature comparison table |
-| Citation and integrity support | Helps users with citation style and responsible academic use | Citation helper and integrity prompts |
-| Accessibility and privacy features | Supports inclusive use and safe handling of user input | Accessibility settings and privacy controls |
-| Testing and pilot package | Prepares the system for user testing and pilot use | Tested MVP, feedback summary, user guide |
+| Deliverable                        | Description                                                                 | Main Output                                 |
+| ---------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------- |
+| Semantic search module             | Allows users to search approved UNSW Library resources and related metadata | Search interface and results page           |
+| Interactive PDF de-jargoniser      | Explains difficult academic text in plain English                           | PDF/text explanation tool                   |
+| Visual knowledge graph             | Shows links between papers, topics, and citations                           | Topic and citation graph                    |
+| Smart literature matrix            | Organises papers by theme, method, and possible research gap                | Literature comparison table                 |
+| Citation and integrity support     | Helps users with citation style and responsible academic use                | Citation helper and integrity prompts       |
+| Accessibility and privacy features | Supports inclusive use and safe handling of user input                      | Accessibility settings and privacy controls |
+| Testing and pilot package          | Prepares the system for user testing and pilot use                          | Tested MVP, feedback summary, user guide    |
 
 ### 2.2 Constraints
 - The project has a planned delivery period of 12 months from 1 March 2026.
