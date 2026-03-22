@@ -9,31 +9,31 @@ Name: Tianxiong Wu
 
 ### 2.1 Deliverables
 
-| Deliverable                        | Description                                                                 | Main Output                                 |
-| ---------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------- |
-| Semantic search module             | Allows users to search approved UNSW Library resources and related metadata | Search interface and results page           |
-| Interactive PDF de-jargoniser      | Explains difficult academic text in plain English                           | PDF/text explanation tool                   |
-| Visual knowledge graph             | Shows links between papers, topics, and citations                           | Topic and citation graph                    |
-| Smart literature matrix            | Organises papers by theme, method, and possible research gap                | Literature comparison table                 |
-| Citation and integrity support     | Helps users with citation style and responsible academic use                | Citation helper and integrity prompts       |
-| Accessibility and privacy features | Supports inclusive use and safe handling of user input                      | Accessibility settings and privacy controls |
-| Testing and pilot package          | Prepares the system for user testing and pilot use                          | Tested MVP, feedback summary, user guide    |
+| Deliverable                        | Description                                                                                                               | Main Output                                 |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Semantic search module             | Allows users to search for licensed resources from the University of New South Wales Library as well as related metadata. | Search interface and results page           |
+| Interactive PDF de-jargoniser      | Explains complex academic texts in easy-to-understand language.                                                           | PDF/text explanation tool                   |
+| Visual knowledge graph             | Shows links between papers, topics, and citations                                                                         | Topic and citation graph                    |
+| Smart literature matrix            | Classifies articles based on topics, research methods, and potential research gaps.                                       | Literature comparison table                 |
+| Citation and integrity support     | Helps users with citation style and responsible academic use                                                              | Citation helper and integrity prompts       |
+| Accessibility and privacy features | Supports inclusive use and safe handling of user input                                                                    | Accessibility settings and privacy controls |
+| Testing and pilot package          | Prepares the system for user testing and pilot use                                                                        | Tested MVP, feedback summary, user guide    |
 
 ### 2.2 Constraints
-- The project has a planned delivery period of 12 months from 1 March 2026.
-- The baseline budget is $350,000.
-- The project can only use approved UNSW systems, data sources, and integrations.
-- The design must meet accessibility expectations for equity cohort students.
-- The project must follow privacy, ethics, and academic integrity requirements.
-- The team must keep the scope aligned with the agreed schedule, budget, and risk plan.
+- The project will start on 1 March 2026 and continue for 12 months.
+- Its baseline budget is $350,000.
+- Only approved UNSW systems, data sources, and integration tools will be used.
+- The design should consider accessibility needs for students from underrepresented groups.
+- The team must also follow privacy, ethics, and academic integrity requirements.
+- Project scope should stay aligned with the agreed schedule, budget, and risk plan.
 
 ### 2.3 Exclusions
-- Multi-university rollout is not included.
-- Full-text hosting or redistribution of journal articles is not included.
-- A mobile app is not included in the current MVP.
-- Commercial release is not included.
-- Features outside the agreed MVP are not included unless formally approved.
-- The system will not generate full academic assignments for students.
+- Deployments at multiple universities are not included.
+- Full-text journal hosting and redistribution are outside the scope of this project.
+- The current minimum viable product (MVP) does not include a mobile app.
+- There are currently no plans for a commercial release.
+- Additional features beyond the scope of the agreed-upon minimum viable product (MVP) require formal approval.
+- The system will not generate complete academic assignments for students.
 
 ### 2.4 Work Breakdown Structure (WBS)
 
@@ -52,7 +52,7 @@ The six major WBS branches are:
 Key work packages from the WBS include the semantic search interface, interactive PDF reader and de-jargoniser, visual knowledge graph generator, smart literature matrix extractor, integrity and citation coach module, library API integration, testing, pilot launch, and project handover.
 
 ### 2.5 Scope Statement
-This project will deliver an AI-powered Research and Academic Equity Companion for UNSW students, especially equity cohort students. The main deliverables are semantic search of approved UNSW Library resources, an interactive PDF de-jargoniser, a visual knowledge graph, a smart literature matrix, and citation and integrity support. The project also includes accessibility features, privacy controls, testing, and pilot handover materials. It will be delivered within 12 months and a baseline budget of $350,000. The project does not include multi-university rollout, full-text article hosting, commercial release, or extra features outside the approved MVP.
+This project aims to provide an AI-powered “Research and Academic Integrity Assistant” to students at the University of New South Wales (UNSW), particularly those in the “Equitable Access Program.” Key deliverables include semantic search of approved UNSW library resources, an interactive PDF term conversion tool, a visualized knowledge graph, an intelligent literature matrix, and support for citation and academic integrity. Additionally, this project includes accessibility features, privacy controls, testing, and pilot handover materials. The project is scheduled to be completed within 12 months, with a budget of approximately AUD 350,000. This project does not include expansion to multiple universities, full-text thesis hosting, commercial release, or additional features beyond the scope of a Minimum Viable Product (MVP) with approved core functionality.
 
 ### 2.6 PMBOK Referenced PM Methods Used in Scope - Discussion
 
@@ -130,30 +130,25 @@ The scope baseline for this project is made up of the deliverables, exclusions, 
 
 ### 5.3 Detailed Stakeholder Management Strategy
 
-| Stakeholder Group | Engagement Strategy | Frequency | Method | Owner |
-| --- | --- | --- | --- | --- |
-| Sponsor and benefit owner | Review project goals, benefits, and major scope decisions | Fortnightly or at milestone points | Meeting, presentation, email summary | Project lead |
-| Library operations and technical stakeholders | Confirm service fit, system access, and technical constraints | At key design and integration points | Consultation meeting, email, technical notes | Relevant component owner |
-| Accessibility and governance stakeholders | Review accessibility, privacy, and compliance matters | At design review points and before pilot testing | Review meeting, document review, email | Scope and stakeholder lead |
-| User representatives | Gather requirements and test usefulness of the MVP | During planning, prototype review, and UAT | Interview, demo session, survey | Scope and stakeholder lead |
-| Project team members | Coordinate tasks, update progress, and resolve issues | Weekly | Team meeting, Trello / Kanban, chat | Entire team |
+| Stakeholder Group                             | Engagement Strategy                                           | Frequency                                        | Method                                       | Owner                      |
+| --------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------- | -------------------------- |
+| Sponsor and benefit owner                     | Review project goals, benefits, and major scope decisions     | Fortnightly or at milestone points               | Meeting, presentation, email summary         | Project lead               |
+| Library operations and technical stakeholders | Confirm service fit, system access, and technical constraints | At key design and integration points             | Consultation meeting, email, technical notes | Relevant component owner   |
+| Accessibility and governance stakeholders     | Review accessibility, privacy, and compliance matters         | At design review points and before pilot testing | Review meeting, document review, email       | Scope and stakeholder lead |
+| User representatives                          | Gather requirements and test usefulness of the MVP            | During planning, prototype review, and UAT       | Interview, demo session, survey              | Scope and stakeholder lead |
+| Project team members                          | Coordinate tasks, update progress, and resolve issues         | Weekly                                           | Team meeting, Trello / Kanban, chat          | Entire team                |
 
 The team will review stakeholder needs every week and update the engagement approach if project conditions change. High-priority stakeholders will be contacted before any major scope decision is made. User-side stakeholders will be involved early so the team can test whether the system is actually useful for the target group. If a key stakeholder becomes unavailable or unresponsive, the issue will be recorded and escalated through the project lead.
 
 ### 5.4 PMBOK Referenced PM Methods Used in Stakeholder Management - Discussion
 
-| PMBOK Method / Process | How It Was Used in This Project | Why It Was Useful |
-| --- | --- | --- |
-| Identify stakeholders | The team listed specific people or roles who affect or are affected by the project | It kept the stakeholder list clear and project-specific |
-| Stakeholder analysis | Stakeholders were assessed by power, interest, and influence | It helped the team decide where to focus attention |
-| Power-interest grid | Stakeholders were grouped by authority and concern about outcomes | It supported communication priority decisions |
-| Power-influence grid | Stakeholders were also grouped by their ability to change outcomes | It helped the team see who could affect project direction most |
-| Stakeholder engagement assessment matrix | Current and desired engagement levels were compared | It showed what action is needed to improve support |
-| Plan stakeholder engagement | Communication and engagement actions were assigned to each group | It gave the team a practical plan to follow during execution |
-| Manage stakeholder engagement | The team will use meetings, demos, and regular updates to maintain support | It helps reduce conflict and improve cooperation |
+| PMBOK Method / Process                   | How It Was Used in This Project                                                    | Why It Was Useful                                              |
+| ---------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Identify stakeholders                    | The team listed specific people or roles who affect or are affected by the project | It kept the stakeholder list clear and project-specific        |
+| Stakeholder analysis                     | Stakeholders were assessed by power, interest, and influence                       | It helped the team decide where to focus attention             |
+| Power-interest grid                      | Stakeholders were grouped by authority and concern about outcomes                  | It supported communication priority decisions                  |
+| Power-influence grid                     | Stakeholders were also grouped by their ability to change outcomes                 | It helped the team see who could affect project direction most |
+| Stakeholder engagement assessment matrix | Current and desired engagement levels were compared                                | It showed what action is needed to improve support             |
+| Plan stakeholder engagement              | Communication and engagement actions were assigned to each group                   | It gave the team a practical plan to follow during execution   |
+| Manage stakeholder engagement            | The team will use meetings, demos, and regular updates to maintain support         | It helps reduce conflict and improve cooperation               |
 
-## Notes for Group Integration
-- Keep the numbering the same when you paste this into the full PMP.
-- If the group changes the final project scope, update Sections 2.1 to 2.5 together.
-- If the group changes stakeholder names, update Sections 5.1 to 5.3 together so the tables stay consistent.
-- The WBS image can stay if the group still uses the same WBS. If not, replace it with the final group version.
