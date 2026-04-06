@@ -1,181 +1,84 @@
----
-aliases:
-  - COMP3331/COMP9331 NAT Assignment Report
----
 ## 1. Code Organisation
 
-The implementation is organised around a small command-line entry point and a set of protocol/runtime modules.
+The code structure is:
 
-- `nat.py`
-  Parses the six required command-line arguments, validates them, constructs a `NATConfig`, and starts the runtime.
-- `nat_system/runtime.py`
-  Contains the main NAT event loop and the end-to-end forwarding logic. It creates the real UDP sockets, listens on both interfaces, validates incoming packets, performs translation, handles TTL and ICMP generation, and applies fragmentation or reassembly when needed.
-- `nat_system/packets.py`
-  Defines the logical packet abstractions used by the assignment model:
-  - `IPv4Packet`
-  - `UDPSegment`
-  - `ICMPMessage`
-  
-  This module is responsible for parsing raw bytes, serialising headers back to bytes, and generating/verifying checksums.
-- `nat_system/translation.py`
-  Implements the NAT translation table and external-port allocation logic.
-- `nat_system/reassembly.py`
-  Implements buffering and reassembly for fragmented IPv4 datagrams.
-- `nat_system/util.py`
-  Provides constants, IPv4 parsing/formatting helpers, and the Internet checksum function.
+```text
+Network Address Translation System/
+|-- nat.py
+|-- nat_system/
+    |-- __init__.py
+    |-- runtime.py
+    |-- packets.py
+    |-- translation.py
+    |-- reassembly.py
+    |-- util.py
+```
 
-The main program flow is:
+The figure below shows how the main parts of the NAT process work together.
 
-1. `nat.py` validates `external_ip`, `num_external_ports`, `timeout`, `mtu`, `real_internal_port`, and `real_next_hop_port`.
-2. `NATRuntime` binds:
-   - an internal UDP socket to `real_internal_port`
-   - an external UDP socket to port `0`, allowing the OS to allocate an ephemeral port
-3. Both sockets are registered with `selectors.DefaultSelector` and processed in a single event-driven loop.
-4. On packet arrival, the runtime:
-   - determines direction from the receiving socket
-   - parses the logical IPv4 packet
-   - validates the IP checksum
-   - reassembles fragments if necessary
-   - dispatches to UDP or ICMP handlers
-5. For outbound UDP traffic, the NAT allocates or reuses a mapping, rewrites source IP and source port, decrements TTL, recomputes checksums, and fragments the datagram if it exceeds the configured MTU.
-6. For inbound UDP replies, the NAT finds the reverse mapping, restores the original internal destination IP and port, decrements TTL, recomputes checksums, and sends the packet back to the client-side real UDP endpoint.
-7. For relevant ICMP error traffic arriving from the external side, the NAT rewrites the quoted inner IPv4/UDP header so the internal sender can identify the original flow.
+<div align="center">
+  <img src="Pasted%20image%2020260406181708.png" width="1500">
+  <div><em>Figure 1. Overall NAT process structure.</em></div>
+</div>
+
+**nat.py** is the entry point. Its purpose is to handle startup. It takes the six command-line arguments, validates them, builds a **NATConfig** object, and then starts the runtime. In this way, the file turns raw user input into a clean configuration for the rest of the program, or stops early with a clear error if the arguments are invalid.
+
+**nat_system/__init__.py** only defines the package. It does not process packets, but it keeps the project structure clean and makes the main modules easier to import.
+
+**nat_system/runtime.py** contains the main NAT logic. This is the core of the program. It takes the validated configuration and the datagrams arriving on the internal and external UDP sockets. It then creates the sockets, runs the selector loop, checks checksums, decreases TTL, applies NAT translation, handles fragmentation and reassembly, and sends the processed packet to the correct side. The result of this module is the actual forwarding behaviour of the NAT, including translated UDP traffic, generated ICMP errors, fragmented packets, or packet drops when required by the rules.
+
+**nat_system/packets.py** handles packet parsing and packet building. It defines the logical IPv4, UDP, and ICMP packet classes used by the rest of the program. It takes either raw bytes from a socket or structured field values from the runtime, and produces either parsed packet objects or serialised packet bytes. This keeps protocol details out of the runtime and makes the packet-processing code much clearer.
+
+**nat_system/translation.py** manages the NAT mapping table. Its job is to remember which internal flow is using which translated external port. It takes an internal **(IP, port)** pair for outbound traffic or an external port for inbound traffic, together with timing information, and produces a matching mapping, a new mapping, or no mapping when none is available. It also removes idle entries after timeout and returns expired ports to the free pool. This module gives the NAT the state needed to translate traffic consistently across multiple packets.
+
+**nat_system/reassembly.py** manages fragmented IPv4 packets. It takes packet fragments, their interface, and their arrival time, and stores them until a full datagram can be rebuilt. When enough fragments are present, it produces one complete logical IPv4 packet for normal processing. If fragments do not arrive in time, it keeps the state needed for timeout handling. This allows the runtime to work with complete packets instead of incomplete pieces.
+
+**nat_system/util.py** provides shared constants and helper functions. It takes small low-level tasks such as IPv4 parsing, checksum calculation, and protocol definitions, and provides reusable results to the rest of the code. This includes parsed addresses, checksum values, protocol constants, and packet format errors. Keeping these helpers here prevents the main logic files from becoming cluttered.
 
 ## 2. Data Structures
 
-### 2.1 Translation Table
+The most important data structure is the translation table. Its purpose is to keep NAT state for active UDP flows. Each flow is stored as a **NatMapping** object containing the internal IP, internal port, translated external port, and the time when the mapping was last used. The table keeps two dictionaries over the same mappings. One dictionary supports outbound lookup by **(internal_ip, internal_port)**, and the other supports inbound lookup by **external_port**. A deque stores the currently free external ports. This lets the NAT find mappings quickly in both directions and reuse ports after timeout.
 
-The translation state is represented by `NatMapping` objects:
+Fragment reassembly uses a separate table because it solves a different problem. A **FragmentGroup** stores the first header, the expected total payload length, the last update time, and a dictionary of fragment payloads keyed by byte offset. The **ReassemblyTable** indexes these groups by **(interface_name, identification)**. As more fragments arrive, the table keeps enough information to decide whether reassembly is complete. Once all byte ranges are present, the fragments are joined into one **IPv4Packet**.
 
-- `internal_ip`
-- `internal_port`
-- `external_port`
-- `last_used`
+The packet classes are also part of the data design. **IPv4Packet**, **UDPSegment**, and **ICMPMessage** store protocol fields in a structured form instead of leaving them as raw bytes. This gives the runtime a clear representation of the packet it is processing and makes header rewriting, checksum checks, and ICMP generation much easier to manage.
 
-`TranslationTable` keeps two dictionaries:
+The figure below summarises the two main state structures used by the NAT.
 
-- `_by_internal[(internal_ip, internal_port)] -> NatMapping`
-- `_by_external[external_port] -> NatMapping`
-
-This gives efficient lookup in both directions:
-
-- outbound traffic indexes by internal flow and either reuses or allocates an external port
-- inbound traffic indexes by translated external port and recovers the original internal destination
-
-A `deque` stores currently available external ports from `1` to `num_external_ports`. When an idle mapping expires, its port is returned to this pool.
-
-### 2.2 Fragment Reassembly State
-
-Inbound fragments are tracked in `ReassemblyTable`, keyed by:
-
-- `(interface_name, identification)`
-
-This matches the assignment assumption that fragment identification values are globally unique, so more complex keys are unnecessary in this model.
-
-Each `FragmentGroup` stores:
-
-- `first_header`
-- `expected_length`
-- `last_update`
-- `fragments[offset] -> payload_bytes`
-
-When all fragment ranges become contiguous from offset `0` to the final length, the NAT reconstructs a complete logical IPv4 datagram and passes it back into normal packet handling.
-
-### 2.3 Protocol Objects
-
-The packet module uses explicit structured objects instead of manipulating raw byte arrays everywhere:
-
-- `IPv4Packet` stores header fields such as source and destination address, identification, flags, fragment offset, TTL, protocol, and payload
-- `UDPSegment` stores ports, payload, length, and checksum
-- `ICMPMessage` stores type, code, rest-of-header, payload data, and checksum
-
-This design keeps the NAT logic readable while still preserving byte-accurate serialisation for forwarding.
+<div align="center">
+  <img src="Pasted%20image%2020260406182407.png" width="1500">
+  <div><em>Figure 2. Main NAT data structures.</em></div>
+</div>
 
 ## 3. Concurrency Handling
 
-The NAT is implemented as a single-threaded event-driven system using non-blocking sockets and `selectors.DefaultSelector`.
+The NAT uses a single-threaded event-driven design rather than threads. Both UDP sockets are set to non-blocking mode and registered with **selectors.DefaultSelector**. The runtime loop first clears expired NAT mappings and fragment state, then waits for activity on either socket, and processes packets as soon as a socket becomes ready.
 
-This design was chosen for two reasons:
+The purpose of this design is to let the NAT react to internal and external traffic independently without assuming a fixed request-response order. Internal packets can continue to arrive while external replies are still pending, and external packets can be handled even when no new internal packet has just been seen. Because all shared state is updated in one execution path, the implementation also avoids locks and race conditions.
 
-1. The assignment requires the NAT to listen on both internal and external sockets without assuming a strict request-response pattern.
-2. A selector-based design avoids lock management and shared-state races that would arise with a multi-threaded implementation.
+## 4. Known Limitations
 
-At runtime, both sockets are registered with the selector. Each iteration of the main loop:
+This implementation follows the assignment model rather than a full production NAT. It only supports IPv4 packets with a fixed 20-byte header, UDP traffic, and the ICMP behaviour required by the specification. It does not support IP options or a wider range of transport protocols.
 
-- expires stale NAT mappings and fragment reassembly state
-- waits for readability events on either socket
-- drains each ready socket until it would block
-
-This means the NAT can process:
-
-- multiple outbound flows
-- inbound replies arriving at arbitrary times
-- reassembly and timeout maintenance
-
-without blocking on one interface while packets are waiting on the other.
-
-## 4. Known Limitations and Assumptions
-
-This section reflects the current implementation rather than an idealised design.
-
-- The implementation follows the assignment model only. It assumes fixed 20-byte IPv4 headers with no options, UDP application traffic, and ICMP error messages relevant to the assignment.
-- Real transport is restricted to localhost UDP sockets. The runtime accepts inbound external traffic only from the configured `real_next_hop_port`, which is consistent with the specification.
-- The logical internal network is represented by a single real UDP client endpoint. The runtime sends all internal replies to the most recently observed internal sender address, which matches the provided single-client model.
-- Generated ICMP error packets use the configured `external_ip` as the logical source address. The specification does not define a separate logical internal NAT interface address, so this implementation keeps one NAT-visible logical address.
-- Fragment reassembly uses `(interface, identification)` as the reassembly key and therefore relies on the specification’s assumption that identification values are globally unique.
-- The implementation is intentionally correctness-oriented rather than throughput-oriented. It is suitable for the assignment scale, but it does not attempt advanced optimisation of buffer growth, batching, or high-volume logging.
+The simplified runtime model also introduces a few practical assumptions. The internal network is represented by one real UDP client endpoint, so replies to the internal side are sent to the most recently seen client address. Generated ICMP error packets use the configured external IP as their source address because the assignment does not define a separate logical internal NAT address. Fragment reassembly also follows the specification assumption that identification values are globally unique, which allows a simpler reassembly key.
 
 ## 5. Discussion
 
-### 5.1 NAT and the Layering Principle
+NAT weakens the layering principle because it cannot stay inside the IP layer. It must read UDP headers, rewrite UDP port numbers, and recompute the UDP checksum. This means a network device is directly changing transport-layer information.
 
-NAT weakens the strict layering principle because it cannot operate purely at the IP layer. A router that performs only normal IPv4 forwarding can route packets using source and destination addresses alone. In contrast, this NAT must inspect and rewrite UDP source and destination ports in order to multiplex flows onto a limited external port space.
+NAT also weakens the end-to-end principle. Communication now depends on state inside the middlebox. An inbound packet is accepted only if a matching mapping exists. Timeout and port exhaustion inside the NAT can therefore break communication even when the endpoints themselves are fine.
 
-This creates cross-layer dependence:
+Advantages of NAT, excluding address multiplexing, include:
 
-- the network-layer device must parse transport-layer headers
-- UDP checksums must be recomputed after address or port translation because the checksum includes an IPv4 pseudo-header
-- ICMP error handling also depends on understanding the quoted inner IPv4 and UDP headers
+- It hides internal addresses from the external network.
+- It provides a simple filtering effect because unmatched inbound traffic is dropped.
+- It lets the internal address plan stay stable even if the external address changes.
 
-As a result, NAT is best viewed as a practical middlebox mechanism rather than a cleanly layered network-layer function.
+Disadvantages of NAT include:
 
-### 5.2 NAT and the End-to-End Principle
-
-NAT also weakens the end-to-end principle. In an ideal end-to-end design, communication semantics are determined primarily by the endpoints, while the network simply forwards packets. NAT introduces per-flow state in the middle of the path:
-
-- new outbound traffic creates translation state inside the NAT
-- unsolicited inbound traffic is dropped when no state exists
-- ongoing communication depends on timeout behaviour and mapping lifetime inside the middlebox
-
-This means reachability and correctness are no longer determined only by sender and receiver. The middlebox becomes part of the communication semantics, especially for timeouts, ICMP handling, fragmentation, and reverse-path delivery.
-
-### 5.3 Advantages of NAT
-
-1. **Address hiding and basic exposure reduction**
-   
-   Internal hosts and their private addresses are not directly visible to the external network. In this assignment model, unmatched inbound packets are silently dropped, which reduces accidental exposure of internal services.
-
-2. **Easier internal network renumbering**
-   
-   Internal hosts can continue using the same private address space even if the externally visible address changes. This decouples internal addressing from provider-facing addressing and simplifies local network administration.
-
-3. **Centralised policy point**
-   
-   Because the NAT already inspects, filters, and rewrites traffic, it naturally becomes a control point for timeout rules, inbound filtering, and ICMP generation.
-
-### 5.4 Disadvantages of NAT
-
-1. **Breaks direct end-to-end reachability**
-   
-   External hosts cannot normally initiate communication with internal hosts unless suitable translation state already exists. This makes peer-to-peer communication and inbound service hosting more complicated.
-
-2. **Adds protocol complexity**
-   
-   The NAT must maintain state, rewrite headers, recompute checksums, handle fragmentation and reassembly, and translate certain ICMP errors. This is significantly more complex than ordinary stateless forwarding.
-
-3. **Creates dependence on middlebox behaviour**
-   
-   Communication can fail because of timeout expiry, port exhaustion, or inconsistent NAT behaviour rather than endpoint logic alone. This increases operational complexity and makes debugging harder.
+- It breaks direct end-to-end reachability for unsolicited inbound traffic.
+- It adds extra state and protocol complexity to the network path.
+- It makes debugging harder because failures may be caused by hidden NAT state.
 
 ## 6. References
 
