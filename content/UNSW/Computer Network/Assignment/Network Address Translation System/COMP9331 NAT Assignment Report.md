@@ -1,7 +1,5 @@
 ## 1. Code Organisation
 
-The code structure is:
-
 ```text
 Network Address Translation System/
 |-- nat.py
@@ -13,8 +11,6 @@ Network Address Translation System/
     |-- reassembly.py
     |-- util.py
 ```
-
-The figure below shows how the main parts of the NAT process work together.
 
 <div align="center">
   <img src="Pasted%20image%2020260406181708.png" width="1500">
@@ -37,12 +33,11 @@ The figure below shows how the main parts of the NAT process work together.
 
 ## 2. Data Structures
 
-The most important data structure is the translation table. Its purpose is to keep NAT state for active UDP flows. Each flow is stored as a **NatMapping** object containing the internal IP, internal port, translated external port, and the time when the mapping was last used. The table keeps two dictionaries over the same mappings. One dictionary supports outbound lookup by **(internal_ip, internal_port)**, and the other supports inbound lookup by **external_port**. A deque stores the currently free external ports. This lets the NAT find mappings quickly in both directions and reuse ports after timeout.
+The most important data structure is the translation table. It is used to store the NAT state of active UDP flows. Each flow is stored in a NatMapping object, which contains the internal IP address, the internal port, the translated external port, and the time when the mapping was last used. The table stores two entries for the same mapping. One table handles outgoing lookups by internal IP address and internal port, while the other handles incoming lookups by external port. A double-ended queue (deque) is used to store currently inactive external ports. This enables fast bidirectional communication lookups within the NAT and allows ports to be reused once they have expired.
 
-Fragment reassembly uses a separate table because it solves a different problem. A **FragmentGroup** stores the first header, the expected total payload length, the last update time, and a dictionary of fragment payloads keyed by byte offset. The **ReassemblyTable** indexes these groups by **(interface_name, identification)**. As more fragments arrive, the table keeps enough information to decide whether reassembly is complete. Once all byte ranges are present, the fragments are joined into one **IPv4Packet**.
+Fragment reassembly uses a separate table because it addresses a different problem. FragmentGroup stores the initial header, the expected total payload length, the time of the last update, and a payload mirror indexed by byte offset for the fragments.
 
-The packet classes are also part of the data design. **IPv4Packet**, **UDPSegment**, and **ICMPMessage** store protocol fields in a structured form instead of leaving them as raw bytes. This gives the runtime a clear representation of the packet it is processing and makes header rewriting, checksum checks, and ICMP generation much easier to manage.
-
+ReassemblyTable indexes these groups (by interface name and identifier). As more fragments arrive, this table stores enough information to determine when reassembly is complete. Once all byte ranges have been found, the fragments are merged into a single IPv4Packet. Packet classes are also part of the data model. IPv4Packet, UDPSegment, and ICMPMessage store protocol fields not as raw bytes, but in a structured format. This provides a clear and concrete representation of the packet being processed at runtime, which greatly facilitates tasks such as header rewriting, checksum calculation, and ICMP generation.
 The figure below summarises the two main state structures used by the NAT.
 
 <div align="center">
@@ -52,9 +47,9 @@ The figure below summarises the two main state structures used by the NAT.
 
 ## 3. Concurrency Handling
 
-The NAT uses a single-threaded event-driven design rather than threads. Both UDP sockets are set to non-blocking mode and registered with **selectors.DefaultSelector**. The runtime loop first clears expired NAT mappings and fragment state, then waits for activity on either socket, and processes packets as soon as a socket becomes ready.
+This NAT uses an event-based, single-threaded model instead of a multithreaded one. Both UDP sockets are configured in non-blocking mode and registered with the DefaultSelector. The execution loop first cleans up expired NAT and fragmentation states, then waits for activity on one of the sockets; as soon as a socket becomes ready, it immediately processes packets.
 
-The purpose of this design is to let the NAT react to internal and external traffic independently without assuming a fixed request-response order. Internal packets can continue to arrive while external replies are still pending, and external packets can be handled even when no new internal packet has just been seen. Because all shared state is updated in one execution path, the implementation also avoids locks and race conditions.
+The purpose of this model is to enable NAT to respond separately to ingress and egress traffic without requiring prior prediction of fixed request-response sequences. Input packets can arrive continuously even while output responses are being processed; conversely, output packets can be processed even when no new input packet has been detected. Since all shared states are updated within a single execution path, this implementation avoids locks and race conditions.
 
 ## 4. Known Limitations
 
@@ -64,21 +59,14 @@ The simplified runtime model also introduces a few practical assumptions. The in
 
 ## 5. Discussion
 
-NAT weakens the layering principle because it cannot stay inside the IP layer. It must read UDP headers, rewrite UDP port numbers, and recompute the UDP checksum. This means a network device is directly changing transport-layer information.
+NAT is extremely useful in practical applications, but it is not fully compatible with traditional Internet design principles. From the perspective of a layered architecture, NAT cannot function like a simple IP forwarder. After modifying packets, it must inspect the UDP header, rewrite the port number, and recalculate the UDP checksum. In other words, network-layer devices are also making modifications at the transport layer. This violates the principle of network-layer separation.
 
-NAT also weakens the end-to-end principle. Communication now depends on state inside the middlebox. An inbound packet is accepted only if a matching mapping exists. Timeout and port exhaustion inside the NAT can therefore break communication even when the endpoints themselves are fine.
+This also violates the end-to-end principle of NAT. Once address translation is applied, communication no longer relies solely on the two endpoints but also depends on the internal state of intermediate devices. Incoming packets are accepted only when a matching mapping already exists, and that mapping may disappear due to timeouts or port exhaustion. This means that NAT no longer merely forwards packets along the path but actively influences whether a communication session succeeds. At the same time, aside from address reuse, NAT still offers some clear practical benefits: it hides internal addresses from the external network, thereby reducing direct exposure of the internal address space.
 
-Advantages of NAT, excluding address multiplexing, include:
-
-- It hides internal addresses from the external network.
-- It provides a simple filtering effect because unmatched inbound traffic is dropped.
-- It lets the internal address plan stay stable even if the external address changes.
-
-Disadvantages of NAT include:
-
-- It breaks direct end-to-end reachability for unsolicited inbound traffic.
-- It adds extra state and protocol complexity to the network path.
-- It makes debugging harder because failures may be caused by hidden NAT state.
+It provides a simple filtering effect, as unexpected inbound traffic is typically rejected unless a matching mapping exists. It also maintains the stability of the internal addressing scheme when external addresses change. Its drawbacks are equally evident:
+- It disrupts direct end-to-end connections, making unexpected inbound traffic and peer-to-peer communication more difficult.
+- This introduces additional state and protocol complexity, as NAT must maintain mapping relationships, update checksums, and handle special cases such as ICMP and fragmentation.
+- This complicates troubleshooting, as connection issues may stem from hidden NAT states rather than the terminal devices themselves.
 
 ## 6. References
 
