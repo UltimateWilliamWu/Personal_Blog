@@ -59,14 +59,13 @@ The simplified runtime model also introduces a few practical assumptions. The in
 
 ## 5. Discussion
 
-NAT is extremely useful in practical applications, but it is not fully compatible with traditional Internet design principles. From the perspective of a layered architecture, NAT cannot function like a simple IP forwarder. After modifying packets, it must inspect the UDP header, rewrite the port number, and recalculate the UDP checksum. In other words, network-layer devices are also making modifications at the transport layer. This violates the principle of network-layer separation.
+NAT is extremely useful in practical applications, but it does not fully comply with the principles of the traditional Internet architecture. From a hierarchical architectural perspective, NAT cannot function like a simple IP router. After modifying the packet, it is necessary to check the UDP header, rewrite the port number, and recalculate the UDP checksum. In other words, a network-layer device also makes changes at the transport layer. This violates the principle of network layer separation.
 
-This also violates the end-to-end principle of NAT. Once address translation is applied, communication no longer relies solely on the two endpoints but also depends on the internal state of intermediate devices. Incoming packets are accepted only when a matching mapping already exists, and that mapping may disappear due to timeouts or port exhaustion. This means that NAT no longer merely forwards packets along the path but actively influences whether a communication session succeeds. At the same time, aside from address reuse, NAT still offers some clear practical benefits: it hides internal addresses from the external network, thereby reducing direct exposure of the internal address space.
+This also violates the end-to-end principle of NAT. By implementing address translation, the communication depends not only on the two endpoints but also on the internal state of the intermediate device. Incoming packets are accepted only if a corresponding mapping exists, and that mapping can be lost due to timeouts or port exhaustion. This means that NAT doesn't just forward packets along the path but actively influences the success or failure of communication sessions.
 
-It provides a simple filtering effect, as unexpected inbound traffic is typically rejected unless a matching mapping exists. It also maintains the stability of the internal addressing scheme when external addresses change. Its drawbacks are equally evident:
-- It disrupts direct end-to-end connections, making unexpected inbound traffic and peer-to-peer communication more difficult.
-- This introduces additional state and protocol complexity, as NAT must maintain mapping relationships, update checksums, and handle special cases such as ICMP and fragmentation.
-- This complicates troubleshooting, as connection issues may stem from hidden NAT states rather than the terminal devices themselves.
+In addition to address reuse, NAT offers several specific practical advantages: it hides internal addresses from the external network, thereby preventing the direct exposure of the internal address space. Since it typically rejects traffic without a matching mapping, it automatically blocks unexpected incoming traffic and acts as a simple filter. It also preserves the stability of the internal naming scheme when the external address changes. However, its drawbacks are clear: it disrupts direct end-to-end connections and makes unexpected incoming traffic and peer-to-peer communication more difficult.
+
+As a result, NAT introduces additional complexities such as maintaining association state, updating aggregate checks, and handling special cases of ICMP and fragmentation.This makes troubleshooting difficult, because connection errors may stem not from the end devices but from the underlying NAT state.
 
 ## 6. References
 
