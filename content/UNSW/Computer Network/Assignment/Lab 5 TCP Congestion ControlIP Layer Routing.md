@@ -64,3 +64,29 @@ aliases:
 >![[Pasted image 20260411190902.png|1000]]
 >
 >The NetAnim visualisation matches the required topology. The top row contains nodes **0-1-2-3**, the bottom row contains nodes **7-6-4-5**, and the vertical links connect node **2** to **4** and node **1** to **6** as specified. The packet arrows visible in the animation confirm that the TCP flows are active during the simulation.
+>
+>### **Question 2.** Using both the throughput and RTT graphs, identify at what point the queue at the bottleneck filled up. What patterns in each graph support your conclusion?
+>
+>**Throughput Graph for Flow 1 (10.0.0.1:49153 -> 10.0.4.2:8080)**
+>
+>![[Pasted image 20260411192424.png|1000]]
+>
+>**Throughput Graph for Flow 2 (10.0.2.2:49153 -> 10.0.4.2:8080)**
+>
+>![[Pasted image 20260411192516.png|1000]]
+>
+>**RTT Graph for Flow 1 (10.0.0.1:49153 -> 10.0.4.2:8080)**
+>
+>![[Pasted image 20260411192623.png|1000]]
+>
+>**RTT Graph for Flow 2 (10.0.2.2:49153 -> 10.0.4.2:8080)**
+>
+>![[Pasted image 20260411192544.png|1000]]
+>
+>The first clear point where the queue on the **n2-n4 bottleneck link** filled up is around **3.5 s to 3.8 s**. A similar congestion episode appears again around **6.3 s to 6.7 s**.
+>
+>The throughput graphs show the main evidence. For **Flow 1**, throughput drops sharply at around **3.7 s** and again near **6.6 s**, indicating that the sender is being forced to back off after congestion. For **Flow 2**, throughput also shows an earlier sharp reduction around **2.5 s** and remains unstable before recovering, which is consistent with competition for the same **2.5 Mbps** bottleneck bandwidth.
+>
+>The RTT graphs support the same conclusion. Both flows have a baseline RTT near **105 ms**, but around **3.5 s to 3.8 s** the RTT rises noticeably above this baseline, reaching roughly **130 ms to 150 ms** with additional spikes. This indicates packets are spending more time queued at the bottleneck. Around **6.3 s to 6.7 s**, **Flow 1** shows another very large RTT spike, which coincides with another major throughput drop.
+>
+>These two patterns together indicate queue fill-up: first the RTT increases because the queue is building, then throughput falls because the queue reaches capacity, packets are dropped, and TCP reduces its sending rate. The decline in **Flow 1** after about **8.5 s** is not treated as a queue-fill event because that flow is scheduled to stop at **8.5 s**.
