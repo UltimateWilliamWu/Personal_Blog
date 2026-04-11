@@ -103,3 +103,19 @@ aliases:
 >In the base simulation, **Flow 1** from node **0** to node **5** takes the path **n0 -> n1 -> n4 -> n5**. **Flow 2** from node **2** to node **5** takes the path **n2 -> n3 -> n5**.
 >
 >These paths are preferred because **NS3 global routing uses hop count as its default metric**, not link bandwidth. For Flow 1, the path **n0 -> n1 -> n4 -> n5** has **3 hops**, while the alternative path **n0 -> n1 -> n2 -> n3 -> n5** has **4 hops**, so the shorter-hop path is chosen even though some links on the alternative route have higher bandwidth. For Flow 2, the path **n2 -> n3 -> n5** has only **2 hops**, while the route **n2 -> n1 -> n4 -> n5** has **3 hops**, so the direct path through node 3 is selected.
+>
+>### **Question 2.** What happens to packet delivery when the link fails? Do packets resume delivery on an alternate path? How long does the disruption last?
+>
+>**Before Failure (~0.70 s)**
+>
+>![[Pasted image 20260411212354.png|1000]]
+>
+>**After Failure (~0. 86s)**
+>
+>![[Pasted image 20260411212201.png|1000]]
+>
+>When the **n1-n4** link fails at **0.8 s**, packet delivery for **Flow 1** is disrupted. Before the failure, traffic from node **0** to node **5** is visible on the path **n0 -> n1 -> n4 -> n5**. After the failure, that path is no longer used and **Flow 1 does not resume on the alternate path** **n0 -> n1 -> n2 -> n3 -> n5**.
+>
+>This happens because the simulation is still using **static routing tables** that were populated only once at the start. When the link goes down, the old route becomes invalid, but no route recomputation occurs, so the source does not switch to a backup path automatically.
+>
+>**Flow 2** from node **2** to node **5** continues along **n2 -> n3 -> n5** and is largely unaffected by the failure. The disruption to **Flow 1** lasts for the remainder of the simulation, since delivery does not recover in the static-routing version.
