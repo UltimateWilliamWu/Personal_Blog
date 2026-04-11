@@ -51,3 +51,16 @@ aliases:
 >| 3 | 458 | 1.655242 | 49153 -> 8080 | Duplicate ACKs | Wireshark marks this as **TCP Fast Retransmission**, again showing that TCP used duplicate ACKs to detect loss and retransmit early. | 0.825488 |
 >
 >For all three events, the loss was triggered by **duplicate ACKs**, not by a timeout, because Wireshark explicitly labels them as **TCP Fast Retransmission**. In each case, TCP responded by retransmitting the missing segment immediately and then continuing transmission once a later cumulative ACK confirmed that the lost data had been successfully received.
+
+## Exercise 2: Implementing an NS3 Simulation (Marked, include in the lab report, 4.5 Marks)
+
+>[!note] Answer & Screenshots
+>### **Question 1.** Fill in all stubs, run the simulation, and produce a working NetAnim animation matching the topology above.
+>
+>The stubs in **exercise2.py** were completed by implementing the full **8-node topology**, configuring all **four TCP flows**, enabling **PCAP capture** on the bottleneck links, and setting fixed node positions for **NetAnim**. The simulation ran successfully and generated the expected output files, including **exercise2.xml** and the bottleneck PCAP traces.
+>
+>**NetAnim Screenshot**
+>
+>![[Exercise 2 NetAnim Screenshot.png|1000]]
+>
+>The NetAnim visualisation matches the required topology. The top row contains nodes **0-1-2-3**, the bottom row contains nodes **7-6-4-5**, and the vertical links connect node **2** to **4** and node **1** to **6** as specified. The packet arrows visible in the animation confirm that the TCP flows are active during the simulation.
