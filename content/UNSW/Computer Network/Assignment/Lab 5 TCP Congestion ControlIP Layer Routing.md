@@ -61,6 +61,6 @@ aliases:
 >
 >**NetAnim Screenshot**
 >
->![[Exercise 2 NetAnim Screenshot.png|1000]]
+>![[Pasted image 20260411190902.png|1000]]
 >
 >The NetAnim visualisation matches the required topology. The top row contains nodes **0-1-2-3**, the bottom row contains nodes **7-6-4-5**, and the vertical links connect node **2** to **4** and node **1** to **6** as specified. The packet arrows visible in the animation confirm that the TCP flows are active during the simulation.
