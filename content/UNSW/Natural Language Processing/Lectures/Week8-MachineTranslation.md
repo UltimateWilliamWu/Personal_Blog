@@ -1,4 +1,4 @@
-﻿# COMP6713 Week 8 Machine Translation 中英对照笔记
+# COMP6713 Week 8 Machine Translation 中英对照笔记
 
 说明：这份笔记以 `Week8-MachineTranslation.pdf` 79 页课件为主线，并对照 `week8-demos.zip` 中的 zero-shot MT、metrics、decoding、OpenNMT、LLM-based MT 和 instruction tuning demo 补全实现细节。每个知识点按“英文一句，中文一句”的顺序整理，便于理解、背诵和考试作答。
 
