@@ -90,3 +90,16 @@ aliases:
 >The RTT graphs support the same conclusion. Both flows have a baseline RTT near **105 ms**, but around **3.5 s to 3.8 s** the RTT rises noticeably above this baseline, reaching roughly **130 ms to 150 ms** with additional spikes. This indicates packets are spending more time queued at the bottleneck. Around **6.3 s to 6.7 s**, **Flow 1** shows another very large RTT spike, which coincides with another major throughput drop.
 >
 >These two patterns together indicate queue fill-up: first the RTT increases because the queue is building, then throughput falls because the queue reaches capacity, packets are dropped, and TCP reduces its sending rate. The decline in **Flow 1** after about **8.5 s** is not treated as a queue-fill event because that flow is scheduled to stop at **8.5 s**.
+
+## Exercise 3: Routing with NS3 (Marked, include in the lab report, 2.5 Marks)
+
+>[!note] Answer & Screenshots
+>### **Question 1.** Which path does each flow take? Why is one path preferred over the other?
+>
+>**Base Simulation NetAnim Screenshot**
+>
+>![[Pasted image 20260411194242.png|1000]]
+>
+>In the base simulation, **Flow 1** from node **0** to node **5** takes the path **n0 -> n1 -> n4 -> n5**. **Flow 2** from node **2** to node **5** takes the path **n2 -> n3 -> n5**.
+>
+>These paths are preferred because **NS3 global routing uses hop count as its default metric**, not link bandwidth. For Flow 1, the path **n0 -> n1 -> n4 -> n5** has **3 hops**, while the alternative path **n0 -> n1 -> n2 -> n3 -> n5** has **4 hops**, so the shorter-hop path is chosen even though some links on the alternative route have higher bandwidth. For Flow 2, the path **n2 -> n3 -> n5** has only **2 hops**, while the route **n2 -> n1 -> n4 -> n5** has **3 hops**, so the direct path through node 3 is selected.
