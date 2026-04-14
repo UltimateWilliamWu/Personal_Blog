@@ -1,9 +1,3 @@
-# COMP6713 Week 5 Sentiment Analysis 中英对照笔记
-
-说明：这份笔记以 `Week5-sentiment-analysis.pdf` 33 页课件为主线，并对照 `Week_5.zip` 中的 rule-based、statistical、neural 和 prompt tuning demo 补全实现细节。每个知识点按“英文一句，中文一句”的顺序整理，便于理解、背诵和考试作答。
-
----
-
 ## 1. Announcements and Weekly Roadmap / 课程提醒与本周路线图
 
 - The lecture begins with a quote from Pang and Lee about how the web makes large-scale public opinion accessible.

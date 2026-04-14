@@ -1,9 +1,3 @@
-# COMP6713 Week 3 Attention and Transformer 中英对照笔记
-
-说明：这份笔记以 `Week3-attention-transformer.pdf` 41 页课件为主线，并对照 `Week_3.zip` 中的 PyTorch、Transformer、BPE 和 positional encoding notebook 补全 demo 细节。每个知识点按照“英文一句，中文一句”的顺序排列，方便理解、背诵和考试作答。
-
----
-
 ## 1. Announcements and Weekly Roadmap / 课程提醒与本周路线图
 
 - The lecture begins by congratulating students on completing the first quiz.

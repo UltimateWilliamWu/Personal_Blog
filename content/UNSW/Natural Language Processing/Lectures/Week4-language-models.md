@@ -1,9 +1,3 @@
-# COMP6713 Week 4 Language Models 中英对照笔记
-
-说明：这份笔记以 `Week4-language-models.pdf` 37 页课件为主线，并对照 `Week_4.zip` 中的 BERT、GPT、LoRA 和 PEFT notebook 补全 demo 细节。每个知识点按照“英文一句，中文一句”的顺序排列，方便理解、背诵和考试作答。
-
----
-
 ## 1. Announcements and Weekly Roadmap / 课程提醒与本周路线图
 
 - The lecture begins with an Emily Bender quote warning that fluent text generation should not be mistaken for genuine understanding or mind.

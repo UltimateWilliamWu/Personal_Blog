@@ -1,9 +1,3 @@
-# COMP6713 Week 2 Representation Learning 中英对照笔记
-
-说明：这份笔记以 `Week2-RepresentationLearning.pdf` 45 页课件为主线，并对照 `Week_2.zip` 里的 4 个 notebook 补全 demo 细节。每个知识点按照“英文一句，中文一句”的顺序排列，方便理解、背诵和考试作答。
-
----
-
 ## 1. Announcements and Weekly Roadmap / 课程提醒与本周路线图
 
 - The first assessable quiz opens on Wednesday at 12pm and stays open until next Monday at 12pm, with only one attempt allowed.
