@@ -1,9 +1,3 @@
-# COMP6713 Week 7 POS Tagging and NER 中英对照笔记
-
-说明：这份笔记以 `Week7-POSTagging-NER.pdf` 33 页课件为主线，并对照 `week7-demos.zip` 中的 BERT token classification、CRF POS tagger 和 BiLSTM-CRF demo 补全实现细节。每个知识点按“英文一句，中文一句”的顺序整理，便于理解、背诵和考试作答。
-
----
-
 ## 1. Announcements and Weekly Roadmap / 课程提醒与本周路线图
 
 - The lecture begins with a Christopher Manning quote asking whether linguistics still matters after POS tagging accuracy rose from 97% toward 100%.
