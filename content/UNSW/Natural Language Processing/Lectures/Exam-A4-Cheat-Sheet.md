@@ -1,5 +1,3 @@
-# NLP Exam A4 Cheat Sheet
-
 ## Core Pipeline
 - Text -> tokenization/BPE -> token IDs -> one-hot lookup -> embeddings -> model blocks -> output head -> logits -> softmax/sigmoid -> loss -> backprop -> optimizer update.
 - Tokenization: splits text into units; BPE learns frequent subword merges; handles rare/OOV words better than word-level vocab.
