@@ -199,7 +199,7 @@
 - SentiWordNet: WordNet senses with sentiment scores, not just a positive/negative word list.
 - SA evaluation: precision, recall, F1, accuracy, confusion matrix; inter-annotator agreement matters.
 - Aspect-based sentiment: aspect = attribute/part of target, e.g. restaurant ambience, movie plot.
-- Valence: positive/negative feeling. Arousal: intensity/activation. Dominance: control/power.
+- Valence: positive vs negative. Arousal: calm vs excited / intensity. Dominance: feeling in control vs powerless.
 - Multi-task learning: shared base encoder learns unified representation; task-specific heads learn each task.
 - Auxiliary task: related helper task, e.g. hate speech detection; backprop applies to auxiliary loss too.
 - BERT classification: use `[CLS]` representation with classification head.
