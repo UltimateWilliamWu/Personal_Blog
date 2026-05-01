@@ -94,6 +94,8 @@
 - Multi-head attention: several Q/K/V projections in parallel; each head can learn different relations.
 - In code, `range(3)` linear layers usually means Q, K, V projections, not three heads.
 - Masked self-attention: decoder cannot attend to future output tokens.
+- Decoder pseudocode trap: $X \leftarrow X+\mathrm{MHAttention}(X\mid W_l^{dec}, \mathrm{Mask}[t,t']=[[t\le t']])$ means residual update using masked multi-head attention over the sequence generated so far.
+- In decoder masks, $t$ is the current output position and $t'$ indexes generated-so-far output positions; future positions are blocked.
 - Feed-forward network: applied independently to each token position; no context mixing.
 - Add & Norm: residual connection plus normalization; stabilizes deep training.
 - LM head: maps final hidden state to vocabulary logits; softmax gives next-token probabilities.
@@ -279,3 +281,4 @@
 - CRF formula quiz: $z$ = BiLSTM output, $Y(z)$ = possible label sequences, $n$ = input length, $W,b$ = feature weights, $\psi$ = feature/potential function.
 - Pointer-generator quiz: attention distribution + source text + decoder hidden state + $p_{\text{gen}}=0$.
 - TextRank quiz: sentences are nodes, edge weights are normalized overlap/similarity, final extract uses top-k.
+- Decoder mask quiz: $t'$ means generated-so-far sequence positions; the line is masked multi-head attention, not unmasked attention.
