@@ -1,4 +1,4 @@
-﻿# Week 9: Summarisation & Question-Answering
+# Week 9: Summarisation & Question-Answering
 
 - These notes cover the Week 9 lecture, the summarization pipeline ideas in the slides, and the demo notebooks in `week9-demos.zip`.
 - 这份笔记覆盖 Week 9 课件、课件中的 summarization pipeline 思路，以及 `week9-demos.zip` 里的 demo notebook 内容。
