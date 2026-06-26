@@ -11,6 +11,9 @@
 
 ---
 
+## 个人博客
+https://personal-blog-three-vert.vercel.app/
+
 ## 🚀 关于我
 
 - 🔍 热衷于 **人工智能、机器学习** 与 **量化交易**
