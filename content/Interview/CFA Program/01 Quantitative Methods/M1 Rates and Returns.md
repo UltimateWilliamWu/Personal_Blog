@@ -27,15 +27,37 @@ tags:
 
 ## 1️⃣ 利率的本质与分解
 
+### TVM 的地基
+
+时间价值的作用是**在不同日期发生的现金流之间建立等价关系**。「今天的钱」和「一年后的钱」是两种不同的东西，需要一个换算率才能比较 —— 那个换算率就是利率。
+
+### 🔢 教材的锚点例子（务必看清分母）
+
+```
+今天 9,500  ≡  一年后 10,000
+补偿 = 10,000 − 9,500 = 500
+利率 = 500 ÷ 9,500 = 5.26%
+```
+
+> ⚠️ **分母是 9,500，不是 10,000。** `500 ÷ 10,000 = 5%` 是典型粗心错。
+> 利率永远相对于**你投入的本金**，即 HPR 的 $\frac{P_1-P_0}{P_0}$ —— **分母永远是起点**。
+
 ### 三种解读（同一个数的三个视角）
 
-| 解读 | 视角 | 场景 |
+| 解读 | 视角 | 在上面例子里 |
 |---|---|---|
-| **Required rate of return** | 投资者 | 我要求的最低回报，否则不投 |
-| **Discount rate** | 估值 | 把未来现金流折回今天 |
-| **Opportunity cost** | 消费者 | 今天不消费、把钱借出去的代价 |
+| **Required rate of return** | 投资者 | 「至少给我 5.26%，我才肯今天掏 9,500」 |
+| **Discount rate** | 估值 | 「用 5.26% 折现，一年后 10,000 = 今天 9,500」 |
+| **Opportunity cost** | 消费者 | 「今天花掉这 9,500，就放弃了赚 5.26% 的机会」 |
 
-> 利率的本质：**反映不同时点现金流之间的关系**（the relationship between differently dated cash flows）。
+> 教材原文承认这几个词 "almost interchangeably" —— 题目里混着用是正常的，都是同一个 r。
+
+### ⭐ 利率由供需决定
+
+> 利率由**供给和需求**决定：**投资者供给资金，借款人需求资金**。
+
+这解释了为什么 premium 不是主观的 —— 每一项都是市场博弈的均衡结果。
+另注意教材的视角声明：整个 build-up 公式是**站在投资者角度**构建的（出借方要求什么补偿），不是借款方的成本视角。
 
 ### 分解式（必背）
 
@@ -47,19 +69,90 @@ r = Real risk-free rate
   + Maturity premium
 ```
 
-| 溢价 | 补偿什么 |
-|---|---|
-| **Inflation premium** | 预期通胀侵蚀购买力 |
-| **Default risk premium** | 借款人可能违约 |
-| **Liquidity premium** | 想卖时卖不掉 / 要折价卖 → 关于**变现** |
-| **Maturity premium** | 期限越长，对利率变动越敏感 → 关于**久期** |
+| 溢价 | 补偿什么 | ⭐ 教材细节考点 |
+|---|---|---|
+| **Real risk-free rate** | 纯粹的时间价值 | 定义有三个限定词：**single-period · completely risk-free · no inflation expected**。反映人们对当前 vs. 未来消费的 **time preferences（时间偏好）** |
+| **Inflation premium** | 预期通胀侵蚀购买力 | 是 **expected**（预期）通胀，且是**整个期限内的平均**预期通胀率 |
+| **Default risk premium** | 借款人可能违约 | 原文是 "fail to make a promised payment **at the contracted time and in the contracted amount**" —— 迟付、少付都算 |
+| **Liquidity premium** | 急着变现时相对 fair value 的损失 | ⭐⭐ **US T-bills 不含 liquidity premium**（可大额买卖而不影响价格）；**小发行人债券含**（发行后交投稀少，卖出成本高） |
+| **Maturity premium** | 期限越长，市值对利率变动越敏感 | ⭐ 长短期国债利差 **不全是** maturity premium —— 教材明说 "and possibly **different inflation premiums** as well" |
 
 $$\text{Nominal risk-free} \approx \text{Real risk-free} + \text{Inflation premium}$$
 
-> ⚠️ **这是近似**。精确关系是乘法：$(1+r_{nom}) = (1+r_{real})(1+\pi)$。
-> 数字小时两者接近，数字大时（高通胀情景）差异显著 —— 题目会用这个设陷阱。
-
 > ⚠️ **Liquidity vs. Maturity premium 易混**：一个关于「卖不掉」，一个关于「期限长」。
+
+### 💡 直觉：这不是数学公式，是一张报价单
+
+把它读成「**时间本身的价钱 + 我让你承担的每一种风险的价钱**」：
+
+先想象最纯净的借贷 —— 我百分百会还、无通胀、借条随时能转手、只借三个月。这时你仍要收利息，因为你放弃了现在用钱的机会。这个纯粹的「时间的价钱」就是 **real risk-free rate**，它跟风险无关。
+
+然后每加一层风险，加一层补偿：
+
+| 放松哪个假设 | 加什么 premium |
+|---|---|
+| 会有通胀，还你的钱购买力下降 | Inflation premium |
+| 我有可能还不上 | Default risk premium |
+| 借条不好转手，急用钱只能折价卖 | Liquidity premium |
+| 借 30 年而不是 3 个月 | Maturity premium |
+
+### 💡 这些 premium 在现实中怎么量化？—— 做减法
+
+不是谁拍脑袋定的，是**从市场价格里倒推**，每一项都是两个可观测收益率之差：
+
+| Premium | 现实中怎么估 |
+|---|---|
+| Inflation premium | 普通国债收益率 − 同期限 **TIPS** 收益率 |
+| Default risk premium | 公司债收益率 − 同期限国债收益率（**信用利差**） |
+| Maturity premium | 长期国债收益率 − 短期国债收益率（**期限利差**） |
+
+> **诚实的局限**：总量客观（市场交易定价），但拆分到每一项是估算的 —— 信用利差里 default 和 liquidity 混在一起，学界仍在争论各占多少；inflation premium 用的是**预期**通胀，不可直接观测。
+>
+> **但 L1 不考这个**。L1 绝不会让你去估计 premium 的数值，那是 L2/L3 和实务的事。
+
+### 🎯 L1 的三种考法（只有这三种）
+
+| 形式 | 长什么样 |
+|---|---|
+| **A. 纯概念**（最常见） | 「30 年期国债收益率高于 3 个月期，最能解释的是？」→ maturity premium |
+| **B. 直接加减**（送分） | 给全五项让你求和；或给总数和其中四项，倒推第五项 |
+| **C. Real ↔ Nominal 转换** | 唯一涉及「精确 vs 近似」的地方 ↓ |
+
+### ⚠️ 精确还是近似？—— 两个公式场景不同，不是二选一
+
+| 场景 | 用哪个 |
+|---|---|
+| **利率分解**（build-up） | **永远用加法**。教材原文就是 "approximated as the sum of"，在 CFA 体系里定义上就是加法 |
+| **Real return 换算**（nominal → real） | **用除法（精确）**：$1 + r_{real} = \dfrac{1+r_{nominal}}{1+\pi}$ |
+
+**考场实操法**（三选一的选项结构会告诉你答案）：
+
+> 先按**近似**算 → 选项里有完全吻合的 → 选它（考的是加减）
+> 近似值卡在两个选项**中间** → 出题人在考精确式 → 换乘除法重算
+
+**例**：nominal 8%，通胀 3%
+- 近似 `8 − 3 = 5.00%` ／ 精确 `1.08 ÷ 1.03 − 1 = 4.85%`
+- 选项 `4.85 / 5.00 / 5.15` → 考精确式
+- 选项 `3.00 / 5.00 / 11.00` → 只考你会不会减
+
+两种算法都在 20 秒内，拿不准就都算。
+
+### ⚠️⚠️ 报价利率是年化的（最容易忽略的陷阱）
+
+教材原文藏了一句杀伤力很大的话：
+
+> 90 天期国债**报价 3%**，指的是**年化利率**，**不是**这 90 天里实际赚到的收益。
+
+90 天实际赚的约为 `3% × 90/360 ≈ 0.75%`。
+
+> **看到任何利率报价，先问一句：这是年化的还是期间的？** 这个坑在 [[Fixed Income]] 里会反复出现。
+
+各国短期政府债都可视为该国的 nominal risk-free rate：美国 90 天 T-bill、法国 BTF、日本 6/12 个月国库券。（国家名不太可能考，但「**短期政府债利率 ≈ 该国 nominal risk-free rate**」是考点。）
+
+### 为什么利率天天在变
+
+所有 premium 和 real risk-free rate 都**随时间持续变化** → 所有利率都在波动。
+`r` 里的每一项都是**时变的** —— 这是后面学 term structure 和 duration 的铺垫。
 
 ---
 
@@ -209,8 +302,13 @@ $$R_{leveraged} = R_p + \frac{V_{borrowed}}{V_{equity}}(R_p - r_{debt})$$
 
 ## ⚠️ 易错点总清单
 
-1. `Nominal ≈ Real + Inflation` 是**近似**，精确是乘法
-2. **Liquidity premium**（卖不掉）vs. **Maturity premium**（期限长）
+0. **利率算式的分母是起点值**：`500 ÷ 9,500`，不是 `500 ÷ 10,000`
+1. **报价利率是年化的**，≠ 期间实际收益（90 天报价 3% ≠ 90 天赚 3%）
+2. **US T-bills 不含 liquidity premium**；小发行人债券含
+3. **长短期国债利差不全是 maturity premium**，还含不同的 inflation premium
+4. **Inflation premium 是预期的、整个期限的平均**
+5. `Nominal ≈ Real + Inflation` 是**近似**；build-up 公式考试用加法，real return 换算用除法
+6. **Liquidity premium**（急售折价）vs. **Maturity premium**（期限敏感度）
 3. **Trimmed = 删，Winsorized = 换**
 4. **Geometric 看过去，Arithmetic 预测未来**
 5. **Harmonic 用于定额定投的平均成本**
