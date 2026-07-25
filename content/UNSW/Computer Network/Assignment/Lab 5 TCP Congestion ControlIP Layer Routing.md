@@ -1,6 +1,11 @@
 ---
 aliases:
   - Lab 5 TCP Congestion Control/IP Layer Routing
+tags:
+  - UNSW
+  - UNSW/COMP9331
+  - Topic/Networking
+  - Type/Lab
 ---
 
 ## Exercise 1: TCP Congestion Control Analysis (Marked, include in the lab report, 3 Marks)

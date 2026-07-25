@@ -3,6 +3,7 @@ title: CFA Program
 tags:
   - CFA
   - CFA/L1
+  - Type/Index
 ---
 
 # CFA Level I · 2026 年 11 月 备考总部

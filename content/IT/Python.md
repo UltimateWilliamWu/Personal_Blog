@@ -1,5 +1,5 @@
 ---
 tags:
-  - Programming
+  - Topic/Python
 ---
 [[COMP 9021]]

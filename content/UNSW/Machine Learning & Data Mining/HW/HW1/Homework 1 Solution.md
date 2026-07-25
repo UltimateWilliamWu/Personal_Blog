@@ -1,6 +1,9 @@
 ---
 tags:
-  - Assignment
+  - UNSW
+  - UNSW/COMP9417
+  - Topic/MachineLearning
+  - Type/Assignment
 ---
 ## Question 1. Data Wrangling    
 (a) Create a variable X containing only features, and a variably y containing the target (Heart Disease). Remove the Last Checkup feature. 

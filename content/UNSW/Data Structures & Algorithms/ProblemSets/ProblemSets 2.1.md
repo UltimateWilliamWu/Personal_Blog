@@ -1,6 +1,9 @@
 ---
 tags:
-  - Assignment
+  - UNSW
+  - UNSW/COMP9024
+  - Topic/Algorithms
+  - Type/ProblemSet
 ---
 ## 1. (Counting primitive operations)
 The following algorithm

@@ -1,3 +1,11 @@
+---
+tags:
+  - UNSW
+  - UNSW/COMP9331
+  - Topic/Networking
+  - Type/Lecture
+---
+
 ﻿# COMP9331 Lectures 0-10 Exam Notes
 
 Source scope（资料范围）: this note is based on the lecture PDFs whose filenames start with `0` to `10` in `Lectures`. There is no `6.*.pdf` file in the folder, so Lecture 6 content is not invented here.

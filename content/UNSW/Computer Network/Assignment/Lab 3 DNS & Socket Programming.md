@@ -1,3 +1,11 @@
+---
+tags:
+  - UNSW
+  - UNSW/COMP9331
+  - Topic/Networking
+  - Type/Lab
+---
+
 ## **Exercise 3: Digging into DNS (marked, include in the lab report, 5 Marks)**
 
 >[!note] Answer & Screenshots

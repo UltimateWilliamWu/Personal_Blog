@@ -1,6 +1,9 @@
 ---
 tags:
-  - Assignment
+  - UNSW
+  - UNSW/COMP9331
+  - Topic/Networking
+  - Type/Lab
 ---
 **ZID**: z5518601
 **Name**: Tianxiong Wu

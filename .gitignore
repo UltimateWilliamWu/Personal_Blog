@@ -23,3 +23,9 @@ content/**
 # 允许上传 md 文件
 !content/**/*.md
 !content/**/*.png
+
+# Obsidian 回收站与插件工作目录，不进仓库
+content/.trash/
+content/.makemd/
+content/.space/
+content/.claudian/

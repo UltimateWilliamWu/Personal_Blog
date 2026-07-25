@@ -1,3 +1,9 @@
+---
+tags:
+  - Finance
+  - Topic/StockAnalysis
+---
+
 # 📈 日报
 
 **跟踪股票：** AAPL, NVDA

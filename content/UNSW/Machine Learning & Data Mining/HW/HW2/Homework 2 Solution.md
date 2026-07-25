@@ -1,6 +1,9 @@
 ---
 tags:
-  - Assignment
+  - UNSW
+  - UNSW/COMP9417
+  - Topic/MachineLearning
+  - Type/Assignment
 ---
 ## Question 1. Explore Model-Based Feature Importance    
 (a) Generate a dataset of two classes using sklearn.datasets.make classification. It should have 1000 observations, 20 features. Set 5 of those features to be informative (important), and the rest as redundant. Be sure to set the shuffle parameter to False, so that the informative features are listed first. Normalize your data using sklearn.StandardScaler(). Then, fit a decision tree (using entropy as the criteria for splits) to a shuffled version of the data1 using sklearn.tree model DecisionTreeClassifier, and using its feature importances method, report how many of the actually important features are found in the top 5 important features by the decision tree. Plot a histogram with $\mathbf{x}$ -axis showing the features ranked in decreasing order of importance, and the y-axis showing the feature importance score. Use a random seed of 0 when generating the data for reproducibility. Use a random seed of O when shuffling the data, you can use shuffled idxs $=$ np.random.default rng(seed $=0$ ).permutation(X.shape[1]).    

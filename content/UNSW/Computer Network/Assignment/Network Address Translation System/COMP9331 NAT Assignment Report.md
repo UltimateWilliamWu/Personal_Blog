@@ -1,3 +1,11 @@
+---
+tags:
+  - UNSW
+  - UNSW/COMP9331
+  - Topic/Networking
+  - Type/Assignment
+---
+
 ## 1. Code Organisation
 
 ```text

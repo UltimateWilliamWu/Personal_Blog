@@ -1,6 +1,7 @@
 ---
 tags:
-  - Programming
+  - Topic/Java
+  - Type/Index
 ---
 This is How I learn Java.
 1. [[JavaSE]]

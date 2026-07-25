@@ -20,7 +20,7 @@ tags:
 
 > 按 2024+ curriculum 结构整理，**请对照 LES 实际章节勾选核对**。
 
-- [ ] Rates and Returns
+- [x] **[[M1 Rates and Returns]]** ← 笔记已整理
 - [ ] Time Value of Money in Finance
 - [ ] Statistical Measures of Asset Returns
 - [ ] Probability Trees and Conditional Expectations

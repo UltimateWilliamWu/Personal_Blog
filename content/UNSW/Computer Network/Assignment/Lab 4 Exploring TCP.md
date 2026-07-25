@@ -1,3 +1,11 @@
+---
+tags:
+  - UNSW
+  - UNSW/COMP9331
+  - Topic/Networking
+  - Type/Lab
+---
+
 ## Exercise 1: Understanding TCP using Wireshark (Marked, include in the lab report, 5 Marks)
 
 >[!note] Answer & Screenshots

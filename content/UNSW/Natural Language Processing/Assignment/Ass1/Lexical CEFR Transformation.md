@@ -1,6 +1,9 @@
 ---
 tags:
-  - Assignment
+  - UNSW
+  - UNSW/COMP6713
+  - Topic/NLP
+  - Type/Assignment
 ---
 ### 1. Task and Framing
 

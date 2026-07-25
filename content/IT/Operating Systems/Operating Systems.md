@@ -1,6 +1,7 @@
 ---
 tags:
-  - ComputerScience
+  - Topic/OperatingSystems
+  - Type/Index
 ---
 ## All Contents
 1. [[Linux]]

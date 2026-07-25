@@ -1,3 +1,11 @@
+---
+tags:
+  - UNSW
+  - UNSW/COMP9444
+  - Topic/DeepLearning
+  - Type/Assignment
+---
+
 # Plant Leaf Disease Classification Using a Simplified 11-Layer Deep Neural Network
 
 ## Abstract

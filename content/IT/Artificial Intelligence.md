@@ -1,6 +1,6 @@
 ---
 tags:
-  - ComputerScience
+  - Topic/AI
 ---
 ## Contents
 1. [[COMP 9417]] Machine Learning & Data Mining

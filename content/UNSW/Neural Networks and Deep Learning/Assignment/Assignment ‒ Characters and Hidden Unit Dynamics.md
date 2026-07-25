@@ -1,6 +1,9 @@
 ---
 tags:
-  - Assignment
+  - UNSW
+  - UNSW/COMP9444
+  - Topic/DeepLearning
+  - Type/Assignment
 ---
 **ZID**: z5518601
 **Name**: Tianxiong Wu

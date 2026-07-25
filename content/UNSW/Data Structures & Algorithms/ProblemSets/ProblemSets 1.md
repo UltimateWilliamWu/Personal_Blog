@@ -1,6 +1,9 @@
 ---
 tags:
-  - Assignment
+  - UNSW
+  - UNSW/COMP9024
+  - Topic/Algorithms
+  - Type/ProblemSet
 ---
 1. 字母序全排列 alphabetical order
 ```C

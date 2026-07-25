@@ -1,3 +1,8 @@
+---
+tags:
+  - Type/Index
+---
+
 - [[DiscreteMath]] 
 - [[NetWork]]
 - [[Programming]]
