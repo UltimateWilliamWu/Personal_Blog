@@ -16,21 +16,49 @@ tags:
 
 ---
 
+## 🗂 笔记结构约定
+
+> 官方教材是 **lesson 粒度**（`1.02`、`1.03`…），所以每个 module 是一个**文件夹**：
+>
+> ```
+> M1 Rates and Returns/          ← 文件夹
+> ├── M1 Rates and Returns.md    ← folder note：导航 + 考点优先级 + 易错点总清单
+> ├── 1.02 ....md                ← 一篇一个 lesson
+> ├── 1.03 ....md
+> └── ...
+> ```
+>
+> **单篇 lesson 笔记的标准结构**：`Part 1 原文翻译` + `Part 2 概念详解`（含直觉、考法、陷阱）。
+> 模板参照 [[1.02 Interest Rates and Time Value of Money]]。
+
+---
+
 ## 📋 Module 清单
 
 > 按 2024+ curriculum 结构整理，**请对照 LES 实际章节勾选核对**。
 
-- [x] **[[M1 Rates and Returns]]** ← 笔记已整理
-- [ ] Time Value of Money in Finance
-- [ ] Statistical Measures of Asset Returns
-- [ ] Probability Trees and Conditional Expectations
-- [ ] Portfolio Mathematics
-- [ ] Simulation Methods
-- [ ] Estimation and Inference
-- [ ] Hypothesis Testing
-- [ ] Parametric and Non-Parametric Tests of Independence
-- [ ] Simple Linear Regression
-- [ ] Introduction to Big Data Techniques
+| # | Module | 笔记 | 进度 |
+|---|---|---|---|
+| M1 | Rates and Returns | **[[M1 Rates and Returns]]** | 🔄 已拆分，精写 **2/6** |
+| M2 | Time Value of Money in Finance | — | ☐ |
+| M3 | Statistical Measures of Asset Returns | — | ☐ |
+| M4 | Probability Trees and Conditional Expectations | — | ☐ |
+| M5 | Portfolio Mathematics | — | ☐ |
+| M6 | Simulation Methods | — | ☐ |
+| M7 | Estimation and Inference | — | ☐ |
+| M8 | Hypothesis Testing | — | ☐ |
+| M9 | Parametric and Non-Parametric Tests of Independence | — | ☐ |
+| M10 | Simple Linear Regression | — | ☐ |
+| M11 | Introduction to Big Data Techniques | — | ☐ |
+
+**M1 内部进度**：
+
+- [x] [[1.01 Introduction]] ← 已精写（module 总览 + 自测清单）
+- [x] [[1.02 Interest Rates and Time Value of Money]] ← 已精写
+- [ ] [[1.03 Rates of Return]] ⚠️ 标题待确认，结构已就位
+- [ ] [[1.04 Money-Weighted and Time-Weighted Return]] ⚠️ 标题待确认
+- [ ] [[1.05 Annualized Return]] ⚠️ 标题待确认
+- [ ] [[1.06 Other Major Return Measures]] ⚠️ 标题待确认
 
 ---
 
