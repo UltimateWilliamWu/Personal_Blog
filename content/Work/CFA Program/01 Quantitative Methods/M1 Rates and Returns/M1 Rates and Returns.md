@@ -24,12 +24,13 @@ tags:
 |---|---|---|---|
 | **1.01** | [[1.01 Introduction]] | Module 总览 + 自测清单 | ✅ **已精写** |
 | **1.02** | [[1.02 Interest Rates and Time Value of Money]] | 利率的三种解读 + 五项分解 | ✅ **已精写** |
-| 1.03 | [[1.03 Rates of Return]] ⚠️ | 收益度量方式与适用场景 | 🚧 待精写 |
+| **1.03** | [[1.03 Rates of Return]] | HPR + 算术/几何平均 | ✅ **已精写**（后半段待补） |
 | 1.04 | [[1.04 Money-Weighted and Time-Weighted Return]] ⚠️ | MWR vs. TWR、业绩评价 | 🚧 待精写 |
 | 1.05 | [[1.05 Annualized Return]] ⚠️ | 年化 + 连续复利 | 🚧 待精写 |
 | 1.06 | [[1.06 Other Major Return Measures]] ⚠️ | 各种收益口径 | 🚧 待精写 |
 
-> ⚠️ **1.03–1.06 的标题和编号是从 LOS 反推的推测，不是官方标题** —— 贴原文时按实际标题重命名。
+> ✅ 1.03 标题已确认与官方一致。**1.04–1.06 的标题仍是从 LOS 反推的推测** —— 贴原文时按实际标题重命名。
+> 1.03 的原文停在 *"We will now look at three examples..."*，**harmonic / trimmed / winsorized 部分待补**。
 >
 > 🚧 = 内容已从旧整篇笔记迁入、结构完整，但**尚未按官方原文做「翻译 + 逐概念详解」**。
 > 精写标准参照 [[1.02 Interest Rates and Time Value of Money]]。
