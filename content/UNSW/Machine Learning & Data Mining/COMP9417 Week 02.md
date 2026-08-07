@@ -11,7 +11,9 @@ Find a line that separates the two classes.
 ### Basic Linear Classifier
 ![[Pasted image 20250412175125.png|500]]
 Using a Linear Classifier to classify:
-$$ax_1+bx_2+c=0$$
+$$
+ax_1+bx_2+c=0
+$$
 
 >[!note] Logic Regression 逻辑回归
 >- 

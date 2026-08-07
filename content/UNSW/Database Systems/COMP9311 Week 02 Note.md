@@ -25,7 +25,9 @@ A **superkey** is a set of attributes that uniquely determines a tuple.
 A **candidate key** is a minimal superkey, i.e., none of whose subsets is a superkey.
 A **primary key** is a designated candidate key.
 Number of Superkeys:
-$$(2^n)-1$$
+$$
+(2^n)-1
+$$
 **Foreign key**: an attribute that keeps the value of a primary key of another relation.
 ### 1.3 Relational Integrity Constraints
 Three integrity constraints are important:
@@ -86,26 +88,40 @@ Terms equivalently expressed by ∧ (and), ∨(or), ¬ (not)
 eg.if there is a table named Enrolment then **𝜎 𝑆𝑢𝑝𝑒𝑟𝑣𝑖𝑠𝑜𝑟=1 ( ENROLMENT)** means specifiying all Supervisor where value is equal to 1
 #### Properties of Selection
 ➢ Consecutive selects can be combined:
-$$𝜎_{<cond1>}(𝜎_{<cond2>}(R))=𝜎_{<cond1> AND <cond2>}(R)$$
+$$
+𝜎_{<cond1>}(𝜎_{<cond2>}(R))=𝜎_{<cond1> AND <cond2>}(R)
+$$
 ➢ Selection is a commutative operation:
-$$𝜎_{<cond1>}(𝜎_{<cond2>}(R))=𝜎_{<cond2>}(𝜎_{<cond1>}(R))$$
+$$
+𝜎_{<cond1>}(𝜎_{<cond2>}(R))=𝜎_{<cond2>}(𝜎_{<cond1>}(R))
+$$
 ### 2.2 Project
 The PROJECT operation is used to project a subset of the attributes (column) of a relation, denoted by:
-$$𝜋_{<attribute list>}(R)$$
+$$
+𝜋_{<attribute list>}(R)
+$$
 ### 2.3 Set Union
 Condition: R and S must be union compatible! 
 Union compatibility: **==there is a 1-1 correspondence between their attributes: the same name and same domain.==**
-$$R \cup S = \{ t:t \in R \:or\: t \in S \} $$
+$$
+R \cup S = \{ t:t \in R \:or\: t \in S \}
+$$
 ### 2.4 Set Intersection
 INTERSECTION is an operation that includes all tuples that are in present both relations, denoted by
-$$ R \cap S=\{t:t\in R \:and\: t \in S\} $$
+$$
+R \cap S=\{t:t\in R \:and\: t \in S\}
+$$
 Condition: R and S must also be union compatible!
 ### 2.5 Set Difference
 DIFFERENCE is a relation that includes all tuples that are in the left relation but not in the right relation, denoted by
-$$ R-S=\{t:t\in R \:and\: t\not\in S\}$$
+$$
+R-S=\{t:t\in R \:and\: t\not\in S\}
+$$
 Condition: R and S must also be union compatible!
 ### 2.6 Cartesian Product
-$$R \times S=\{t_1||t_2:t_1\in R \:and\: t_2 \in S\}$$
+$$
+R \times S=\{t_1||t_2:t_1\in R \:and\: t_2 \in S\}
+$$
 Intuition: every combination of tuples in R with tuples in S.
 - 𝑡1 || 𝑡2 indicates the concatenation(连接) of tuples.
 - R and S not required to be union compatible
@@ -113,22 +129,32 @@ Intuition: every combination of tuples in R with tuples in S.
 ### 2.7 Join
 JOIN is used to combine related tuples from two relations into single "longer" tuples.
 **Theta-join**:
-$$ R\Join_{<join\: condition>} S=\{t_1||t_2:t_1\in R \: and \: t_2\in S \:and\: <join\:condition>\}$$
+$$
+R\Join_{<join\: condition>} S=\{t_1||t_2:t_1\in R \: and \: t_2\in S \:and\: <join\:condition>\}
+$$
 #### 2.7.1 Equi-join
 A type of theta-join where the only comparison operator used is “=” is called an Equi-join
 Example:
-$$ENROLMENT\Join_{(Supervisor=Person)}RESEARCHER$$
+$$
+ENROLMENT\Join_{(Supervisor=Person)}RESEARCHER
+$$
 #### 2.7.2 Natural Join
 A type of equi-join that requires each pair of join attributes to have the same name and domain in both relations. 
 Notes: In a natural join, there may be several valid pairs of join attributes.
-$$ENROLMENT\Join_{(department,name),(department,name)}COURSE$$
+$$
+ENROLMENT\Join_{(department,name),(department,name)}COURSE
+$$
 If there are pairs of joining attributes identically named, we can write:
-$$ENROLMENT\Join COURSE$$
+$$
+ENROLMENT\Join COURSE
+$$
 ### 2.8 Divide
 The DIVISION operation is applied to two Relations R and S, where the attributes of S are a subset of the attributes of R.
 ![[Pasted image 20241028201336.png|475]]
 Typical use: which courses are offered by all departments?
-$$ Course\div (𝜋_{Deparment} Course)$$
+$$
+Course\div (𝜋_{Deparment} Course)
+$$
 ### 2.9 Rename Operator
 The rename operator ρ changes the name of one or more attributes
 ### 2.10 Aggregate Operators

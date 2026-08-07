@@ -27,7 +27,9 @@ The first step in the formal definition of logic is the separation of syntax and
 ### Syntax
 >[!important] Well-formed formulas
 >Let Prop = {p, q, r , . . .} be a set of propositional letters. Consider the alphabet
->$$Σ = Prop ∪ \{ ⊤, ⊥, ¬, ∧, ∨, →, ↔, (, ) \}.$$
+> $$
+> Σ = Prop ∪ \{ ⊤, ⊥, ¬, ∧, ∨, →, ↔, (, ) \}.
+> $$
 
 >[!note] Conventions
 >To aid readability some conventions and binding rules can and will be used not in proof assistant. 

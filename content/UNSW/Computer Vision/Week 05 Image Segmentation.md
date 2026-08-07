@@ -264,11 +264,15 @@ TN：正确预测背景
 ## ⭐ Sensitivity & Specificity
 
 Sensitivity (TPR):  
-$$TPR = \frac{TP}{TP+FN}$$  
+$$
+TPR = \frac{TP}{TP+FN}
+$$
 敏感度，表示正确检测的比例。
 
 Specificity (TNR):  
-$$TNR = \frac{TN}{TN+FP}$$  
+$$
+TNR = \frac{TN}{TN+FP}
+$$
 特异度，表示背景准确率。
 
 ---
@@ -286,15 +290,21 @@ AUC 越大，分割越好。
 ## ⭐ Precision, Recall, F1
 
 Precision:  
-$$P = \frac{TP}{TP+FP}$$  
+$$
+P = \frac{TP}{TP+FP}
+$$
 查准率：预测为物体中有多少是真的。
 
 Recall:  
-$$R = \frac{TP}{TP+FN}$$  
+$$
+R = \frac{TP}{TP+FN}
+$$
 查全率：真实物体有多少被找到。
 
 F1:  
-$$F1=\frac{2PR}{P+R}$$  
+$$
+F1=\frac{2PR}{P+R}
+$$
 PR 的调和平均。
 
 ---
@@ -302,11 +312,15 @@ PR 的调和平均。
 ## ⭐ Jaccard (IoU) & Dice
 
 Jaccard (IoU):  
-$$J = \frac{TP}{TP+FP+FN}$$  
+$$
+J = \frac{TP}{TP+FP+FN}
+$$
 交并比，表示正确像素占联合区域比例。
 
 Dice:  
-$$D = \frac{2TP}{2TP+FP+FN}$$  
+$$
+D = \frac{2TP}{2TP+FP+FN}
+$$
 Dice 系数，IoU 的对称版本。
 
 ---
@@ -357,7 +371,9 @@ Dilation expands objects by adding pixels near boundaries.
 膨胀会“扩张”物体，使边界向外生长。
 
 Definition:  
-$$I \oplus S = {x \mid (S)_x \cap I \neq \emptyset }$$
+$$
+I \oplus S = {x \mid (S)_x \cap I \neq \emptyset }
+$$
 
 It fills small holes and connects nearby components.  
 用于填补小洞、连接相近物体。
@@ -370,7 +386,9 @@ Erosion shrinks objects by removing boundary pixels.
 腐蚀会“收缩”物体，去掉边界像素。
 
 Definition:  
-$$I \ominus S = {x \mid (S)_x \subseteq I }$$
+$$
+I \ominus S = {x \mid (S)_x \subseteq I }
+$$
 
 It removes small objects and separates touching ones.  
 用于去除小噪声、分离接触物体。
@@ -396,7 +414,9 @@ It removes small foreground noise and smooths object boundaries.
 开运算删除小前景噪声、平滑边缘。
 
 Formula:  
-$$(I \circ S) = (I \ominus S) \oplus S$$
+$$
+(I \circ S) = (I \ominus S) \oplus S
+$$
 
 ---
 
@@ -409,7 +429,9 @@ It fills small holes and connects close objects.
 闭运算填补小孔洞、连接靠近物体。
 
 Formula：  
-$$(I \bullet S) = (I \oplus S) \ominus S$$
+$$
+(I \bullet S) = (I \oplus S) \ominus S
+$$
 
 ---
 
@@ -422,7 +444,9 @@ It highlights both inner and outer boundaries.
 能检测物体的内外边缘。
 
 Formula：  
-$$G = (I \oplus S) - (I \ominus S)$$
+$$
+G = (I \oplus S) - (I \ominus S)
+$$
 
 ---
 

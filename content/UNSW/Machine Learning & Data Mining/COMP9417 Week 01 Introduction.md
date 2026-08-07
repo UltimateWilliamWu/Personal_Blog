@@ -25,7 +25,9 @@ The most widely used categories of machine learning algorithms are:
 本质就是找到损失函数并对其求导得出最优解
 
 >[!note] Loss Function 损失函数
->$$y_j​=θ_1​x_j​+θ_0$$​
+> $$
+> y_j​=θ_1​x_j​+θ_0
+> $$
 >$\qquad$![[Pasted image 20250224145605.png|500]]
 >$\qquad$损失函数值越小 说明曲线越拟合
 >### Residual Sum of Square RSS 残差平方和
@@ -37,7 +39,9 @@ The most widely used categories of machine learning algorithms are:
 
 >[!note] “Ordinary Least Squares” (OLS) regression 最小二乘法
 >$\qquad$令 $\frac{\partial J(\theta)}{\partial \theta}=0$ 可得：
->$$\theta=(X^TX)^{-1}X^Ty$$
+> $$
+> \theta=(X^TX)^{-1}X^Ty
+> $$
 >这个是最小二乘法闭式解
 >本质是对损失函数求导使得导数等于0得到极值点的解
 
@@ -49,7 +53,9 @@ The most widely used categories of machine learning algorithms are:
 >- 什么是梯度？
 >	- 对损失函数求导
 >- 已知损失函数MSE, 对其泰勒展开可得:
->$$L(w+\Delta w)\approx L(w)+\nabla L(w)^T\Delta w$$
+> $$
+> L(w+\Delta w)\approx L(w)+\nabla L(w)^T\Delta w
+> $$
 >$\Delta w=−\alpha \nabla L(w)$ 因为最佳移动方向是负梯度方向
 >$\nabla L(w)$ 代表在w处的梯度
 >- 梯度下降更新公式：

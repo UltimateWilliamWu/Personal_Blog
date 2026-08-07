@@ -278,7 +278,9 @@ Deeper layers have larger receptive fields.
 # ⭐ Feature Map Size Formula（考试常考）
 
 Output height × width：  
-$$(1 + (J + 2P - M)/s) \times (1 + (K + 2P - N)/s)$$  
+$$
+(1 + (J + 2P - M)/s) \times (1 + (K + 2P - N)/s)
+$$
 J,K = input size; M,N = kernel size; P = padding; s = stride.
 
 计算卷积输出大小的重要公式。

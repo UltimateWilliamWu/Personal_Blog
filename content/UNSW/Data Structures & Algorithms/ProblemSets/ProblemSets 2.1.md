@@ -23,16 +23,22 @@ Count the number of primitive operations (evaluating an expression, indexing int
 1. Prove mathematically that $$\sum_{i=1}^{n}i^2\in O(n^3)$$
 	
 > [!NOTE] Answer
-> $$1+2+...+n=\frac {n(n+1)(2n+1)} 6=O(n^3)$$
+> $$
+> 1+2+...+n=\frac {n(n+1)(2n+1)} 6=O(n^3)
+> $$
 2. Prove mathematically that $$\sum_{i=1}^nlog\ i\in O(n\ log\ n)$$
 
 > [!NOTE] Answer
-> $$\sum_{i=1}^nlog\ i\leq \sum_{i=1}^nlog\ n=O(n\ log\ n)$$
+> $$
+> \sum_{i=1}^nlog\ i\leq \sum_{i=1}^nlog\ n=O(n\ log\ n)
+> $$
 
 3. Prove mathematically that $$\sum_{i=1}^n\frac i {2^i}\in O(1)$$
 
 > [!NOTE] Answer
-> $$Let\ S=\sum_{i=1}^n\frac i {2^i}\ Then\ S=\sum_{i=1}^n\frac 1 {2^i}+\sum_{i=1}^n\frac {i-1} {2^i}=\sum_{i=1}^n\frac 1 {2^i}+\sum_{i=1}^{n-1}\frac {i} {2^{i+1}}<1+\frac 1 2 S\;\; Therefore\; S<2$$
+> $$
+> Let\ S=\sum_{i=1}^n\frac i {2^i}\ Then\ S=\sum_{i=1}^n\frac 1 {2^i}+\sum_{i=1}^n\frac {i-1} {2^i}=\sum_{i=1}^n\frac 1 {2^i}+\sum_{i=1}^{n-1}\frac {i} {2^{i+1}}<1+\frac 1 2 S\;\; Therefore\; S<2
+> $$
 ### 3. (Algorithms and complexity)
 Develop an algorithm to determine if a character array of length contains at least one letter more than once. For example, "repeat" is such a word but "until" is not
 1. Write the algorithm in pseudocode.

@@ -153,7 +153,9 @@ _Note: Include all traceroute outputs in your report._
 >     
 > - **Transmission delay**: **depends directly** on packet size. It is the time to push L bits onto a link of rate R:
 >     
->     $$d_{tx} = \frac{L}{R}$$​
+>     $$
+>     d_{tx} = \frac{L}{R}
+>     $$
 >     
 >     so larger packets take longer to transmit.
 >     

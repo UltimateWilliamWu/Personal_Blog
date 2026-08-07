@@ -232,7 +232,9 @@ Classes are separable by a hyperplane.
 ### **• Model**
 
 A linear classifier uses  
-$$ f(x) = W^T x + b $$  
+$$
+f(x) = W^T x + b
+$$
 👉 线性函数决定分类边界。
 
 ### **• Decision rule**

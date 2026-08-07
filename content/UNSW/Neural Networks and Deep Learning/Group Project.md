@@ -42,7 +42,9 @@ We implement two advanced loss functions:
 - **Focal Loss**:
     
 
-$$FocalLoss(pt)=−αt(1−pt)γ⋅log⁡(pt)\text{FocalLoss}(p_t) = -\alpha_t (1 - p_t)^\gamma \cdot \log(p_t)$$
+$$
+FocalLoss(pt)=−αt(1−pt)γ⋅log⁡(pt)\text{FocalLoss}(p_t) = -\alpha_t (1 - p_t)^\gamma \cdot \log(p_t)
+$$
 
 Where γ=1.5\gamma = 1.5, αt\alpha_t is the class-specific weight.
 
@@ -51,11 +53,15 @@ Where γ=1.5\gamma = 1.5, αt\alpha_t is the class-specific weight.
 
 Smoothed targets:
 
-$$y~i=(1−ε)⋅yi+εK\tilde{y}_i = (1 - \varepsilon) \cdot y_i + \frac{\varepsilon}{K}$$
+$$
+y~i=(1−ε)⋅yi+εK\tilde{y}_i = (1 - \varepsilon) \cdot y_i + \frac{\varepsilon}{K}
+$$
 
 Loss:
 
-$$Loss=−∑i=1Ky~i⋅log⁡(pi)\text{Loss} = -\sum_{i=1}^{K} \tilde{y}_i \cdot \log(p_i)$$
+$$
+Loss=−∑i=1Ky~i⋅log⁡(pi)\text{Loss} = -\sum_{i=1}^{K} \tilde{y}_i \cdot \log(p_i)
+$$
 
 Both losses help address class imbalance and model overconfidence.
 

@@ -79,15 +79,21 @@ tags:
 ### Moments:
 
 - **First moment (Mean):**  
-    $$\mu_i = \frac{1}{N}\sum_{j=1}^{N} f_{ij}$$  
+    $$
+    \mu_i = \frac{1}{N}\sum_{j=1}^{N} f_{ij}
+    $$
     第一阶矩（均值）
     
 - **Second moment (Std):**  
-    $$\sigma_i = \sqrt{\frac{1}{N}\sum_{j=1}^{N}(f_{ij}-\mu_i)^2}$$  
+    $$
+    \sigma_i = \sqrt{\frac{1}{N}\sum_{j=1}^{N}(f_{ij}-\mu_i)^2}
+    $$
     第二阶矩（标准差）
     
 - **Third moment (Skewness):**  
-    $$s_i = \sqrt[3]{\frac{1}{N}\sum_{j=1}^{N}(f_{ij}-\mu_i)^3}$$  
+    $$
+    s_i = \sqrt[3]{\frac{1}{N}\sum_{j=1}^{N}(f_{ij}-\mu_i)^3}
+    $$
     第三阶矩（偏度）
     
 

@@ -83,13 +83,17 @@ tags:
 >     The client records the time of the first packet sent ($t_{firstSend}$) and the time when the last event occurs ($t_{lastEvent}$), where $t_{lastEvent}$ is either the receive time of the last successful reply or the time when the last request times out. Then:
 >
 >
-> $$total_{time} (ms) = t_{lastEvent} − t_{firstSend}$$
+> $$
+> total_{time} (ms) = t_{lastEvent} − t_{firstSend}
+> $$
 >
 > 5. Jitter (as required in the assignment)  
 >     Jitter is computed using successive RTT values of received packets in the order they are received (timeouts ignored). If received ≥ 2:
 >
 >
->$$jitter (ms) = \frac{\sum |RTT(n) − RTT(n−1)|}{(received − 1)}$$
+> $$
+> jitter (ms) = \frac{\sum |RTT(n) − RTT(n−1)|}{(received − 1)}
+> $$
 >
 > If received < 2, jitter is reported as 0.
 
