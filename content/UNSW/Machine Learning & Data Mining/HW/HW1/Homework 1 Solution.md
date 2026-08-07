@@ -112,7 +112,7 @@ It turns out that this objective is identical to our objective above (when the s
 >Knowing that 
 >$$
 >L(\beta_{0},\beta)=penalty(\beta)+\frac{\lambda}{n}\sum_{i=1}^{n}\left[y_{i}\ln\left(\frac{1}{\sigma(\beta_{0}+\beta^{T}x_{i})}\right)+(1-y_{i})\ln\left(\frac{1}{1-\sigma(\beta_{0}+\beta^{T}x_{i})}\right)\right]
-\\ \widetilde{y}_{i}\,\in\,\{-1,1\} 
+>\\ \widetilde{y}_{i}\,\in\,\{-1,1\} 
 >$$
 >Suppose $z_i= {\beta_{0}+\beta^{T}x_{i}}$ we can get
 >$$

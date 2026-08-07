@@ -64,8 +64,8 @@ where:
 >Entropy is an **information-theoretic measure** of impurity or uncertainty. For a node ttt in a classification decision tree, with KKK classes, entropy is computed as:
 >$$
 >\begin{equation}
-H(t) = -\sum_{k=1}^{K} p_k \log_2(p_k)
-\end{equation}
+>H(t) = -\sum_{k=1}^{K} p_k \log_2(p_k)
+>\end{equation}
 >$$
 >Where:
 >- $p_k$​ is the proportion of samples in node ttt that belong to class kkk.
@@ -74,8 +74,8 @@ H(t) = -\sum_{k=1}^{K} p_k \log_2(p_k)
 >When constructing a decision tree, at each node the algorithm evaluates splits based on the **Information Gain (IG)**:
 >$$
 >\begin{equation}
-IG_t = H(t) - \left( \frac{n_{\text{left}}}{n_t} H(\text{left}) + \frac{n_{\text{right}}}{n_t} H(\text{right}) \right)
-\end{equation}
+>IG_t = H(t) - \left( \frac{n_{\text{left}}}{n_t} H(\text{left}) + \frac{n_{\text{right}}}{n_t} H(\text{right}) \right)
+>\end{equation}
 >$$
 >Where:
 >- H(t): entropy before the split,
