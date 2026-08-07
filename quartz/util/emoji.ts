@@ -1,8 +1,13 @@
 const U200D = String.fromCharCode(8205)
 const UFE0Fg = /\uFE0F/g
+const U20E3 = "\u20E3"
 
 export function getIconCode(char: string) {
-  return toCodePoint(char.indexOf(U200D) < 0 ? char.replace(UFE0Fg, "") : char)
+  // Keycaps (1\uFE0F\u20E3 = 0031 FE0F 20E3) are keyed *with* their variation selector in
+  // the emoji map, so stripping FE0F the way we do for other sequences would
+  // produce a codepoint that isn't there.
+  const keepVariationSelector = char.indexOf(U200D) >= 0 || char.indexOf(U20E3) >= 0
+  return toCodePoint(keepVariationSelector ? char : char.replace(UFE0Fg, ""))
 }
 
 function toCodePoint(unicodeSurrogates: string) {
@@ -19,7 +24,9 @@ function toCodePoint(unicodeSurrogates: string) {
     } else if (55296 <= c && c <= 56319) {
       p = c
     } else {
-      r.push(c.toString(16))
+      // the map zero-pads to at least 4 hex digits, so BMP codepoints below
+      // U+1000 (the ASCII bases of keycap sequences) must be padded to match
+      r.push(c.toString(16).padStart(4, "0"))
     }
   }
   return r.join("-")
