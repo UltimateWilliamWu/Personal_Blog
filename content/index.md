@@ -20,11 +20,19 @@ banner_y: "41"
 |---|---|---|
 | 💻 | **[[Computer Science]]** | CS / AI 知识体系导航 —— 按**学科**组织 |
 | 🎓 | **[[UNSW/index\|UNSW 课程笔记]]** | UNSW 课程笔记 —— 按**课程**组织 |
-| 💹 | **[[CFA Program]]** | CFA Level I 备考知识库 |
-| 🧩 | **[[Work/LeetCode/index\|LeetCode 题解]]** | 算法题解 |
 
 > 💡 **两个维度**：`Computer Science` 是学科视角（跨课程聚合），`UNSW` 是课程视角（按学期原样）。
 > 同一篇笔记通过 `Topic/*` 标签同时出现在两边。
+
+---
+
+## 💼 求职
+
+| | 入口 | 说明 |
+|---|---|---|
+| 💹 | **[[CFA Program]]** | CFA Level I 备考知识库 |
+| 🧩 | **[[Work/LeetCode/index\|LeetCode 题解]]** | 算法刷题 |
+| 📝 | **[[Work/Interview/index\|面试准备]]** | 笔试真题 / 面试题库 |
 
 ---
 
