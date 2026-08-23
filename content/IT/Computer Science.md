@@ -92,4 +92,4 @@ UNSW 的课程是**按学期切分的碎片**，不是按知识体系组织的�
 
 - [[UNSW/index|UNSW 课程笔记]] —— 按**课程**维度组织的原始笔记（97 篇 / 16 门课）
 - [[CFA Program]] —— 金融方向
-- [[LeetCode/index|LeetCode 题解]] —— 算法实战
+- [[Work/LeetCode/index|LeetCode 题解]] —— 算法实战

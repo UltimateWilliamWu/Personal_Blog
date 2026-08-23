@@ -21,7 +21,7 @@ tags:
 
 ## 🔗 刷题
 
-- [[LeetCode/index|LeetCode 题解]] —— 实战刷题
+- [[Work/LeetCode/index|LeetCode 题解]] —— 实战刷题
 
 ---
 
